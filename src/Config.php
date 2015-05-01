@@ -19,13 +19,18 @@ class Config extends ContainerConfig
         $di->setters['Aura\Router\RouterContainer']['setMapFactory'] = $di->newFactory('Radar\Adr\Router\Map');
 
         /**
-         * Radar\Adr\Adr
+         * Radar\Adr\Dispatcher
          */
-        $di->params['Radar\Adr\Adr']['factory'] = $di->getInjectionFactory();
-        $di->params['Radar\Adr\Adr']['matcher'] = $di->lazyGetCall('radar/adr:router', 'getMatcher');
-        $di->params['Radar\Adr\Adr']['request'] = $di->lazy(['Phly\Http\ServerRequestFactory', 'fromGlobals']);
-        $di->params['Radar\Adr\Adr']['response'] = $di->lazyNew('Phly\Http\Response');
-        $di->params['Radar\Adr\Adr']['sender'] = $di->lazyNew('Radar\Adr\Sender');
+        $di->params['Radar\Adr\Adr']['dispatcher'] = $di->lazyNew('Radar\Adr\Dispatcher');
+
+        /**
+         * Radar\Adr\Dispatcher
+         */
+        $di->params['Radar\Adr\Dispatcher']['factory'] = $di->getInjectionFactory();
+        $di->params['Radar\Adr\Dispatcher']['matcher'] = $di->lazyGetCall('radar/adr:router', 'getMatcher');
+        $di->params['Radar\Adr\Dispatcher']['request'] = $di->lazy(['Phly\Http\ServerRequestFactory', 'fromGlobals']);
+        $di->params['Radar\Adr\Dispatcher']['response'] = $di->lazyNew('Phly\Http\Response');
+        $di->params['Radar\Adr\Dispatcher']['sender'] = $di->lazyNew('Radar\Adr\Sender');
 
         /**
          * Radar\Adr\Error\Domain
