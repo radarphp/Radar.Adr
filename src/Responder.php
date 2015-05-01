@@ -7,7 +7,7 @@ use Aura\Router\Generator;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Responder
+class Responder implements ResponderInterface
 {
     protected $request;
 
