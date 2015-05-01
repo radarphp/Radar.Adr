@@ -130,12 +130,26 @@ class Adr
         if ($domain) {
             $input = $this->factory->newInstance($input);
             $input = (array) $input($this->request);
-            $domain = $this->factory->newInstance($domain);
+            $domain = $this->getDomainCallable($domain);
             $payload = call_user_func_array($domain, $input);
         }
 
         $responder = $this->factory->newInstance($responder);
         $this->response = $responder($this->request, $this->response, $payload);
+    }
+
+    protected function getDomainCallable($domain)
+    {
+        if (is_string($domain)) {
+            return $this->factory->newInstance($domain);
+        }
+
+        if (is_array($domain) && is_string($domain[0])) {
+            $domain[0] = $this->factory->newInstance($domain[0]);
+            return $domain;
+        }
+
+        return $domain;
     }
 
     protected function runError($e)
