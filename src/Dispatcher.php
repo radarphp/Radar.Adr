@@ -37,7 +37,7 @@ class Dispatcher
         try {
             $this->startup($before);
         } catch (Exception $e) {
-            $this->error($e);
+            $this->error($e, $error);
         }
 
         try {
@@ -45,7 +45,7 @@ class Dispatcher
             $this->sender->send($this->response);
             $this->middle($finish);
         } catch (Exception $e) {
-            $this->error($e);
+            $this->error($e, $error);
         }
     }
 
@@ -117,13 +117,13 @@ class Dispatcher
         return $domain;
     }
 
-    protected function error($e)
+    protected function error($e, $error)
     {
         $this->attributes(['radar/adr:exception' => $e]);
         $this->action(
-            $this->error->input,
-            $this->error->domain,
-            $this->error->responder
+            $error->input,
+            $error->domain,
+            $error->responder
         );
     }
 
