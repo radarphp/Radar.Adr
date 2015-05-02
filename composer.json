@@ -5,7 +5,6 @@
     "license": "MIT",
     "require": {
         "aura/di": "3.x-dev",
-        "aura/payload-interface": "3.x-dev",
         "aura/payload": "3.x-dev",
         "aura/router": "3.x-dev",
         "josegonzalez/dotenv": "~0.0",
@@ -13,8 +12,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Radar\\Adr\\": "src/",
-            "App\\": "app/"
+            "Radar\\Adr\\": "src/"
         }
-    }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Radar\\Adr\\": "tests/",
+            "Aura\\Di\\_Config\\": "vendor/aura/di/tests/_Config"
+        }
+    },
+    "minimum-stability": "dev"
 }
