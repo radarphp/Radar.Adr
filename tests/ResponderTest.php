@@ -1,9 +1,9 @@
 <?php
 namespace Radar\Adr;
 
+use Aura\Payload\Payload;
 use Phly\Http\ServerRequestFactory;
 use Phly\Http\Response;
-use Aura\Payload\Payload;
 
 class ResponderTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,14 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
         $this->responder = new Responder();
     }
 
-    public function getResponse($payload)
+    public function testGetMediaTypes()
+    {
+        $expect = ['application/json'];
+        $actual = Responder::getMediaTypes();
+        $this->assertSame($expect, $actual);
+    }
+
+    protected function getResponse($payload)
     {
         $request = ServerRequestFactory::fromGlobals();
         $response = new Response();
@@ -112,6 +119,20 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testFound()
+    {
+        $payload = (new Payload())
+            ->setStatus(Payload::FOUND)
+            ->setOutput(['foo' => 'bar']);
+
+        $this->assertPayloadResponse(
+            $payload,
+            200,
+            ['Content-Type' => 'application/json'],
+            '{"foo":"bar"}'
+        );
+    }
+
     public function testNoContent()
     {
         $this->assertPayloadResponse(
@@ -119,6 +140,126 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
             204,
             [],
             ''
+        );
+    }
+
+    public function testNotAuthenticated()
+    {
+        $payload = (new Payload())
+            ->setStatus(Payload::NOT_AUTHENTICATED)
+            ->setInput(['foo' => 'bar']);
+
+        $this->assertPayloadResponse(
+            $payload,
+            400,
+            ['Content-Type' => 'application/json'],
+            '{"foo":"bar"}'
+        );
+    }
+
+    public function testNotAuthorized()
+    {
+        $payload = (new Payload())
+            ->setStatus(Payload::NOT_AUTHORIZED)
+            ->setInput(['foo' => 'bar']);
+
+        $this->assertPayloadResponse(
+            $payload,
+            403,
+            ['Content-Type' => 'application/json'],
+            '{"foo":"bar"}'
+        );
+    }
+
+    public function testNotFound()
+    {
+        $payload = (new Payload())
+            ->setStatus(Payload::NOT_FOUND)
+            ->setInput(['foo' => 'bar']);
+
+        $this->assertPayloadResponse(
+            $payload,
+            404,
+            ['Content-Type' => 'application/json'],
+            '{"foo":"bar"}'
+        );
+    }
+
+    public function testNotValid()
+    {
+        $payload = (new Payload())
+            ->setStatus(Payload::NOT_VALID)
+            ->setInput(['foo' => 'bar'])
+            ->setOutput(['baz' => 'dib'])
+            ->setExtras(['zim' => 'gir']);
+
+        $expect = json_encode([
+            'input' => ['foo' => 'bar'],
+            'output' => ['baz' => 'dib'],
+            'errors' => ['zim' => 'gir'],
+        ]);
+
+        $this->assertPayloadResponse(
+            $payload,
+            422,
+            ['Content-Type' => 'application/json'],
+            $expect
+        );
+    }
+
+    public function testProcessing()
+    {
+        $payload = (new Payload())
+            ->setStatus(Payload::PROCESSING)
+            ->setOutput(['foo' => 'bar']);
+
+        $this->assertPayloadResponse(
+            $payload,
+            203,
+            ['Content-Type' => 'application/json'],
+            '{"foo":"bar"}'
+        );
+    }
+
+    public function testSuccess()
+    {
+        $payload = (new Payload())
+            ->setStatus(Payload::SUCCESS)
+            ->setOutput(['foo' => 'bar']);
+
+        $this->assertPayloadResponse(
+            $payload,
+            200,
+            ['Content-Type' => 'application/json'],
+            '{"foo":"bar"}'
+        );
+    }
+
+    public function testUnknown()
+    {
+        $payload = (new Payload())
+            ->setStatus('foobar')
+            ->setOutput(['foo' => 'bar']);
+
+        $this->assertPayloadResponse(
+            $payload,
+            500,
+            ['Content-Type' => 'application/json'],
+            '{"error":"Unknown domain payload status","status":"foobar"}'
+        );
+    }
+
+    public function testUpdated()
+    {
+        $payload = (new Payload())
+            ->setStatus(Payload::UPDATED)
+            ->setOutput(['foo' => 'bar']);
+
+        $this->assertPayloadResponse(
+            $payload,
+            303,
+            ['Content-Type' => 'application/json'],
+            '{"foo":"bar"}'
         );
     }
 }

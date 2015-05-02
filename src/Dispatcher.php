@@ -64,7 +64,7 @@ class Dispatcher implements DispatcherInterface
     protected function shutdown($after, $finish)
     {
         $this->middle($after);
-        $this->sender->send($this->response);
+        $this->sender->__invoke($this->response);
         $this->middle($finish);
     }
 

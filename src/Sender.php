@@ -5,7 +5,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Sender
 {
-    public function send(ResponseInterface $response)
+    public function __invoke(ResponseInterface $response)
     {
         $this->sendStatus($response);
         $this->sendHeaders($response);
@@ -39,10 +39,6 @@ class Sender
 
     protected function sendBody(ResponseInterface $response)
     {
-        while (ob_get_level()) {
-            ob_end_flush();
-        }
         echo $response->getBody();
     }
-
 }

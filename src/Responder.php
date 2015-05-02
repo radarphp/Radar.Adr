@@ -98,13 +98,13 @@ class Responder implements ResponderInterface
     protected function notAuthenticated()
     {
         $this->response = $this->response->withStatus(400);
-        $this->jsonBody($this->payload->getOutput());
+        $this->jsonBody($this->payload->getInput());
     }
 
     protected function notAuthorized()
     {
         $this->response = $this->response->withStatus(403);
-        $this->jsonBody($this->payload->getOutput());
+        $this->jsonBody($this->payload->getInput());
     }
 
     protected function notFound()
@@ -118,6 +118,7 @@ class Responder implements ResponderInterface
         $this->response = $this->response->withStatus(422);
         $this->jsonBody([
             'input' => $this->payload->getInput(),
+            'output' => $this->payload->getOutput(),
             'errors' => $this->payload->getExtras(),
         ]);
     }

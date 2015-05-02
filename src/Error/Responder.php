@@ -48,23 +48,14 @@ class Responder
         }
     }
 
-    protected function notFound($route)
-    {
-        $this->response = $this->response
-            ->withStatus(404)
-            ->withHeader('Content-Type', 'text/plain');
-
-        $this->response->getBody()->write('404 Not Found');
-    }
-
     protected function methodNotAllowed($route)
     {
         $this->response = $this->response
             ->withStatus(405)
-            ->withHeader('Allow', implode(',', $route->allows))
-            ->withHeader('Content-Type', 'text/plain');
+            ->withHeader('Allow', implode(', ', $route->allows))
+            ->withHeader('Content-Type', 'application/json');
 
-        $this->response->getBody()->write('405 Method Not Allowed');
+        $this->response->getBody()->write(json_encode($route->allows));
     }
 
     protected function notAcceptable($route)
@@ -76,11 +67,18 @@ class Responder
         $this->response->getBody()->write(json_encode($route->accepts));
     }
 
+    protected function notFound($route)
+    {
+        $this->response = $this->response
+            ->withStatus(404);
+
+        $this->response->getBody()->write('404 Not Found');
+    }
+
     protected function unknown($e)
     {
         $this->response = $this->response
-            ->withStatus(500)
-            ->withHeader('Content-Type', 'text/plain');
+            ->withStatus(500);
 
         $this->response->getBody()->write($e->getMessage());
     }
