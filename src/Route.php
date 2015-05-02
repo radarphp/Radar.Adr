@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr\Router;
+namespace Radar\Adr;
 
 use Aura\Router\Route as AuraRoute;
 

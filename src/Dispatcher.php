@@ -6,7 +6,7 @@ use Aura\Router\Matcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Dispatcher
+class Dispatcher implements DispatcherInterface
 {
     protected $factory;
     protected $matcher;
@@ -32,7 +32,7 @@ class Dispatcher
         array $before,
         array $after,
         array $finish,
-        $error
+        array $error
     ) {
         try {
             $this->startup($before);
@@ -41,9 +41,7 @@ class Dispatcher
         }
 
         try {
-            $this->middle($after);
-            $this->sender->send($this->response);
-            $this->middle($finish);
+            $this->shutdown($after, $finish);
         } catch (Exception $e) {
             $this->error($e, $error);
         }
@@ -61,6 +59,13 @@ class Dispatcher
             $route = $this->route();
             $this->action($route->input, $route->domain, $route->responder);
         }
+    }
+
+    protected function shutdown($after, $finish)
+    {
+        $this->middle($after);
+        $this->sender->send($this->response);
+        $this->middle($finish);
     }
 
     protected function middle(array $classes)
@@ -92,15 +97,17 @@ class Dispatcher
 
     protected function action($input, $domain, $responder)
     {
-        $payload = null;
-        if ($domain) {
-            $input = $this->factory->newInstance($input);
-            $input = (array) $input($this->request);
-            $domain = $this->domain($domain);
-            $payload = call_user_func_array($domain, $input);
-        }
+        $payload = $domain ? $this->payload($input, $domain) : null;
         $responder = $this->factory->newInstance($responder);
         $this->response = $responder($this->request, $this->response, $payload);
+    }
+
+    protected function payload($input, $domain)
+    {
+        $input = $this->factory->newInstance($input);
+        $input = $input($this->request);
+        $domain = $this->domain($domain);
+        return call_user_func_array($domain, (array) $input);
     }
 
     protected function domain($domain)
@@ -117,14 +124,10 @@ class Dispatcher
         return $domain;
     }
 
-    protected function error($e, $error)
+    protected function error($e, array $error)
     {
         $this->attributes(['radar/adr:exception' => $e]);
-        $this->action(
-            $error->input,
-            $error->domain,
-            $error->responder
-        );
+        call_user_func_array([$this, 'action'], $error);
     }
 
     protected function attributes(array $attributes)

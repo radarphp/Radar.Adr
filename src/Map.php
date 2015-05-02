@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr\Router;
+namespace Radar\Adr;
 
 use Aura\Router\Map as AuraMap;
 
@@ -38,6 +38,4 @@ class Map extends AuraMap
             $route->responder($responder);
         }
     }
-
-    // protected function resource($namePrefix, $pathPrefix)
 }

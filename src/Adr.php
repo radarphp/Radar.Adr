@@ -13,18 +13,16 @@ class Adr
     protected $before = [];
     protected $after = [];
     protected $finish = [];
-    protected $error;
+    protected $error = [
+        'Radar\Adr\Input',
+        'Radar\Adr\Error\Domain',
+        'Radar\Adr\Error\Responder'
+    ];
 
-    // inject a logger too
-    public function __construct(Dispatcher $dispatcher)
+    public function __construct(DispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
         $this->map = $this->dispatcher->map();
-        $this->error(
-            'Radar\Adr\Input',
-            'Radar\Adr\Error\Domain',
-            'Radar\Adr\Error\Responder'
-        );
     }
 
     public function __call($method, $params)
@@ -34,12 +32,7 @@ class Adr
 
     public function __invoke()
     {
-        $this->dispatcher->__invoke(
-            $this->before,
-            $this->after,
-            $this->finish,
-            $this->error
-        );
+        return call_user_func_array($this->dispatcher, $this->getMiddles());
     }
 
     public function before($class)
@@ -59,10 +52,16 @@ class Adr
 
     public function error($input, $domain, $responder)
     {
-        $this->error = (object) [
-            'input' => $input,
-            'domain' => $domain,
-            'responder' => $responder
+        $this->error = func_get_args();
+    }
+
+    public function getMiddles()
+    {
+        return [
+            'before' => $this->before,
+            'after' => $this->after,
+            'finish' => $this->finish,
+            'error' => $this->error
         ];
     }
 }
