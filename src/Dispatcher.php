@@ -97,9 +97,15 @@ class Dispatcher implements DispatcherInterface
 
     protected function action($input, $domain, $responder)
     {
-        $payload = $domain ? $this->payload($input, $domain) : null;
+        $payload = $domain
+            ? $this->payload($input, $domain)
+            : null;
+
         $responder = $this->factory->newInstance($responder);
-        $this->response = $responder($this->request, $this->response, $payload);
+
+        $this->response = $payload
+            ? $responder($this->request, $this->response, $payload)
+            : $responder($this->request, $this->response);
     }
 
     protected function payload($input, $domain)

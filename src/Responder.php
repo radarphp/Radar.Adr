@@ -15,11 +15,6 @@ class Responder implements ResponderInterface
 
     protected $payload;
 
-    public function __construct(Generator $generator)
-    {
-        $this->generator = $generator;
-    }
-
     public static function getMediaTypes()
     {
         return ['application/json'];
@@ -33,60 +28,51 @@ class Responder implements ResponderInterface
         $this->request = $request;
         $this->response = $response;
         $this->payload = $payload;
-        $this->runMethodForPayload();
+        $method = $this->getMethodForPayload();
+        $this->$method();
         return $this->response;
     }
 
-    protected function runMethodForPayload()
+    protected function getMethodForPayload()
     {
         if (! $this->payload) {
-            return $this->noContent();
+            return 'noContent';
         }
 
-        $method = str_replace('_', '', $this->payload->getStatus());
-        if (! method_exists($this, $method)) {
-            $method = 'unknown';
+        $method = str_replace('_', '', strtolower($this->payload->getStatus()));
+        return method_exists($this, $method) ? $method : 'unknown';
+    }
+
+    protected function jsonBody($data)
+    {
+        if (isset($data)) {
+            $this->response = $this->response->withHeader('Content-Type', 'application/json');
+            $this->response->getBody()->write(json_encode($data));
         }
-        return $this->$method();
-    }
-
-    protected function writeJson($data)
-    {
-        $this->response = $this->response->withHeader('Content-Type', 'application/json');
-        $this->response->getBody()->write(json_encode($data));
-    }
-
-    protected function unknown()
-    {
-        $this->response = $this->response->withStatus(500);
-        $this->writeJson([
-            'error' => 'Unknown domain payload status',
-            'status' => $this->payload->getStatus(),
-        ]);
     }
 
     protected function accepted()
     {
         $this->response = $this->response->withStatus(202);
-        $this->writeJson($this->payload->getOutput());
+        $this->jsonBody($this->payload->getOutput());
     }
 
     protected function created()
     {
         $this->response = $this->response->withStatus(201);
-        $this->writeJson($this->payload->getOutput());
+        $this->jsonBody($this->payload->getOutput());
     }
 
     protected function deleted()
     {
         $this->response = $this->response->withStatus(204);
-        $this->writeJson($this->payload->getOutput());
+        $this->jsonBody($this->payload->getOutput());
     }
 
     protected function error()
     {
         $this->response = $this->response->withStatus(500);
-        $this->writeJson([
+        $this->jsonBody([
             'code' => $this->payload->getCode(),
             'message' => $this->payload->getMessage(),
         ]);
@@ -95,13 +81,13 @@ class Responder implements ResponderInterface
     protected function failure()
     {
         $this->response = $this->response->withStatus(400);
-        $this->writeJson($this->payload->getInput());
+        $this->jsonBody($this->payload->getInput());
     }
 
     protected function found()
     {
         $this->response = $this->response->withStatus(200);
-        $this->writeJson($this->payload->getOutput());
+        $this->jsonBody($this->payload->getOutput());
     }
 
     protected function noContent()
@@ -112,25 +98,25 @@ class Responder implements ResponderInterface
     protected function notAuthenticated()
     {
         $this->response = $this->response->withStatus(400);
-        $this->writeJson($this->payload->getOutput());
+        $this->jsonBody($this->payload->getOutput());
     }
 
     protected function notAuthorized()
     {
         $this->response = $this->response->withStatus(403);
-        $this->writeJson($this->payload->getOutput());
+        $this->jsonBody($this->payload->getOutput());
     }
 
     protected function notFound()
     {
         $this->response = $this->response->withStatus(404);
-        $this->writeJson($this->payload->getInput());
+        $this->jsonBody($this->payload->getInput());
     }
 
     protected function notValid()
     {
         $this->response = $this->response->withStatus(422);
-        $this->writeJson([
+        $this->jsonBody([
             'input' => $this->payload->getInput(),
             'errors' => $this->payload->getExtras(),
         ]);
@@ -139,18 +125,27 @@ class Responder implements ResponderInterface
     protected function processing()
     {
         $this->response = $this->response->withStatus(203);
-        $this->writeJson($this->payload->getOutput());
+        $this->jsonBody($this->payload->getOutput());
     }
 
     protected function success()
     {
         $this->response = $this->response->withStatus(200);
-        $this->writeJson($this->payload->getOutput());
+        $this->jsonBody($this->payload->getOutput());
+    }
+
+    protected function unknown()
+    {
+        $this->response = $this->response->withStatus(500);
+        $this->jsonBody([
+            'error' => 'Unknown domain payload status',
+            'status' => $this->payload->getStatus(),
+        ]);
     }
 
     protected function updated()
     {
         $this->response = $this->response->withStatus(303);
-        $this->writeJson($this->payload->getOutput());
+        $this->jsonBody($this->payload->getOutput());
     }
 }
