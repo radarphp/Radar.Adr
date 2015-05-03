@@ -13,7 +13,7 @@ class Factory
         $this->envPath = $envPath;
     }
 
-    public function newInstance(array $config)
+    public function newInstance(array $config = [])
     {
         $loader = new Loader($this->envPath);
         $loader->parse();

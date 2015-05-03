@@ -75,7 +75,7 @@ class Responder
         $this->response->getBody()->write('404 Not Found');
     }
 
-    protected function unknown($e)
+    protected function unknown(Exception $e)
     {
         $this->response = $this->response
             ->withStatus(500);

@@ -3,19 +3,11 @@ namespace Radar\Adr;
 
 use Phly\Http\Response;
 
-// namespace-specific header() function
-function header($string, $flag = true)
-{
-    SenderTest::header($string, $flag);
-}
-
 class SenderTest extends \PHPUnit_Framework_TestCase
 {
-    protected static $headers = [];
-
-    static public function header($string, $flag)
+    protected function setUp()
     {
-        static::$headers[] = $string;
+        Php::$headers = [];
     }
 
     public function test()
@@ -34,7 +26,7 @@ class SenderTest extends \PHPUnit_Framework_TestCase
             'HTTP/1.1 200 OK',
             'Content-Type: foo/bar'
         ];
-        $this->assertSame($expect, static::$headers);
+        $this->assertSame($expect, Php::$headers);
         $this->assertSame('DOOM', $body);
     }
 }

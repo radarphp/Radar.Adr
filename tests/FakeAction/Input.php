@@ -1,7 +1,8 @@
 <?php
 namespace Radar\Adr\FakeAction;
 
-class Input
-{
+use Radar\Adr\Input as RadarInput;
 
+class Input extends RadarInput
+{
 }

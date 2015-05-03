@@ -9,10 +9,10 @@ class Input
     {
         return [
             array_merge(
-                $request->getQueryParams(),
-                $request->getAttributes(),
-                $request->getParsedBody(),
-                $request->getUploadedFiles()
+                (array) $request->getQueryParams(),
+                (array) $request->getAttributes(),
+                (array) $request->getParsedBody(),
+                (array) $request->getUploadedFiles()
             )
         ];
     }

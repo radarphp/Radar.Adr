@@ -18,6 +18,9 @@ class Responder implements ResponderInterface
         ResponseInterface $response,
         PayloadInterface $payload = null
     ) {
-        // do nothing
+        if ($payload) {
+            $response->getBody()->write($payload->getOutput());
+        }
+        return $response;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Radar\Adr;
 
+use Exception as AnyException;
 use Aura\Di\Injection\InjectionFactory;
 use Aura\Router\Matcher;
 use Psr\Http\Message\ServerRequestInterface;
@@ -35,14 +36,25 @@ class Dispatcher implements DispatcherInterface
         array $error
     ) {
         try {
-            $this->startup($before);
-        } catch (Exception $e) {
+            $early = $this->middle($before);
+            if (! $early) {
+                $route = $this->route();
+                $this->action($route->input, $route->domain, $route->responder);
+            }
+        } catch (AnyException $e) {
             $this->error($e, $error);
         }
 
         try {
-            $this->shutdown($after, $finish);
-        } catch (Exception $e) {
+            $this->middle($after);
+        } catch (AnyException $e) {
+            $this->error($e, $error);
+        }
+
+        try {
+            $this->sender->__invoke($this->response);
+            $this->middle($finish);
+        } catch (AnyException $e) {
             $this->error($e, $error);
         }
     }
@@ -50,22 +62,6 @@ class Dispatcher implements DispatcherInterface
     public function map()
     {
         return $this->matcher->getMap();
-    }
-
-    protected function startup($before)
-    {
-        $early = $this->middle($before);
-        if (! $early) {
-            $route = $this->route();
-            $this->action($route->input, $route->domain, $route->responder);
-        }
-    }
-
-    protected function shutdown($after, $finish)
-    {
-        $this->middle($after);
-        $this->sender->__invoke($this->response);
-        $this->middle($finish);
     }
 
     protected function middle(array $classes)
@@ -97,14 +93,9 @@ class Dispatcher implements DispatcherInterface
 
     protected function action($input, $domain, $responder)
     {
-        $payload = $domain
-            ? $this->payload($input, $domain)
-            : null;
-
         $responder = $this->factory->newInstance($responder);
-
-        $this->response = $payload
-            ? $responder($this->request, $this->response, $payload)
+        $this->response = $domain
+            ? $responder($this->request, $this->response, $this->payload($input, $domain))
             : $responder($this->request, $this->response);
     }
 
@@ -130,7 +121,7 @@ class Dispatcher implements DispatcherInterface
         return $domain;
     }
 
-    protected function error($e, array $error)
+    protected function error(AnyException $e, array $error)
     {
         $this->attributes(['radar/adr:exception' => $e]);
         call_user_func_array([$this, 'action'], $error);
