@@ -3,11 +3,10 @@ namespace Radar\Adr;
 
 use Aura\Payload_Interface\PayloadInterface;
 use Aura\Payload\Payload;
-use Aura\Router\Generator;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Responder implements ResponderInterface
+class Responder implements ResponderAcceptsInterface
 {
     protected $request;
 
@@ -15,7 +14,7 @@ class Responder implements ResponderInterface
 
     protected $payload;
 
-    public static function getMediaTypes()
+    public static function accepts()
     {
         return ['application/json'];
     }

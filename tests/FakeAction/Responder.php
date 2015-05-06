@@ -4,11 +4,11 @@ namespace Radar\Adr\FakeAction;
 use Aura\Payload_Interface\PayloadInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Radar\Adr\ResponderInterface;
+use Radar\Adr\ResponderAcceptsInterface;
 
-class Responder implements ResponderInterface
+class Responder implements ResponderAcceptsInterface
 {
-    public static function getMediaTypes()
+    public static function accepts()
     {
         return ['foo/bar'];
     }

@@ -15,10 +15,10 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
         $this->responder = new Responder();
     }
 
-    public function testGetMediaTypes()
+    public function testAccepts()
     {
         $expect = ['application/json'];
-        $actual = Responder::getMediaTypes();
+        $actual = Responder::accepts();
         $this->assertSame($expect, $actual);
     }
 
