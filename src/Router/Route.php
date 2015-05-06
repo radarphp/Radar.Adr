@@ -7,7 +7,7 @@ class Route extends AuraRoute
 {
     protected $input = 'Radar\Adr\Input';
     protected $domain;
-    protected $responder = 'Radar\Adr\Responder';
+    protected $responder = 'Radar\Adr\Responder\Responder';
 
     public function input($input)
     {
