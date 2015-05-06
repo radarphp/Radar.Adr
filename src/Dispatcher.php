@@ -50,7 +50,7 @@ class Dispatcher implements DispatcherInterface
 
         $routingHandler = $this->factory($routingHandler);
         $route = $routingHandler($this->request);
-        $this->action($route);
+        $this->response = $this->action($route);
         $this->middle($middle, 'after');
     }
 
@@ -79,10 +79,18 @@ class Dispatcher implements DispatcherInterface
         foreach ($route->attributes as $key => $val) {
             $this->request = $this->request->withAttribute($key, $val);
         }
+
         $responder = $this->factory($route->responder);
-        $this->response = $route->domain
-            ? $responder($this->request, $this->response, $this->payload($route->input, $route->domain))
-            : $responder($this->request, $this->response);
+
+        if ($route->domain) {
+            return $responder(
+                $this->request,
+                $this->response,
+                $this->payload($route->input, $route->domain)
+            );
+        }
+
+        return $responder($this->request, $this->response);
     }
 
     protected function payload($input, $domain)
