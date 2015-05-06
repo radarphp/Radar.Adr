@@ -1,7 +1,7 @@
 <?php
 namespace Radar\Adr;
 
-use Exception as AnyException;
+use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -37,13 +37,13 @@ class Dispatcher
     {
         try {
             $this->inbound();
-        } catch (AnyException $e) {
+        } catch (Exception $e) {
             $this->exception($e);
         }
 
         try {
             $this->outbound();
-        } catch (AnyException $e) {
+        } catch (Exception $e) {
             $this->exception($e);
         }
     }
@@ -111,7 +111,7 @@ class Dispatcher
     }
 
 
-    protected function exception(AnyException $exception)
+    protected function exception(Exception $exception)
     {
         $factory = $this->factory;
         $exceptionHandler = $factory($this->exceptionHandler);

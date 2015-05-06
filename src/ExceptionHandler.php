@@ -1,7 +1,7 @@
 <?php
 namespace Radar\Adr;
 
-use Exception as AnyException;
+use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -14,7 +14,7 @@ class ExceptionHandler
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        AnyException $exception
+        Exception $exception
     ) {
         $this->request = $request;
         $this->response = $response;

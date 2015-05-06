@@ -1,6 +1,7 @@
 <?php
 namespace Radar\Adr;
 
+use Exception;
 use Phly\Http\ServerRequestFactory;
 use Phly\Http\Response;
 
