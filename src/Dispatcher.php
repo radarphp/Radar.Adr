@@ -6,7 +6,7 @@ use Aura\Di\Injection\InjectionFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Dispatcher implements DispatcherInterface
+class Dispatcher
 {
     protected $factory;
     protected $request;

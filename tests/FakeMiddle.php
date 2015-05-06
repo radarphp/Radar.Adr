@@ -5,7 +5,7 @@ class FakeMiddle extends Middle
 {
     public function __construct()
     {
-        // no need for factory
+        // do nothing
     }
 
     public function __get($key)
