@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Responder;
 
 use Aura\Payload\Payload;
 use Phly\Http\ServerRequestFactory;

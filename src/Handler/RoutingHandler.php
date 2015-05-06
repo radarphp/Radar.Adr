@@ -23,7 +23,7 @@ class RoutingHandler
             $route = clone $this->route;
             $route->input(null);
             $route->domain([$this->matcher, 'getFailedRoute']);
-            $route->responder('Radar\Adr\RoutingFailedResponder');
+            $route->responder('Radar\Adr\Responder\RoutingFailedResponder');
         }
         return $route;
     }

@@ -24,9 +24,12 @@ class ConfigTest extends AbstractContainerTest
         return [
             ['Aura\Router\RouterContainer'],
             ['Radar\Adr\Adr'],
-            ['Radar\Adr\Responder'],
-            ['Radar\Adr\Map'],
+            ['Radar\Adr\Dispatcher'],
+            ['Radar\Adr\Factory'],
+            ['Radar\Adr\Handler\ActionHandler'],
             ['Radar\Adr\Handler\RoutingHandler'],
+            ['Radar\Adr\Map'],
+            ['Radar\Adr\Middle'],
         ];
     }
 }

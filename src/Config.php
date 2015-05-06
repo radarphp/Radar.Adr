@@ -49,14 +49,14 @@ class Config extends ContainerConfig
         $di->params['Radar\Adr\Handler\RoutingHandler']['route'] = $di->lazyNew('Radar\Adr\Route');
 
         /**
-         * Radar\Adr\Middle
-         */
-        $di->params['Radar\Adr\Middle']['factory'] = $di->lazyNew('Radar\Adr\Factory');
-
-        /**
          * Radar\Adr\Map
          */
         $di->params['Radar\Adr\Map']['protoRoute'] = $di->lazyNew('Radar\Adr\Route');
+
+        /**
+         * Radar\Adr\Middle
+         */
+        $di->params['Radar\Adr\Middle']['factory'] = $di->lazyNew('Radar\Adr\Factory');
     }
 
     public function modify(Container $di)

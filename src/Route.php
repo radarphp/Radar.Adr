@@ -24,7 +24,7 @@ class Route extends AuraRoute
         $this->responder = $responder;
         $accepts = is_subclass_of(
             $responder,
-            'Radar\Adr\ResponderAcceptsInterface',
+            'Radar\Adr\Responder\ResponderAcceptsInterface',
             true
         );
         if ($accepts) {

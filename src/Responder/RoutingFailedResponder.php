@@ -1,8 +1,9 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Responder;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Radar\Adr\Route;
 
 class RoutingFailedResponder
 {

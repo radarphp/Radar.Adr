@@ -4,7 +4,7 @@ namespace Radar\Adr\FakeAction;
 use Aura\Payload_Interface\PayloadInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Radar\Adr\ResponderAcceptsInterface;
+use Radar\Adr\Responder\ResponderAcceptsInterface;
 
 class Responder implements ResponderAcceptsInterface
 {
