@@ -31,13 +31,13 @@ class Dispatcher implements DispatcherInterface
         try {
             $this->inbound($middle, $routingHandler);
         } catch (AnyException $e) {
-            $this->handleException($e, $exceptionHandler);
+            $this->exception($e, $exceptionHandler);
         }
 
         try {
             $this->outbound($middle, $sendingHandler);
         } catch (AnyException $e) {
-            $this->handleException($e, $exceptionHandler);
+            $this->exception($e, $exceptionHandler);
         }
     }
 
@@ -106,10 +106,14 @@ class Dispatcher implements DispatcherInterface
         return call_user_func_array($domain, $input);
     }
 
-    protected function handleException($exception, $handler)
+    protected function exception(AnyException $exception, $exceptionHandler)
     {
-        $handler = $this->factory($handler);
-        $this->response = $handler($this->request, $this->response, $exception);
+        $exceptionHandler = $this->factory($exceptionHandler);
+        $this->response = $exceptionHandler(
+            $this->request,
+            $this->response,
+            $exception
+        );
     }
 
     protected function factory($spec)

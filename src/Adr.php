@@ -10,9 +10,11 @@ class Adr
 {
     protected $dispatcher;
     protected $map;
-    protected $before = [];
-    protected $after = [];
-    protected $finish = [];
+    protected $middle = [
+        'before' => [],
+        'after' => [],
+        'finish' => [],
+    ];
     protected $routingHandler = 'Radar\Adr\RoutingHandler';
     protected $sendingHandler = 'Radar\Adr\SendingHandler';
     protected $exceptionHandler = 'Radar\Adr\ExceptionHandler';
@@ -35,17 +37,17 @@ class Adr
 
     public function before($class)
     {
-        $this->before[] = $class;
+        $this->middle['before'][] = $class;
     }
 
     public function after($class)
     {
-        $this->after[] = $class;
+        $this->middle['after'][] = $class;
     }
 
     public function finish($class)
     {
-        $this->finish[] = $class;
+        $this->middle['finish'][] = $class;
     }
 
     public function exceptionHandler($class)
@@ -66,11 +68,7 @@ class Adr
     public function getDispatcherParams()
     {
         return [
-            'middle' => [
-                'before' => $this->before,
-                'after' => $this->after,
-                'finish' => $this->finish,
-            ],
+            'middle' => $this->middle,
             'routingHandler' => $this->routingHandler,
             'sendingHandler' => $this->sendingHandler,
             'exceptionHandler' => $this->exceptionHandler,
