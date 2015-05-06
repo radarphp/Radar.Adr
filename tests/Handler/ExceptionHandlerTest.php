@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Handler;
 
 use Exception;
 use Phly\Http\ServerRequestFactory;

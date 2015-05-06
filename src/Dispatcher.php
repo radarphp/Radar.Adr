@@ -11,10 +11,10 @@ class Dispatcher
     protected $request;
     protected $response;
     protected $middle;
-    protected $routingHandler = 'Radar\Adr\RoutingHandler';
-    protected $sendingHandler = 'Radar\Adr\SendingHandler';
-    protected $exceptionHandler = 'Radar\Adr\ExceptionHandler';
-    protected $actionHandler = 'Radar\Adr\ActionHandler';
+    protected $routingHandler = 'Radar\Adr\Handler\RoutingHandler';
+    protected $sendingHandler = 'Radar\Adr\Handler\SendingHandler';
+    protected $exceptionHandler = 'Radar\Adr\Handler\ExceptionHandler';
+    protected $actionHandler = 'Radar\Adr\Handler\ActionHandler';
 
     public function __construct(
         Factory $factory,

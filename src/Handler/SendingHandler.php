@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Handler;
 
 use Psr\Http\Message\ResponseInterface;
 

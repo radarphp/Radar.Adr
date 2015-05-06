@@ -1,11 +1,6 @@
 <?php
 namespace Radar\Adr;
 
-function header($string, $flag = true)
-{
-    Php::header($string, $flag);
-}
-
 class Php
 {
     static public $headers = [];

@@ -1,6 +1,11 @@
 <?php
 namespace Radar\Adr;
 
+function header($string, $flag = true)
+{
+    Php::header($string, $flag);
+}
+
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
     protected $factory;

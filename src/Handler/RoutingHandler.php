@@ -1,8 +1,9 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Handler;
 
 use Aura\Router\Matcher;
 use Psr\Http\Message\ServerRequestInterface;
+use Radar\Adr\Route;
 
 class RoutingHandler
 {

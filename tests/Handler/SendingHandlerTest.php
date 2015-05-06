@@ -1,7 +1,13 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Handler;
 
 use Phly\Http\Response;
+use Radar\Adr\Php;
+
+function header($string, $flag = true)
+{
+    Php::header($string, $flag);
+}
 
 class SenderTest extends \PHPUnit_Framework_TestCase
 {
