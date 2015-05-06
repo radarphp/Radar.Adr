@@ -1,28 +1,24 @@
 <?php
 namespace Radar\Adr;
 
-use Aura\Di\Injection\InjectionFactory;
 use Aura\Router\Map;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// a proxy for the map, middle, and dispatcher
 class Adr
 {
     protected $map;
     protected $middle;
     protected $dispatcher;
-    protected $routingHandler = 'Radar\Adr\RoutingHandler';
-    protected $sendingHandler = 'Radar\Adr\SendingHandler';
-    protected $exceptionHandler = 'Radar\Adr\ExceptionHandler';
 
     public function __construct(
         Map $map,
-        Middle $middle,
         Dispatcher $dispatcher
     ) {
         $this->map = $map;
-        $this->middle = $middle;
         $this->dispatcher = $dispatcher;
+        $this->middle = $this->dispatcher->middle;
     }
 
     public function __call($method, $params)
@@ -32,7 +28,7 @@ class Adr
 
     public function __invoke()
     {
-        return call_user_func_array($this->dispatcher, $this->getDispatcherParams());
+        return call_user_func($this->dispatcher);
     }
 
     public function before($class)
@@ -52,26 +48,16 @@ class Adr
 
     public function exceptionHandler($class)
     {
-        $this->exceptionHandler = $class;
+        $this->dispatcher->exceptionHandler($class);
     }
 
     public function routingHandler($class)
     {
-        $this->routingHandler = $class;
+        $this->dispatcher->routingHandler($class);
     }
 
     public function sendingHandler($class)
     {
-        $this->sendingHandler = $class;
-    }
-
-    public function getDispatcherParams()
-    {
-        return [
-            'middle' => $this->middle,
-            'routingHandler' => $this->routingHandler,
-            'sendingHandler' => $this->sendingHandler,
-            'exceptionHandler' => $this->exceptionHandler,
-        ];
+        $this->dispatcher->sendingHandler($class);
     }
 }

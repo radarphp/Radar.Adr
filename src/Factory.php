@@ -1,28 +1,28 @@
 <?php
 namespace Radar\Adr;
 
-use Aura\Di\ContainerBuilder;
-use josegonzalez\Dotenv\Loader;
+use Aura\Di\Injection\InjectionFactory;
 
-// rename to Bootstrap or Boot (again) and make Factory work like Dispatcher::factory
 class Factory
 {
-    protected $envPath;
+    protected $injectionFactory;
 
-    public function __construct($envPath)
+    public function __construct(InjectionFactory $injectionFactory)
     {
-        $this->envPath = $envPath;
+        $this->injectionFactory = $injectionFactory;
     }
 
-    public function newInstance(array $config = [])
+    public function __invoke($spec)
     {
-        $loader = new Loader($this->envPath);
-        $loader->parse();
-        $loader->toEnv();
+        if (is_string($spec)) {
+            return $this->injectionFactory->newInstance($spec);
+        }
 
-        $config = array_merge(['Radar\Adr\Config'], $config);
-        $di = (new ContainerBuilder())->newConfiguredInstance([], $config);
+        if (is_array($spec) && is_string($spec[0])) {
+            $spec[0] = $this->injectionFactory->newInstance($spec[0]);
+            return $spec;
+        }
 
-        return $di->newInstance('Radar\Adr\Adr');
+        return $spec;
     }
 }

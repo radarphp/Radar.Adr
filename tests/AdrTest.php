@@ -7,11 +7,10 @@ class AdrTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->adr = new Adr(
-            new FakeMap(new Route()),
-            new FakeMiddle(),
-            new FakeDispatcher()
-        );
+        $this->fakeMap = new FakeMap(new Route());
+        $this->fakeMiddle = new FakeMiddle();
+        $this->fakeDispatcher = new FakeDispatcher($this->fakeMiddle);
+        $this->adr = new Adr($this->fakeMap, $this->fakeDispatcher);
     }
 
     public function testProxyToMap()
@@ -36,37 +35,35 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->adr->sendingHandler('Foo\Bar\SendingHandler');
         $this->adr->exceptionHandler('Foo\Bar\ExceptionHandler');
 
-        $actual = $this->adr->getDispatcherParams();
-        $middle = $actual['middle'];
-        unset($actual['middle']);
+        $expect = 'Foo\Bar\RoutingHandler';
+        $this->assertSame($expect, $this->fakeDispatcher->routingHandler);
 
-        $expect = [
-            'routingHandler' => 'Foo\Bar\RoutingHandler',
-            'sendingHandler' => 'Foo\Bar\SendingHandler',
-            'exceptionHandler' => 'Foo\Bar\ExceptionHandler',
-        ];
-        $this->assertSame($expect, $actual);
+        $expect = 'Foo\Bar\SendingHandler';
+        $this->assertSame($expect, $this->fakeDispatcher->sendingHandler);
+
+        $expect = 'Foo\Bar\ExceptionHandler';
+        $this->assertSame($expect, $this->fakeDispatcher->exceptionHandler);
 
         $expect = [
             'before1',
             'before2',
             'before3',
         ];
-        $this->assertSame($expect, $middle->before);
+        $this->assertSame($expect, $this->fakeMiddle->before);
 
         $expect = [
             'after1',
             'after2',
             'after3',
         ];
-        $this->assertSame($expect, $middle->after);
+        $this->assertSame($expect, $this->fakeMiddle->after);
 
         $expect = [
             'finish1',
             'finish2',
             'finish3',
         ];
-        $this->assertSame($expect, $middle->finish);
+        $this->assertSame($expect, $this->fakeMiddle->finish);
     }
 
     public function testInvoke()

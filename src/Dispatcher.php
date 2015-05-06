@@ -2,7 +2,6 @@
 namespace Radar\Adr;
 
 use Exception as AnyException;
-use Aura\Di\Injection\InjectionFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -11,53 +10,82 @@ class Dispatcher
     protected $factory;
     protected $request;
     protected $response;
+    protected $middle;
+    protected $routingHandler = 'Radar\Adr\RoutingHandler';
+    protected $sendingHandler = 'Radar\Adr\SendingHandler';
+    protected $exceptionHandler = 'Radar\Adr\ExceptionHandler';
 
     public function __construct(
-        InjectionFactory $factory,
+        Factory $factory,
         ServerRequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
+        Middle $middle
     ) {
         $this->factory = $factory;
         $this->request = $request;
         $this->response = $response;
+        $this->middle = $middle;
     }
 
-    public function __invoke(
-        Middle $middle,
-        $routingHandler,
-        $sendingHandler,
-        $exceptionHandler
-    ) {
-        try {
-            $this->inbound($middle, $routingHandler);
-        } catch (AnyException $e) {
-            $this->exception($e, $exceptionHandler);
-        }
-
-        try {
-            $this->outbound($middle, $sendingHandler);
-        } catch (AnyException $e) {
-            $this->exception($e, $exceptionHandler);
-        }
-    }
-
-    public function inbound(Middle $middle, $routingHandler)
+    public function __get($key)
     {
+        return $this->$key;
+    }
+
+    public function __invoke()
+    {
+        try {
+            $this->inbound();
+        } catch (AnyException $e) {
+            $this->exception($e);
+        }
+
+        try {
+            $this->outbound();
+        } catch (AnyException $e) {
+            $this->exception($e);
+        }
+    }
+
+    public function exceptionHandler($class)
+    {
+        $this->exceptionHandler = $class;
+    }
+
+    public function routingHandler($class)
+    {
+        $this->routingHandler = $class;
+    }
+
+    public function sendingHandler($class)
+    {
+        $this->sendingHandler = $class;
+    }
+
+    protected function inbound()
+    {
+        $middle = $this->middle;
+
         $early = $middle($this->request, $this->response, 'before');
         if ($early) {
             return;
         }
 
-        $routingHandler = $this->factory($routingHandler);
+        $factory = $this->factory;
+        $routingHandler = $factory($this->routingHandler);
         $route = $routingHandler($this->request);
         $this->response = $this->action($route);
+
         $middle($this->request, $this->response, 'after');
     }
 
-    protected function outbound(Middle $middle, $sendingHandler)
+    protected function outbound()
     {
-        $sendingHandler = $this->factory($sendingHandler);
+        $factory = $this->factory;
+        $sendingHandler = $factory($this->sendingHandler);
         $sendingHandler($this->response);
+
+        $middle = $this->middle;
         $middle($this->request, $this->response, 'after');
     }
 
@@ -67,7 +95,8 @@ class Dispatcher
             $this->request = $this->request->withAttribute($key, $val);
         }
 
-        $responder = $this->factory($route->responder);
+        $factory = $this->factory;
+        $responder = $factory($route->responder);
 
         if ($route->domain) {
             return $responder(
@@ -82,38 +111,27 @@ class Dispatcher
 
     protected function payload($input, $domain)
     {
+        $factory = $this->factory;
+
         if ($input) {
-            $input = $this->factory($input);
+            $input = $factory($input);
             $input = (array) $input($this->request);
         } else {
             $input = [];
         }
 
-        $domain = $this->factory($domain);
+        $domain = $factory($domain);
         return call_user_func_array($domain, $input);
     }
 
-    protected function exception(AnyException $exception, $exceptionHandler)
+    protected function exception(AnyException $exception)
     {
-        $exceptionHandler = $this->factory($exceptionHandler);
+        $factory = $this->factory;
+        $exceptionHandler = $factory($this->exceptionHandler);
         $this->response = $exceptionHandler(
             $this->request,
             $this->response,
             $exception
         );
-    }
-
-    protected function factory($spec)
-    {
-        if (is_string($spec)) {
-            return $this->factory->newInstance($spec);
-        }
-
-        if (is_array($spec) && is_string($spec[0])) {
-            $spec[0] = $this->factory->newInstance($spec[0]);
-            return $spec;
-        }
-
-        return $spec;
     }
 }

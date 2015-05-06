@@ -8,16 +8,16 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Php::$headers = [];
-        $this->factory = new Factory(__DIR__ . DIRECTORY_SEPARATOR . '_env');
-
         FakeWare::$count = 0;
     }
 
     protected function newAdr(array $server = [])
     {
         Php::$headers = [];
+        FakeWare::$count = 0;
         $_SERVER = array_merge($_SERVER, $server);
-        return $this->factory->newInstance();
+        $boot = new Boot(__DIR__ . DIRECTORY_SEPARATOR . '_env');
+        return $boot();
     }
 
     protected function assertOutput($adr, $expectHeaders, $expectBody)
@@ -25,7 +25,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         ob_start();
         $adr();
         $actualBody = ob_get_clean();
-        // $this->assertEquals($expectHeaders, Php::$headers);
+        $this->assertEquals($expectHeaders, Php::$headers);
         $this->assertEquals($expectBody, $actualBody);
     }
 

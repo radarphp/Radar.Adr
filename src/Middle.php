@@ -1,7 +1,6 @@
 <?php
 namespace Radar\Adr;
 
-use Aura\Di\Injection\InjectionFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -11,7 +10,7 @@ class Middle
     protected $after = [];
     protected $finish = [];
 
-    public function __construct(InjectionFactory $factory)
+    public function __construct(Factory $factory)
     {
         $this->factory = $factory;
     }
@@ -21,8 +20,10 @@ class Middle
         ResponseInterface &$response,
         $key
     ) {
+        $factory = $this->factory;
+
         foreach ($this->$key as $class) {
-            $object = $this->factory->newInstance($class);
+            $object = $factory($class);
             $early = $object($request, $response);
             if ($early instanceof ResponseInterface) {
                 $response = $early;
