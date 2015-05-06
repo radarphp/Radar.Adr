@@ -22,7 +22,9 @@ class Route extends AuraRoute
     public function responder($responder)
     {
         $this->responder = $responder;
-        $this->accepts = array();
-        $this->accepts($responder::getMediaTypes());
+        if (is_subclass_of($responder, 'Radar\Adr\ResponderInterface', true)) {
+            $this->accepts = [];
+            $this->accepts($responder::getMediaTypes());
+        }
     }
 }

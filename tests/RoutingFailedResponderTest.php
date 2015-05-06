@@ -1,33 +1,22 @@
 <?php
 namespace Radar\Adr;
 
-use Aura\Payload\Payload;
 use Phly\Http\ServerRequestFactory;
 use Phly\Http\Response;
 
-class ErrorTest extends \PHPUnit_Framework_TestCase
+class RoutingFailedResponderTest extends \PHPUnit_Framework_TestCase
 {
-    protected $responder;
-
-    public function setup()
+    protected function getResponse($failedRoute)
     {
-        $this->domain = new Error\Domain(new Payload());
-        $this->responder = new Error\Responder();
-    }
-
-    protected function getResponse($e)
-    {
+        $routingFailedResponder = new RoutingFailedResponder();
         $request = ServerRequestFactory::fromGlobals();
         $response = new Response();
-        $payload = $this->domain->__invoke([
-            'radar/adr:exception' => $e
-        ]);
-        return $this->responder->__invoke($request, $response, $payload);
+        return $routingFailedResponder($request, $response, $failedRoute);
     }
 
-    protected function assertPayloadResponse($e, $status, array $headers, $body)
+    protected function assertResponse($failedRoute, $status, array $headers, $body)
     {
-        $response = $this->getResponse($e);
+        $response = $this->getResponse($failedRoute);
 
         $this->assertEquals($status, $response->getStatusCode());
 
@@ -48,11 +37,8 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
             ->allows(['PUT', 'POST'])
             ->failedRule('Aura\Router\Rule\Allows');
 
-        $e = new Exception\RoutingFailed();
-        $e->setFailedRoute($failedRoute);
-
-        $this->assertPayloadResponse(
-            $e,
+        $this->assertResponse(
+            $failedRoute,
             405,
             [
                 'Allow' => 'PUT, POST',
@@ -68,11 +54,8 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
             ->accepts(['foo/bar', 'baz/dib'])
             ->failedRule('Aura\Router\Rule\Accepts');
 
-        $e = new Exception\RoutingFailed();
-        $e->setFailedRoute($failedRoute);
-
-        $this->assertPayloadResponse(
-            $e,
+        $this->assertResponse(
+            $failedRoute,
             406,
             [],
             '["foo\/bar","baz\/dib"]'
@@ -84,11 +67,8 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
         $failedRoute = (new Route())
             ->failedRule('Aura\Router\Rule\Path');
 
-        $e = new Exception\RoutingFailed();
-        $e->setFailedRoute($failedRoute);
-
-        $this->assertPayloadResponse(
-            $e,
+        $this->assertResponse(
+            $failedRoute,
             404,
             [],
             '404 Not Found'
@@ -97,12 +77,15 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
 
     public function testUnknown()
     {
-        $e = new Exception('Unknown error');
-        $this->assertPayloadResponse(
-            $e,
+        $failedRoute = (new Route())
+            ->name('test')
+            ->failedRule('RandomRuleName');
+
+        $this->assertResponse(
+            $failedRoute,
             500,
             [],
-            'Unknown error'
+            'Route test failed rule RandomRuleName'
         );
     }
 }

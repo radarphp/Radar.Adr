@@ -17,13 +17,11 @@ class Dispatcher implements DispatcherInterface
 
     public function __construct(
         InjectionFactory $factory,
-        Matcher $matcher,
         ServerRequestInterface $request,
         ResponseInterface $response,
         Sender $sender
     ) {
         $this->factory = $factory;
-        $this->matcher = $matcher;
         $this->request = $request;
         $this->response = $response;
         $this->sender = $sender;
@@ -33,42 +31,48 @@ class Dispatcher implements DispatcherInterface
         array $before,
         array $after,
         array $finish,
-        array $error
+        $routingHandler,
+        $exceptionHandler
     ) {
         try {
-            $early = $this->middle($before);
-            if (! $early) {
-                $route = $this->route();
-                $this->action($route->input, $route->domain, $route->responder);
-            }
+            $this->inbound($before, $routingHandler, $after);
         } catch (AnyException $e) {
-            $this->error($e, $error);
+            $this->handleException($e, $exceptionHandler);
         }
 
         try {
-            $this->middle($after);
+            $this->outbound($finish);
         } catch (AnyException $e) {
-            $this->error($e, $error);
-        }
-
-        try {
-            $this->sender->__invoke($this->response);
-            $this->middle($finish);
-        } catch (AnyException $e) {
-            $this->error($e, $error);
+            $this->handleException($e, $exceptionHandler);
         }
     }
 
-    public function map()
+    public function inbound($before, $routingHandler, $after)
     {
-        return $this->matcher->getMap();
+        $early = $this->middle($before);
+        if ($early) {
+            return;
+        }
+
+        $routingHandler = $this->factory($routingHandler);
+        $route = $routingHandler($this->request);
+        $this->action($route);
+        $this->middle($after);
     }
 
+    protected function outbound($finish)
+    {
+        $this->sender->__invoke($this->response);
+        $this->middle($finish);
+    }
+
+    // return true to exit early.
+    // use &request &$response to modify the values.
     protected function middle(array $classes)
     {
         // need logging here to say when something runs or not
         foreach ($classes as $class) {
-            $object = $this->factory->newInstance($class);
+            $object = $this->factory($class);
             $early = $object($this->request, $this->response);
             if ($early instanceof ResponseInterface) {
                 $this->response = $early;
@@ -78,59 +82,47 @@ class Dispatcher implements DispatcherInterface
         return false;
     }
 
-    protected function route()
+    protected function action($route)
     {
-        $route = $this->matcher->match($this->request);
-        if ($route) {
-            $this->attributes($route->attributes);
-            return $route;
+        foreach ($route->attributes as $key => $val) {
+            $this->request = $this->request->withAttribute($key, $val);
         }
-
-        $e = new Exception\RoutingFailed();
-        $e->setFailedRoute($this->matcher->getFailedRoute());
-        throw $e;
-    }
-
-    protected function action($input, $domain, $responder)
-    {
-        $responder = $this->factory->newInstance($responder);
-        $this->response = $domain
-            ? $responder($this->request, $this->response, $this->payload($input, $domain))
+        $responder = $this->factory($route->responder);
+        $route->domain
+            ? $responder($this->request, $this->response, $this->payload($route->input, $route->domain))
             : $responder($this->request, $this->response);
     }
 
     protected function payload($input, $domain)
     {
-        $input = $this->factory->newInstance($input);
-        $input = $input($this->request);
-        $domain = $this->domain($domain);
-        return call_user_func_array($domain, (array) $input);
-    }
-
-    protected function domain($domain)
-    {
-        if (is_string($domain)) {
-            return $this->factory->newInstance($domain);
+        if ($input) {
+            $input = $this->factory($input);
+            $input = (array) $input($this->request);
+        } else {
+            $input = [];
         }
 
-        if (is_array($domain) && is_string($domain[0])) {
-            $domain[0] = $this->factory->newInstance($domain[0]);
-            return $domain;
-        }
-
-        return $domain;
+        $domain = $this->factory($domain);
+        return call_user_func_array($domain, $input);
     }
 
-    protected function error(AnyException $e, array $error)
+    protected function handleException($exception, $handler)
     {
-        $this->attributes(['radar/adr:exception' => $e]);
-        call_user_func_array([$this, 'action'], $error);
+        $handler = $this->factory($handler);
+        $this->response = $handler($this->request, $this->response, $exception);
     }
 
-    protected function attributes(array $attributes)
+    protected function factory($spec)
     {
-        foreach ($attributes as $key => $val) {
-            $this->request = $this->request->withAttribute($key, $val);
+        if (is_string($spec)) {
+            return $this->factory->newInstance($spec);
         }
+
+        if (is_array($spec) && is_string($spec[0])) {
+            $spec[0] = $this->factory->newInstance($spec[0]);
+            return $spec;
+        }
+
+        return $spec;
     }
 }

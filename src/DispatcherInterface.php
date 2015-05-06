@@ -7,8 +7,7 @@ interface DispatcherInterface
         array $before,
         array $after,
         array $finish,
-        array $error
+        $routingHander,
+        $exceptionHandler
     );
-
-    public function map();
 }

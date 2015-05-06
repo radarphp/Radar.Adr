@@ -7,7 +7,10 @@ class AdrTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->adr = new Adr(new FakeDispatcher(new FakeMap()));
+        $this->adr = new Adr(
+            new FakeMap(new Route()),
+            new FakeDispatcher()
+        );
     }
 
     public function testProxyToMap()
@@ -17,7 +20,7 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testMiddles()
+    public function testGetDispatcherParams()
     {
         $this->adr->before('before1');
         $this->adr->before('before2');
@@ -28,7 +31,8 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->adr->finish('finish1');
         $this->adr->finish('finish2');
         $this->adr->finish('finish3');
-        $this->adr->error('errorInput', 'errorDomain', 'errorResponder');
+        $this->adr->routingHandler('Radar\Adr\RoutingHandler');
+        $this->adr->exceptionHandler('Radar\Adr\ExceptionHandler');
 
         $expect = [
             'before' => [
@@ -46,14 +50,11 @@ class AdrTest extends \PHPUnit_Framework_TestCase
                 'finish2',
                 'finish3',
             ],
-            'error' => [
-                'errorInput',
-                'errorDomain',
-                'errorResponder',
-            ],
+            'routingHandler' => 'Radar\Adr\RoutingHandler',
+            'exceptionHandler' => 'Radar\Adr\ExceptionHandler',
         ];
 
-        $actual = $this->adr->getMiddles();
+        $actual = $this->adr->getDispatcherParams();
         $this->assertSame($expect, $actual);
     }
 
