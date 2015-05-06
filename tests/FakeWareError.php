@@ -1,7 +1,7 @@
 <?php
 namespace Radar\Adr;
 
-class MiddleError
+class FakeWareError
 {
     public function __invoke(&$request, &$response)
     {

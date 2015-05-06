@@ -1,10 +1,15 @@
 <?php
 namespace Radar\Adr;
 
-class FakeDispatcher implements DispatcherInterface
+class FakeDispatcher extends Dispatcher
 {
+    public function __construct()
+    {
+        // do nothing
+    }
+
     public function __invoke(
-        array $middle,
+        Middle $middle,
         $routingHandler,
         $sendingHandler,
         $exceptionHandler

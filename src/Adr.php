@@ -8,20 +8,20 @@ use Psr\Http\Message\ResponseInterface;
 
 class Adr
 {
-    protected $dispatcher;
     protected $map;
-    protected $middle = [
-        'before' => [],
-        'after' => [],
-        'finish' => [],
-    ];
+    protected $middle;
+    protected $dispatcher;
     protected $routingHandler = 'Radar\Adr\RoutingHandler';
     protected $sendingHandler = 'Radar\Adr\SendingHandler';
     protected $exceptionHandler = 'Radar\Adr\ExceptionHandler';
 
-    public function __construct(Map $map, DispatcherInterface $dispatcher)
-    {
+    public function __construct(
+        Map $map,
+        Middle $middle,
+        Dispatcher $dispatcher
+    ) {
         $this->map = $map;
+        $this->middle = $middle;
         $this->dispatcher = $dispatcher;
     }
 
@@ -37,17 +37,17 @@ class Adr
 
     public function before($class)
     {
-        $this->middle['before'][] = $class;
+        $this->middle->before($class);
     }
 
     public function after($class)
     {
-        $this->middle['after'][] = $class;
+        $this->middle->after($class);
     }
 
     public function finish($class)
     {
-        $this->middle['finish'][] = $class;
+        $this->middle->finish($class);
     }
 
     public function exceptionHandler($class)

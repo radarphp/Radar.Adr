@@ -4,6 +4,7 @@ namespace Radar\Adr;
 use Aura\Di\ContainerBuilder;
 use josegonzalez\Dotenv\Loader;
 
+// rename to Bootstrap or Boot (again) and make Factory work like Dispatcher::factory
 class Factory
 {
     protected $envPath;

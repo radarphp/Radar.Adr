@@ -10,7 +10,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         Php::$headers = [];
         $this->factory = new Factory(__DIR__ . DIRECTORY_SEPARATOR . '_env');
 
-        Middle::$count = 0;
+        FakeWare::$count = 0;
     }
 
     protected function newAdr(array $server = [])
@@ -104,7 +104,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->after('Radar\Adr\MiddleError');
+        $adr->after('Radar\Adr\FakeWareError');
 
         $adr->get('Radar\Adr\FakeAction', '/fake', 'Radar\Adr\FakeDomain');
         $this->assertOutput(
@@ -123,7 +123,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->finish('Radar\Adr\MiddleError');
+        $adr->finish('Radar\Adr\FakeWareError');
         $adr->get('Radar\Adr\FakeAction', '/fake', 'Radar\Adr\FakeDomain');
 
         // OK, because the error is after the response is sent
@@ -143,9 +143,9 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->before('Radar\Adr\Middle');
-        $adr->before('Radar\Adr\Middle');
-        $adr->before('Radar\Adr\Middle');
+        $adr->before('Radar\Adr\FakeWare');
+        $adr->before('Radar\Adr\FakeWare');
+        $adr->before('Radar\Adr\FakeWare');
 
         $adr->get('Radar\Adr\FakeAction', '/fake', new FakeDomain());
         $this->assertOutput(
@@ -155,7 +155,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             ],
             'domain 3'
         );
-        $this->assertSame(3, Middle::$count);
+        $this->assertSame(3, FakeWare::$count);
 
     }
 
@@ -166,9 +166,9 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->before('Radar\Adr\Middle');
-        $adr->before('Radar\Adr\Middle');
-        $adr->before('Radar\Adr\MiddleError');
+        $adr->before('Radar\Adr\FakeWare');
+        $adr->before('Radar\Adr\FakeWare');
+        $adr->before('Radar\Adr\FakeWareError');
 
         $adr->get('Radar\Adr\FakeAction', '/fake', new FakeDomain());
         $this->assertOutput(
@@ -178,7 +178,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             ],
             'Error in middle'
         );
-        $this->assertSame(2, Middle::$count);
+        $this->assertSame(2, FakeWare::$count);
     }
 
     public function testMiddleEarly()
@@ -188,9 +188,9 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->before('Radar\Adr\Middle');
-        $adr->before('Radar\Adr\MiddleEarly');
-        $adr->before('Radar\Adr\Middle');
+        $adr->before('Radar\Adr\FakeWare');
+        $adr->before('Radar\Adr\FakeWareEarly');
+        $adr->before('Radar\Adr\FakeWare');
 
         $adr->get('Radar\Adr\FakeAction', '/fake', new FakeDomain());
         $this->assertOutput(
@@ -200,6 +200,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             ],
             'Early exit in middle'
         );
-        $this->assertSame(1, Middle::$count);
+        $this->assertSame(1, FakeWare::$count);
     }
 }

@@ -9,6 +9,7 @@ class AdrTest extends \PHPUnit_Framework_TestCase
     {
         $this->adr = new Adr(
             new FakeMap(new Route()),
+            new FakeMiddle(),
             new FakeDispatcher()
         );
     }
@@ -35,31 +36,37 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->adr->sendingHandler('Foo\Bar\SendingHandler');
         $this->adr->exceptionHandler('Foo\Bar\ExceptionHandler');
 
+        $actual = $this->adr->getDispatcherParams();
+        $middle = $actual['middle'];
+        unset($actual['middle']);
+
         $expect = [
-            'middle' => [
-                'before' => [
-                    'before1',
-                    'before2',
-                    'before3',
-                ],
-                'after' => [
-                    'after1',
-                    'after2',
-                    'after3',
-                ],
-                'finish' => [
-                    'finish1',
-                    'finish2',
-                    'finish3',
-                ],
-            ],
             'routingHandler' => 'Foo\Bar\RoutingHandler',
             'sendingHandler' => 'Foo\Bar\SendingHandler',
             'exceptionHandler' => 'Foo\Bar\ExceptionHandler',
         ];
-
-        $actual = $this->adr->getDispatcherParams();
         $this->assertSame($expect, $actual);
+
+        $expect = [
+            'before1',
+            'before2',
+            'before3',
+        ];
+        $this->assertSame($expect, $middle->before);
+
+        $expect = [
+            'after1',
+            'after2',
+            'after3',
+        ];
+        $this->assertSame($expect, $middle->after);
+
+        $expect = [
+            'finish1',
+            'finish2',
+            'finish3',
+        ];
+        $this->assertSame($expect, $middle->finish);
     }
 
     public function testInvoke()

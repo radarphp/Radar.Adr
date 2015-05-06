@@ -1,7 +1,7 @@
 <?php
 namespace Radar\Adr;
 
-class Middle
+class FakeWare
 {
     public static $count;
 

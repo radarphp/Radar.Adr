@@ -1,7 +1,7 @@
 <?php
 namespace Radar\Adr;
 
-class MiddleEarly
+class FakeWareEarly
 {
     public function __invoke(&$request, &$response)
     {
