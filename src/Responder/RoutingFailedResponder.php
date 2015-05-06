@@ -3,7 +3,7 @@ namespace Radar\Adr\Responder;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Radar\Adr\Route;
+use Radar\Adr\Router\Route;
 
 class RoutingFailedResponder
 {

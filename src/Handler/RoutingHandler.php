@@ -3,7 +3,7 @@ namespace Radar\Adr\Handler;
 
 use Aura\Router\Matcher;
 use Psr\Http\Message\ServerRequestInterface;
-use Radar\Adr\Route;
+use Radar\Adr\Router\Route;
 
 class RoutingHandler
 {

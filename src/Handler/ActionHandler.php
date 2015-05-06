@@ -4,7 +4,7 @@ namespace Radar\Adr\Handler;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Radar\Adr\Factory;
-use Radar\Adr\Route;
+use Radar\Adr\Router\Route;
 
 class ActionHandler
 {

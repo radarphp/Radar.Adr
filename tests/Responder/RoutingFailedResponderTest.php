@@ -3,7 +3,7 @@ namespace Radar\Adr\Responder;
 
 use Phly\Http\ServerRequestFactory;
 use Phly\Http\Response;
-use Radar\Adr\Route;
+use Radar\Adr\Router\Route;
 
 class RoutingFailedResponderTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,8 @@
 <?php
 namespace Radar\Adr;
 
+use Radar\Adr\Router\Route;
+
 class AdrTest extends \PHPUnit_Framework_TestCase
 {
     protected $adr;

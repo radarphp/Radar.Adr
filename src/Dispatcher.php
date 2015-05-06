@@ -4,6 +4,7 @@ namespace Radar\Adr;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Radar\Adr\Router\Route;
 
 class Dispatcher
 {
@@ -48,24 +49,24 @@ class Dispatcher
         }
     }
 
-    public function actionHandler($class)
+    public function actionHandler($spec)
     {
-        $this->actionHandler = $class;
+        $this->actionHandler = $spec;
     }
 
-    public function exceptionHandler($class)
+    public function exceptionHandler($spec)
     {
-        $this->exceptionHandler = $class;
+        $this->exceptionHandler = $spec;
     }
 
-    public function routingHandler($class)
+    public function routingHandler($spec)
     {
-        $this->routingHandler = $class;
+        $this->routingHandler = $spec;
     }
 
-    public function sendingHandler($class)
+    public function sendingHandler($spec)
     {
-        $this->sendingHandler = $class;
+        $this->sendingHandler = $spec;
     }
 
     protected function inbound()

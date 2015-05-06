@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Router;
 
 class MapTest extends \PHPUnit_Framework_TestCase
 {

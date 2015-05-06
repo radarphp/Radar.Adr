@@ -16,7 +16,7 @@ class Config extends ContainerConfig
         /**
          * Aura\Router\Container
          */
-        $di->setters['Aura\Router\RouterContainer']['setMapFactory'] = $di->newFactory('Radar\Adr\Map');
+        $di->setters['Aura\Router\RouterContainer']['setMapFactory'] = $di->newFactory('Radar\Adr\Router\Map');
 
         /**
          * Radar\Adr\Adr
@@ -46,17 +46,17 @@ class Config extends ContainerConfig
          * Radar\Adr\Handler\RoutingHandler
          */
         $di->params['Radar\Adr\Handler\RoutingHandler']['matcher'] = $di->lazyGetCall('radar/adr:router', 'getMatcher');
-        $di->params['Radar\Adr\Handler\RoutingHandler']['route'] = $di->lazyNew('Radar\Adr\Route');
-
-        /**
-         * Radar\Adr\Map
-         */
-        $di->params['Radar\Adr\Map']['protoRoute'] = $di->lazyNew('Radar\Adr\Route');
+        $di->params['Radar\Adr\Handler\RoutingHandler']['route'] = $di->lazyNew('Radar\Adr\Router\Route');
 
         /**
          * Radar\Adr\Middle
          */
         $di->params['Radar\Adr\Middle']['factory'] = $di->lazyNew('Radar\Adr\Factory');
+
+        /**
+         * Radar\Adr\Router\Map
+         */
+        $di->params['Radar\Adr\Router\Map']['protoRoute'] = $di->lazyNew('Radar\Adr\Router\Route');
     }
 
     public function modify(Container $di)
