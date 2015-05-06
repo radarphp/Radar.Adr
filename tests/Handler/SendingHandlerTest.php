@@ -2,18 +2,18 @@
 namespace Radar\Adr\Handler;
 
 use Phly\Http\Response;
-use Radar\Adr\Php;
+use Radar\Adr\FakePhp;
 
 function header($string, $flag = true)
 {
-    Php::header($string, $flag);
+    FakePhp::header($string, $flag);
 }
 
 class SenderTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        Php::$headers = [];
+        FakePhp::$headers = [];
     }
 
     public function test()
@@ -32,7 +32,7 @@ class SenderTest extends \PHPUnit_Framework_TestCase
             'HTTP/1.1 200 OK',
             'Content-Type: foo/bar'
         ];
-        $this->assertSame($expect, Php::$headers);
+        $this->assertSame($expect, FakePhp::$headers);
         $this->assertSame('DOOM', $body);
     }
 }

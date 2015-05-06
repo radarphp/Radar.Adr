@@ -3,7 +3,7 @@ namespace Radar\Adr;
 
 function header($string, $flag = true)
 {
-    Php::header($string, $flag);
+    FakePhp::header($string, $flag);
 }
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
@@ -12,13 +12,13 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        Php::$headers = [];
+        FakePhp::$headers = [];
         FakeWare::$count = 0;
     }
 
     protected function newAdr(array $server = [])
     {
-        Php::$headers = [];
+        FakePhp::$headers = [];
         FakeWare::$count = 0;
         $_SERVER = array_merge($_SERVER, $server);
         $boot = new Boot(__DIR__ . DIRECTORY_SEPARATOR . '_env');
@@ -31,7 +31,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $adr();
         $actualBody = ob_get_clean();
         $this->assertEquals($expectBody, $actualBody);
-        $this->assertEquals($expectHeaders, Php::$headers);
+        $this->assertEquals($expectHeaders, FakePhp::$headers);
     }
 
     public function testOk()

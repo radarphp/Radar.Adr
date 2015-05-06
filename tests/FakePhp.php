@@ -1,7 +1,7 @@
 <?php
 namespace Radar\Adr;
 
-class Php
+class FakePhp
 {
     static public $headers = [];
 
