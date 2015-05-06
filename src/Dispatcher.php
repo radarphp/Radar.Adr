@@ -29,21 +29,21 @@ class Dispatcher implements DispatcherInterface
         $exceptionHandler
     ) {
         try {
-            $this->inbound($middle['before'], $routingHandler, $middle['after']);
+            $this->inbound($middle, $routingHandler);
         } catch (AnyException $e) {
             $this->handleException($e, $exceptionHandler);
         }
 
         try {
-            $this->outbound($sendingHandler, $middle['finish']);
+            $this->outbound($middle, $sendingHandler);
         } catch (AnyException $e) {
             $this->handleException($e, $exceptionHandler);
         }
     }
 
-    public function inbound($before, $routingHandler, $after)
+    public function inbound($middle, $routingHandler)
     {
-        $early = $this->middle($before);
+        $early = $this->middle($middle, 'before');
         if ($early) {
             return;
         }
@@ -51,20 +51,19 @@ class Dispatcher implements DispatcherInterface
         $routingHandler = $this->factory($routingHandler);
         $route = $routingHandler($this->request);
         $this->action($route);
-        $this->middle($after);
+        $this->middle($middle, 'after');
     }
 
-    protected function outbound($sendingHandler, $finish)
+    protected function outbound($middle, $sendingHandler)
     {
         $sendingHandler = $this->factory($sendingHandler);
         $sendingHandler($this->response);
-        $this->middle($finish);
+        $this->middle($middle, 'finish');
     }
 
-    protected function middle(array $classes)
+    protected function middle(array $middle, $key)
     {
-        // need logging here to say when something runs or not
-        foreach ($classes as $class) {
+        foreach ($middle[$key] as $class) {
             $object = $this->factory($class);
             $early = $object($this->request, $this->response);
             if ($early instanceof ResponseInterface) {
