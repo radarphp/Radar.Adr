@@ -25,8 +25,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         ob_start();
         $adr();
         $actualBody = ob_get_clean();
-        $this->assertEquals($expectHeaders, Php::$headers);
         $this->assertEquals($expectBody, $actualBody);
+        $this->assertEquals($expectHeaders, Php::$headers);
     }
 
     public function testOk()

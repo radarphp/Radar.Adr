@@ -14,6 +14,7 @@ class Dispatcher
     protected $routingHandler = 'Radar\Adr\RoutingHandler';
     protected $sendingHandler = 'Radar\Adr\SendingHandler';
     protected $exceptionHandler = 'Radar\Adr\ExceptionHandler';
+    protected $actionHandler = 'Radar\Adr\ActionHandler';
 
     public function __construct(
         Factory $factory,
@@ -47,6 +48,11 @@ class Dispatcher
         }
     }
 
+    public function actionHandler($class)
+    {
+        $this->actionHandler = $class;
+    }
+
     public function exceptionHandler($class)
     {
         $this->exceptionHandler = $class;
@@ -71,12 +77,27 @@ class Dispatcher
             return;
         }
 
+        $this->response = $this->action($this->route());
+        $middle($this->request, $this->response, 'after');
+    }
+
+    protected function route()
+    {
         $factory = $this->factory;
+
         $routingHandler = $factory($this->routingHandler);
         $route = $routingHandler($this->request);
-        $this->response = $this->action($route);
+        foreach ($route->attributes as $key => $val) {
+            $this->request = $this->request->withAttribute($key, $val);
+        }
+        return $route;
+    }
 
-        $middle($this->request, $this->response, 'after');
+    protected function action(Route $route)
+    {
+        $factory = $this->factory;
+        $actionHandler = $factory($this->actionHandler);
+        return $actionHandler($this->request, $this->response, $route);
     }
 
     protected function outbound()
@@ -89,40 +110,6 @@ class Dispatcher
         $middle($this->request, $this->response, 'after');
     }
 
-    protected function action($route)
-    {
-        foreach ($route->attributes as $key => $val) {
-            $this->request = $this->request->withAttribute($key, $val);
-        }
-
-        $factory = $this->factory;
-        $responder = $factory($route->responder);
-
-        if ($route->domain) {
-            return $responder(
-                $this->request,
-                $this->response,
-                $this->payload($route->input, $route->domain)
-            );
-        }
-
-        return $responder($this->request, $this->response);
-    }
-
-    protected function payload($input, $domain)
-    {
-        $factory = $this->factory;
-
-        if ($input) {
-            $input = $factory($input);
-            $input = (array) $input($this->request);
-        } else {
-            $input = [];
-        }
-
-        $domain = $factory($domain);
-        return call_user_func_array($domain, $input);
-    }
 
     protected function exception(AnyException $exception)
     {

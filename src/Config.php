@@ -19,6 +19,11 @@ class Config extends ContainerConfig
         $di->setters['Aura\Router\RouterContainer']['setMapFactory'] = $di->newFactory('Radar\Adr\Map');
 
         /**
+         * Radar\Adr\ActionHandler
+         */
+        $di->params['Radar\Adr\ActionHandler']['factory'] = $di->lazyNew('Radar\Adr\Factory');
+
+        /**
          * Radar\Adr\Adr
          */
         $di->params['Radar\Adr\Adr']['map'] = $di->lazyGetCall('radar/adr:router', 'getMap');
