@@ -36,20 +36,22 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->adr->exceptionHandler('Foo\Bar\ExceptionHandler');
 
         $expect = [
-            'before' => [
-                'before1',
-                'before2',
-                'before3',
-            ],
-            'after' => [
-                'after1',
-                'after2',
-                'after3',
-            ],
-            'finish' => [
-                'finish1',
-                'finish2',
-                'finish3',
+            'middle' => [
+                'before' => [
+                    'before1',
+                    'before2',
+                    'before3',
+                ],
+                'after' => [
+                    'after1',
+                    'after2',
+                    'after3',
+                ],
+                'finish' => [
+                    'finish1',
+                    'finish2',
+                    'finish3',
+                ],
             ],
             'routingHandler' => 'Foo\Bar\RoutingHandler',
             'sendingHandler' => 'Foo\Bar\SendingHandler',

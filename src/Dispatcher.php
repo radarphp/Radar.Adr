@@ -3,7 +3,6 @@ namespace Radar\Adr;
 
 use Exception as AnyException;
 use Aura\Di\Injection\InjectionFactory;
-use Aura\Router\Matcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -24,21 +23,19 @@ class Dispatcher implements DispatcherInterface
     }
 
     public function __invoke(
-        array $before,
-        array $after,
-        array $finish,
+        array $middle,
         $routingHandler,
         $sendingHandler,
         $exceptionHandler
     ) {
         try {
-            $this->inbound($before, $routingHandler, $after);
+            $this->inbound($middle['before'], $routingHandler, $middle['after']);
         } catch (AnyException $e) {
             $this->handleException($e, $exceptionHandler);
         }
 
         try {
-            $this->outbound($sendingHandler, $finish);
+            $this->outbound($sendingHandler, $middle['finish']);
         } catch (AnyException $e) {
             $this->handleException($e, $exceptionHandler);
         }

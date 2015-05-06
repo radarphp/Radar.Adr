@@ -66,9 +66,11 @@ class Adr
     public function getDispatcherParams()
     {
         return [
-            'before' => $this->before,
-            'after' => $this->after,
-            'finish' => $this->finish,
+            'middle' => [
+                'before' => $this->before,
+                'after' => $this->after,
+                'finish' => $this->finish,
+            ],
             'routingHandler' => $this->routingHandler,
             'sendingHandler' => $this->sendingHandler,
             'exceptionHandler' => $this->exceptionHandler,
