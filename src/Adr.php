@@ -31,33 +31,38 @@ class Adr
         return call_user_func($this->dispatcher);
     }
 
-    public function before($class)
+    public function before($spec)
     {
-        $this->middle->before($class);
+        $this->middle->before($spec);
     }
 
-    public function after($class)
+    public function after($spec)
     {
-        $this->middle->after($class);
+        $this->middle->after($spec);
     }
 
-    public function finish($class)
+    public function finish($spec)
     {
-        $this->middle->finish($class);
+        $this->middle->finish($spec);
     }
 
-    public function exceptionHandler($class)
+    public function actionHandler($spec)
     {
-        $this->dispatcher->exceptionHandler($class);
+        $this->dispatcher->actionHandler($spec);
     }
 
-    public function routingHandler($class)
+    public function exceptionHandler($spec)
     {
-        $this->dispatcher->routingHandler($class);
+        $this->dispatcher->exceptionHandler($spec);
     }
 
-    public function sendingHandler($class)
+    public function routingHandler($spec)
     {
-        $this->dispatcher->sendingHandler($class);
+        $this->dispatcher->routingHandler($spec);
+    }
+
+    public function sendingHandler($spec)
+    {
+        $this->dispatcher->sendingHandler($spec);
     }
 }
