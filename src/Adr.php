@@ -14,6 +14,7 @@ class Adr
     protected $after = [];
     protected $finish = [];
     protected $routingHandler = 'Radar\Adr\RoutingHandler';
+    protected $sendingHandler = 'Radar\Adr\SendingHandler';
     protected $exceptionHandler = 'Radar\Adr\ExceptionHandler';
 
     public function __construct(Map $map, DispatcherInterface $dispatcher)
@@ -57,6 +58,11 @@ class Adr
         $this->routingHandler = $class;
     }
 
+    public function sendingHandler($class)
+    {
+        $this->sendingHandler = $class;
+    }
+
     public function getDispatcherParams()
     {
         return [
@@ -64,6 +70,7 @@ class Adr
             'after' => $this->after,
             'finish' => $this->finish,
             'routingHandler' => $this->routingHandler,
+            'sendingHandler' => $this->sendingHandler,
             'exceptionHandler' => $this->exceptionHandler,
         ];
     }

@@ -12,14 +12,14 @@ class SenderTest extends \PHPUnit_Framework_TestCase
 
     public function test()
     {
-        $sender = new Sender();
+        $sendingHandler = new SendingHandler();
 
         $response = new Response();
         $response = $response->withHeader('content-type', 'foo/bar');
         $response->getBody()->write('DOOM');
 
         ob_start();
-        $sender($response);
+        $sendingHandler($response);
         $body = ob_get_clean();
 
         $expect = [

@@ -16,7 +16,7 @@ class RoutingHandler
         $route = $this->matcher->match($request);
         if (! $route) {
             $route = clone $this->matcher->getFailedRoute();
-            $route->input(array());
+            $route->input(null);
             $route->domain([$this, 'getFailedRoute']);
             $route->responder('Radar\Adr\RoutingFailedResponder');
         }

@@ -3,7 +3,7 @@ namespace Radar\Adr;
 
 use Psr\Http\Message\ResponseInterface;
 
-class Sender
+class SendingHandler
 {
     public function __invoke(ResponseInterface $response)
     {

@@ -8,6 +8,7 @@ interface DispatcherInterface
         array $after,
         array $finish,
         $routingHander,
+        $sendingHandler,
         $exceptionHandler
     );
 }

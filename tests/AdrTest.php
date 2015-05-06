@@ -31,8 +31,9 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->adr->finish('finish1');
         $this->adr->finish('finish2');
         $this->adr->finish('finish3');
-        $this->adr->routingHandler('Radar\Adr\RoutingHandler');
-        $this->adr->exceptionHandler('Radar\Adr\ExceptionHandler');
+        $this->adr->routingHandler('Foo\Bar\RoutingHandler');
+        $this->adr->sendingHandler('Foo\Bar\SendingHandler');
+        $this->adr->exceptionHandler('Foo\Bar\ExceptionHandler');
 
         $expect = [
             'before' => [
@@ -50,8 +51,9 @@ class AdrTest extends \PHPUnit_Framework_TestCase
                 'finish2',
                 'finish3',
             ],
-            'routingHandler' => 'Radar\Adr\RoutingHandler',
-            'exceptionHandler' => 'Radar\Adr\ExceptionHandler',
+            'routingHandler' => 'Foo\Bar\RoutingHandler',
+            'sendingHandler' => 'Foo\Bar\SendingHandler',
+            'exceptionHandler' => 'Foo\Bar\ExceptionHandler',
         ];
 
         $actual = $this->adr->getDispatcherParams();

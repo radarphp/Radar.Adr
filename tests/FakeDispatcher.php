@@ -7,7 +7,8 @@ class FakeDispatcher implements DispatcherInterface
         array $before,
         array $after,
         array $finish,
-        $routingHander,
+        $routingHandler,
+        $sendingHandler,
         $exceptionHandler
     ) {
         return __METHOD__;

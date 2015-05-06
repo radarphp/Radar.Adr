@@ -10,21 +10,17 @@ use Psr\Http\Message\ResponseInterface;
 class Dispatcher implements DispatcherInterface
 {
     protected $factory;
-    protected $matcher;
     protected $request;
     protected $response;
-    protected $sender;
 
     public function __construct(
         InjectionFactory $factory,
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        Sender $sender
+        ResponseInterface $response
     ) {
         $this->factory = $factory;
         $this->request = $request;
         $this->response = $response;
-        $this->sender = $sender;
     }
 
     public function __invoke(
@@ -32,6 +28,7 @@ class Dispatcher implements DispatcherInterface
         array $after,
         array $finish,
         $routingHandler,
+        $sendingHandler,
         $exceptionHandler
     ) {
         try {
@@ -41,7 +38,7 @@ class Dispatcher implements DispatcherInterface
         }
 
         try {
-            $this->outbound($finish);
+            $this->outbound($sendingHandler, $finish);
         } catch (AnyException $e) {
             $this->handleException($e, $exceptionHandler);
         }
@@ -60,14 +57,13 @@ class Dispatcher implements DispatcherInterface
         $this->middle($after);
     }
 
-    protected function outbound($finish)
+    protected function outbound($sendingHandler, $finish)
     {
-        $this->sender->__invoke($this->response);
+        $sendingHandler = $this->factory($sendingHandler);
+        $sendingHandler($this->response);
         $this->middle($finish);
     }
 
-    // return true to exit early.
-    // use &request &$response to modify the values.
     protected function middle(array $classes)
     {
         // need logging here to say when something runs or not
@@ -88,7 +84,7 @@ class Dispatcher implements DispatcherInterface
             $this->request = $this->request->withAttribute($key, $val);
         }
         $responder = $this->factory($route->responder);
-        $route->domain
+        $this->response = $route->domain
             ? $responder($this->request, $this->response, $this->payload($route->input, $route->domain))
             : $responder($this->request, $this->response);
     }
