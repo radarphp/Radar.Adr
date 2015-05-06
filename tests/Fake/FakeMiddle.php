@@ -1,5 +1,7 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Fake;
+
+use Radar\Adr\Middle;
 
 class FakeMiddle extends Middle
 {

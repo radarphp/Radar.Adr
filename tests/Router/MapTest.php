@@ -25,9 +25,9 @@ class MapTest extends \PHPUnit_Framework_TestCase
 
     public function testRouteMagic()
     {
-        $route = $this->map->route('Radar\Adr\FakeAction', '/fake', 'Radar\Adr\FakeDomain');
-        $this->assertSame('Radar\Adr\FakeAction\Input', $route->input);
-        $this->assertSame('Radar\Adr\FakeAction\Responder', $route->responder);
+        $route = $this->map->route('Radar\Adr\Fake\Action', '/fake', 'Radar\Adr\FakeDomain');
+        $this->assertSame('Radar\Adr\Fake\Action\Input', $route->input);
+        $this->assertSame('Radar\Adr\Fake\Action\Responder', $route->responder);
         $this->assertSame(['foo/bar'], $route->accepts);
     }
 }

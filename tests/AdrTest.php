@@ -9,15 +9,15 @@ class AdrTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->fakeMap = new FakeMap(new Route());
-        $this->fakeMiddle = new FakeMiddle();
-        $this->fakeDispatcher = new FakeDispatcher($this->fakeMiddle);
+        $this->fakeMap = new Fake\FakeMap(new Route());
+        $this->fakeMiddle = new Fake\FakeMiddle();
+        $this->fakeDispatcher = new Fake\FakeDispatcher($this->fakeMiddle);
         $this->adr = new Adr($this->fakeMap, $this->fakeDispatcher);
     }
 
     public function testProxyToMap()
     {
-        $expect = 'Radar\Adr\FakeMap::fakeMapMethod';
+        $expect = 'Radar\Adr\Fake\FakeMap::fakeMapMethod';
         $actual = $this->adr->fakeMapMethod();
         $this->assertSame($expect, $actual);
     }
@@ -70,7 +70,7 @@ class AdrTest extends \PHPUnit_Framework_TestCase
 
     public function testInvoke()
     {
-        $expect = 'Radar\Adr\FakeDispatcher::__invoke';
+        $expect = 'Radar\Adr\Fake\FakeDispatcher::__invoke';
         $actual = $this->adr->__invoke();
         $this->assertSame($expect, $actual);
     }

@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr\FakeAction;
+namespace Radar\Adr\Fake\Action;
 
 use Aura\Payload_Interface\PayloadInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Fake;
 
 class FakeWare
 {

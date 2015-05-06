@@ -2,7 +2,7 @@
 namespace Radar\Adr\Handler;
 
 use Phly\Http\Response;
-use Radar\Adr\FakePhp;
+use Radar\Adr\Fake\FakePhp;
 
 function header($string, $flag = true)
 {

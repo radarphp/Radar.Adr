@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Fake;
 
 use Radar\Adr\Router\Map;
 use Radar\Adr\Router\Route;

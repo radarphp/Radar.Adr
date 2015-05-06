@@ -1,6 +1,10 @@
 <?php
 namespace Radar\Adr;
 
+use Radar\Adr\Fake\FakePhp;
+use Radar\Adr\Fake\FakeWare;
+use Radar\Adr\Fake\FakeDomain;
+
 function header($string, $flag = true)
 {
     FakePhp::header($string, $flag);
@@ -41,7 +45,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->get('Radar\Adr\FakeAction', '/fake', 'Radar\Adr\FakeDomain');
+        $adr->get('Radar\Adr\Fake\Action', '/fake', 'Radar\Adr\Fake\FakeDomain');
         $this->assertOutput(
             $adr,
             [
@@ -58,7 +62,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->get('Radar\Adr\FakeAction', '/fake', ['Radar\Adr\FakeDomain', '__invoke']);
+        $adr->get('Radar\Adr\Fake\Action', '/fake', ['Radar\Adr\Fake\FakeDomain', '__invoke']);
         $this->assertOutput(
             $adr,
             [
@@ -75,7 +79,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->get('Radar\Adr\FakeAction', '/fake', new FakeDomain());
+        $adr->get('Radar\Adr\Fake\Action', '/fake', new Fake\FakeDomain());
         $this->assertOutput(
             $adr,
             [
@@ -92,7 +96,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/no-such-path',
         ]);
 
-        $adr->get('Radar\Adr\FakeAction', '/fake', 'Radar\Adr\FakeDomain');
+        $adr->get('Radar\Adr\Fake\Action', '/fake', 'Radar\Adr\Fake\FakeDomain');
         $this->assertOutput(
             $adr,
             [
@@ -109,9 +113,9 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->after('Radar\Adr\FakeWareError');
+        $adr->after('Radar\Adr\Fake\FakeWareError');
 
-        $adr->get('Radar\Adr\FakeAction', '/fake', 'Radar\Adr\FakeDomain');
+        $adr->get('Radar\Adr\Fake\Action', '/fake', 'Radar\Adr\Fake\FakeDomain');
         $this->assertOutput(
             $adr,
             [
@@ -128,8 +132,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->finish('Radar\Adr\FakeWareError');
-        $adr->get('Radar\Adr\FakeAction', '/fake', 'Radar\Adr\FakeDomain');
+        $adr->finish('Radar\Adr\Fake\FakeWareError');
+        $adr->get('Radar\Adr\Fake\Action', '/fake', 'Radar\Adr\Fake\FakeDomain');
 
         // OK, because the error is after the response is sent
         $this->assertOutput(
@@ -148,11 +152,11 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->before('Radar\Adr\FakeWare');
-        $adr->before('Radar\Adr\FakeWare');
-        $adr->before('Radar\Adr\FakeWare');
+        $adr->before('Radar\Adr\Fake\FakeWare');
+        $adr->before('Radar\Adr\Fake\FakeWare');
+        $adr->before('Radar\Adr\Fake\FakeWare');
 
-        $adr->get('Radar\Adr\FakeAction', '/fake', new FakeDomain());
+        $adr->get('Radar\Adr\Fake\Action', '/fake', new FakeDomain());
         $this->assertOutput(
             $adr,
             [
@@ -171,11 +175,11 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->before('Radar\Adr\FakeWare');
-        $adr->before('Radar\Adr\FakeWare');
-        $adr->before('Radar\Adr\FakeWareError');
+        $adr->before('Radar\Adr\Fake\FakeWare');
+        $adr->before('Radar\Adr\Fake\FakeWare');
+        $adr->before('Radar\Adr\Fake\FakeWareError');
 
-        $adr->get('Radar\Adr\FakeAction', '/fake', new FakeDomain());
+        $adr->get('Radar\Adr\Fake\Action', '/fake', new FakeDomain());
         $this->assertOutput(
             $adr,
             [
@@ -193,11 +197,11 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/fake',
         ]);
 
-        $adr->before('Radar\Adr\FakeWare');
-        $adr->before('Radar\Adr\FakeWareEarly');
-        $adr->before('Radar\Adr\FakeWare');
+        $adr->before('Radar\Adr\Fake\FakeWare');
+        $adr->before('Radar\Adr\Fake\FakeWareEarly');
+        $adr->before('Radar\Adr\Fake\FakeWare');
 
-        $adr->get('Radar\Adr\FakeAction', '/fake', new FakeDomain());
+        $adr->get('Radar\Adr\Fake\Action', '/fake', new FakeDomain());
         $this->assertOutput(
             $adr,
             [

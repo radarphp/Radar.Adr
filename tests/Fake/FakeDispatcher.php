@@ -1,5 +1,7 @@
 <?php
-namespace Radar\Adr;
+namespace Radar\Adr\Fake;
+
+use Radar\Adr\Dispatcher;
 
 class FakeDispatcher extends Dispatcher
 {

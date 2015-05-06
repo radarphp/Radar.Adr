@@ -1,5 +1,5 @@
 <?php
-namespace Radar\Adr\FakeAction;
+namespace Radar\Adr\Fake\Action;
 
 use Radar\Adr\Input as RadarInput;
 
