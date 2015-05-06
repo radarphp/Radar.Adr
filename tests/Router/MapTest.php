@@ -15,12 +15,12 @@ class MapTest extends \PHPUnit_Framework_TestCase
         $route = $this->map->route('Foo', '/foo');
         $this->assertSame('Radar\Adr\Input', $route->input);
         $this->assertNull($route->domain);
-        $this->assertSame('Radar\Adr\Responder', $route->responder);
+        $this->assertSame('Radar\Adr\Responder\Responder', $route->responder);
 
         $route = $this->map->route('Bar', '/bar', 'BarDomain');
         $this->assertSame('Radar\Adr\Input', $route->input);
         $this->assertSame('BarDomain', $route->domain);
-        $this->assertSame('Radar\Adr\Responder', $route->responder);
+        $this->assertSame('Radar\Adr\Responder\Responder', $route->responder);
     }
 
     public function testRouteMagic()
