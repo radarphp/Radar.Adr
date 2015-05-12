@@ -108,7 +108,7 @@ class Dispatcher
         $sendingHandler($this->response);
 
         $middle = $this->middle;
-        $middle($this->request, $this->response, 'after');
+        $middle($this->request, $this->response, 'finish');
     }
 
 
