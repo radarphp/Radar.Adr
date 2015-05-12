@@ -12,6 +12,7 @@ class Config extends ContainerConfig
          * Services
          */
         $di->set('radar/adr:router', $di->lazyNew('Aura\Router\RouterContainer'));
+        $di->set('radar/adr:adr', $di->lazyNew('Radar\Adr\Adr'));
 
         /**
          * Aura\Router\Container

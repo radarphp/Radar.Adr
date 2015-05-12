@@ -34,8 +34,12 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->adr->finish('finish2');
         $this->adr->finish('finish3');
         $this->adr->routingHandler('Foo\Bar\RoutingHandler');
+        $this->adr->actionHandler('Foo\Bar\ActionHandler');
         $this->adr->sendingHandler('Foo\Bar\SendingHandler');
         $this->adr->exceptionHandler('Foo\Bar\ExceptionHandler');
+
+        $expect = 'Foo\Bar\ActionHandler';
+        $this->assertSame($expect, $this->fakeDispatcher->actionHandler);
 
         $expect = 'Foo\Bar\RoutingHandler';
         $this->assertSame($expect, $this->fakeDispatcher->routingHandler);

@@ -16,6 +16,7 @@ class ConfigTest extends AbstractContainerTest
     {
         return [
             ['radar/adr:router', 'Aura\Router\RouterContainer'],
+            ['radar/adr:adr', 'Radar\Adr\Adr'],
         ];
     }
 

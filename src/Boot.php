@@ -4,7 +4,6 @@ namespace Radar\Adr;
 use Aura\Di\ContainerBuilder;
 use josegonzalez\Dotenv\Loader;
 
-// rename to Bootstrap or Boot (again) and make Factory work like Dispatcher::factory
 class Boot
 {
     protected $envPath;
@@ -26,7 +25,7 @@ class Boot
             $di = $this->newContainer($config);
         }
 
-        return $di->newInstance('Radar\Adr\Adr');
+        return $di->get('radar/adr:adr');
     }
 
     protected function cachedContainer(array $config)
