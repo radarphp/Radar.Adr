@@ -94,14 +94,14 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     {
         $payload = (new Payload())
             ->setStatus(Payload::ERROR)
-            ->setCode(96)
-            ->setMessage('bad');
+            ->setInput(['foo' => 'bar'])
+            ->setOutput('96: wrong');
 
         $this->assertPayloadResponse(
             $payload,
             500,
             ['Content-Type' => 'application/json'],
-            '{"code":96,"message":"bad"}'
+            '{"input":{"foo":"bar"},"error":"96: wrong"}'
         );
     }
 
@@ -191,12 +191,12 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
             ->setStatus(Payload::NOT_VALID)
             ->setInput(['foo' => 'bar'])
             ->setOutput(['baz' => 'dib'])
-            ->setExtras(['zim' => 'gir']);
+            ->setMessages(['zim' => 'gir']);
 
         $expect = json_encode([
             'input' => ['foo' => 'bar'],
             'output' => ['baz' => 'dib'],
-            'errors' => ['zim' => 'gir'],
+            'messages' => ['zim' => 'gir'],
         ]);
 
         $this->assertPayloadResponse(

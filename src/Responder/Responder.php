@@ -72,8 +72,8 @@ class Responder implements ResponderAcceptsInterface
     {
         $this->response = $this->response->withStatus(500);
         $this->jsonBody([
-            'code' => $this->payload->getCode(),
-            'message' => $this->payload->getMessage(),
+            'input' => $this->payload->getInput(),
+            'error' => $this->payload->getOutput(),
         ]);
     }
 
@@ -118,7 +118,7 @@ class Responder implements ResponderAcceptsInterface
         $this->jsonBody([
             'input' => $this->payload->getInput(),
             'output' => $this->payload->getOutput(),
-            'errors' => $this->payload->getExtras(),
+            'messages' => $this->payload->getMessages(),
         ]);
     }
 
