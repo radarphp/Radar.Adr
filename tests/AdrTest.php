@@ -1,6 +1,7 @@
 <?php
 namespace Radar\Adr;
 
+use Aura\Router\Rule\RuleIterator;
 use Radar\Adr\Router\Route;
 
 class AdrTest extends \PHPUnit_Framework_TestCase
@@ -10,9 +11,10 @@ class AdrTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->fakeMap = new Fake\FakeMap(new Route());
+        $this->fakeRules = new RuleIterator();
         $this->fakeMiddle = new Fake\FakeMiddle();
         $this->fakeDispatcher = new Fake\FakeDispatcher($this->fakeMiddle);
-        $this->adr = new Adr($this->fakeMap, $this->fakeDispatcher);
+        $this->adr = new Adr($this->fakeMap, $this->fakeRules, $this->fakeDispatcher);
     }
 
     public function testProxyToMap()
