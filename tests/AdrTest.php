@@ -53,23 +53,29 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $this->fakeDispatcher->exceptionHandler);
 
         $expect = [
-            'before1',
-            'before2',
-            'before3',
+            [
+                'before1',
+                'before2',
+                'before3',
+            ]
         ];
         $this->assertSame($expect, $this->fakeMiddle->before);
 
         $expect = [
-            'after1',
-            'after2',
-            'after3',
+            [
+                'after1',
+                'after2',
+                'after3',
+            ]
         ];
         $this->assertSame($expect, $this->fakeMiddle->after);
 
         $expect = [
-            'finish1',
-            'finish2',
-            'finish3',
+            [
+                'finish1',
+                'finish2',
+                'finish3',
+            ]
         ];
         $this->assertSame($expect, $this->fakeMiddle->finish);
     }

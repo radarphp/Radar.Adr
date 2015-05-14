@@ -21,31 +21,32 @@ class Middle
         $key
     ) {
         $factory = $this->factory;
-
-        foreach ($this->$key as $class) {
-            $object = $factory($class);
-            $early = $object($request, $response);
-            if ($early instanceof ResponseInterface) {
-                $response = $early;
-                return $early;
+        ksort($this->$key);
+        foreach ($this->$key as $priority => $classes) {
+            foreach ($classes as $class) {
+                $object = $factory($class);
+                $early = $object($request, $response);
+                if ($early instanceof ResponseInterface) {
+                    $response = $early;
+                    return $early;
+                }
             }
         }
         return false;
     }
 
-    public function before($class)
+    public function before($class, $priority = 0)
     {
-        $this->before[] = $class;
+        $this->before[$priority][] = $class;
     }
 
-    public function after($class)
+    public function after($class, $priority = 0)
     {
-        $this->after[] = $class;
+        $this->after[$priority][] = $class;
     }
 
-    public function finish($class)
+    public function finish($class, $priority = 0)
     {
-        $this->finish[] = $class;
+        $this->finish[$priority][] = $class;
     }
-
 }
