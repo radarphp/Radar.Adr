@@ -1,6 +1,7 @@
 <?php
 namespace Radar\Adr;
 
+use Aura\Router\Rule\RuleIterator;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Radar\Adr\Router\Map;
@@ -10,13 +11,16 @@ class Adr
 {
     protected $map;
     protected $middle;
+    protected $rules;
     protected $dispatcher;
 
     public function __construct(
         Map $map,
+        RuleIterator $rules,
         Dispatcher $dispatcher
     ) {
         $this->map = $map;
+        $this->rules = $rules;
         $this->dispatcher = $dispatcher;
         $this->middle = $this->dispatcher->middle;
     }
@@ -39,6 +43,11 @@ class Adr
     public function finish($spec)
     {
         $this->middle->finish($spec);
+    }
+
+    public function rules()
+    {
+        return $this->rules;
     }
 
     public function actionHandler($spec)

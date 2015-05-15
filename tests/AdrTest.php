@@ -1,6 +1,7 @@
 <?php
 namespace Radar\Adr;
 
+use Aura\Router\Rule\RuleIterator;
 use Radar\Adr\Router\Route;
 
 class AdrTest extends \PHPUnit_Framework_TestCase
@@ -10,9 +11,10 @@ class AdrTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->fakeMap = new Fake\FakeMap(new Route());
+        $this->fakeRules = new RuleIterator();
         $this->fakeMiddle = new Fake\FakeMiddle();
         $this->fakeDispatcher = new Fake\FakeDispatcher($this->fakeMiddle);
-        $this->adr = new Adr($this->fakeMap, $this->fakeDispatcher);
+        $this->adr = new Adr($this->fakeMap, $this->fakeRules, $this->fakeDispatcher);
     }
 
     public function testProxyToMap()
@@ -51,23 +53,29 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $this->fakeDispatcher->exceptionHandler);
 
         $expect = [
-            'before1',
-            'before2',
-            'before3',
+            [
+                'before1',
+                'before2',
+                'before3',
+            ]
         ];
         $this->assertSame($expect, $this->fakeMiddle->before);
 
         $expect = [
-            'after1',
-            'after2',
-            'after3',
+            [
+                'after1',
+                'after2',
+                'after3',
+            ]
         ];
         $this->assertSame($expect, $this->fakeMiddle->after);
 
         $expect = [
-            'finish1',
-            'finish2',
-            'finish3',
+            [
+                'finish1',
+                'finish2',
+                'finish3',
+            ]
         ];
         $this->assertSame($expect, $this->fakeMiddle->finish);
     }
