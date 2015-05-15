@@ -72,10 +72,10 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $this->fakeMiddle->finish);
     }
 
-    public function testInvoke()
+    public function testRun()
     {
-        $expect = 'Radar\Adr\Fake\FakeDispatcher::__invoke';
-        $actual = $this->adr->__invoke();
+        $expect = 'Radar\Adr\Fake\FakeDispatcher::run';
+        $actual = $this->adr->run();
         $this->assertSame($expect, $actual);
     }
 }

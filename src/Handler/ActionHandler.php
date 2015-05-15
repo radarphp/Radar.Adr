@@ -20,8 +20,7 @@ class ActionHandler
         ResponseInterface $response,
         Route $route
     ) {
-        $factory = $this->factory;
-        $responder = $factory($route->responder);
+        $responder = $this->factory->invokable($route->responder);
 
         if ($route->domain) {
             $payload = $this->domain($route, $request);
@@ -33,12 +32,11 @@ class ActionHandler
 
     protected function domain(Route $route, ServerRequestInterface $request)
     {
-        $factory = $this->factory;
-        $domain = $factory($route->domain);
+        $domain = $this->factory->invokable($route->domain);
 
         $input = [];
         if ($route->input) {
-            $input = $factory($route->input);
+            $input = $this->factory->invokable($route->input);
             $input = (array) $input($request);
             return call_user_func_array($domain, $input);
         }
