@@ -4,9 +4,9 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "aura/di": "3.x-dev",
-        "aura/payload": "3.x-dev",
-        "aura/router": "3.x-dev",
+        "aura/di": "~3.0",
+        "aura/payload": "~3.0",
+        "aura/router": "~3.0",
         "josegonzalez/dotenv": "~0.0",
         "phly/http": "~0.0"
     },
