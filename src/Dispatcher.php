@@ -34,7 +34,7 @@ class Dispatcher
         return $this->$key;
     }
 
-    public function __invoke()
+    public function run()
     {
         try {
             $this->inbound();
@@ -71,22 +71,18 @@ class Dispatcher
 
     protected function inbound()
     {
-        $middle = $this->middle;
-
-        $early = $middle($this->request, $this->response, 'before');
+        $early = $this->middle->run($this->request, $this->response, 'before');
         if ($early) {
             return;
         }
 
         $this->response = $this->action($this->route());
-        $middle($this->request, $this->response, 'after');
+        $this->middle->run($this->request, $this->response, 'after');
     }
 
     protected function route()
     {
-        $factory = $this->factory;
-
-        $routingHandler = $factory($this->routingHandler);
+        $routingHandler = $this->factory->invokable($this->routingHandler);
         $route = $routingHandler($this->request);
         foreach ($route->attributes as $key => $val) {
             $this->request = $this->request->withAttribute($key, $val);
@@ -96,26 +92,21 @@ class Dispatcher
 
     protected function action(Route $route)
     {
-        $factory = $this->factory;
-        $actionHandler = $factory($this->actionHandler);
+        $actionHandler = $this->factory->invokable($this->actionHandler);
         return $actionHandler($this->request, $this->response, $route);
     }
 
     protected function outbound()
     {
-        $factory = $this->factory;
-        $sendingHandler = $factory($this->sendingHandler);
+        $sendingHandler = $this->factory->invokable($this->sendingHandler);
         $sendingHandler($this->response);
-
-        $middle = $this->middle;
-        $middle($this->request, $this->response, 'finish');
+        $this->middle->run($this->request, $this->response, 'finish');
     }
 
 
     protected function exception(Exception $exception)
     {
-        $factory = $this->factory;
-        $exceptionHandler = $factory($this->exceptionHandler);
+        $exceptionHandler = $this->factory->invokable($this->exceptionHandler);
         $this->response = $exceptionHandler(
             $this->request,
             $this->response,

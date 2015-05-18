@@ -26,13 +26,13 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         FakeWare::$count = 0;
         $_SERVER = array_merge($_SERVER, $server);
         $boot = new Boot(__DIR__ . DIRECTORY_SEPARATOR . '_env');
-        return $boot();
+        return $boot->adr();
     }
 
     protected function assertOutput($adr, $expectHeaders, $expectBody)
     {
         ob_start();
-        $adr();
+        $adr->run();
         $actualBody = ob_get_clean();
         $this->assertEquals($expectBody, $actualBody);
         $this->assertEquals($expectHeaders, FakePhp::$headers);

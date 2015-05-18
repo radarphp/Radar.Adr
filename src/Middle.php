@@ -15,16 +15,15 @@ class Middle
         $this->factory = $factory;
     }
 
-    public function __invoke(
+    public function run(
         ServerRequestInterface &$request,
         ResponseInterface &$response,
         $key
     ) {
-        $factory = $this->factory;
         ksort($this->$key);
         foreach ($this->$key as $priority => $classes) {
             foreach ($classes as $class) {
-                $object = $factory($class);
+                $object = $this->factory->invokable($class);
                 $early = $object($request, $response);
                 if ($early instanceof ResponseInterface) {
                     $response = $early;

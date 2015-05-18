@@ -12,7 +12,7 @@ class SendingHandler
         $this->sendBody($response);
     }
 
-    protected function sendStatus($response)
+    protected function sendStatus(ResponseInterface $response)
     {
         $version = $response->getProtocolVersion();
         $status = $response->getStatusCode();

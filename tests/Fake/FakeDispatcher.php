@@ -10,7 +10,7 @@ class FakeDispatcher extends Dispatcher
         $this->middle = $middle;
     }
 
-    public function __invoke() {
+    public function run() {
         return __METHOD__;
     }
 }

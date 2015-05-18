@@ -13,7 +13,7 @@ class Boot
         $this->envPath = $envPath;
     }
 
-    public function __invoke(array $config = [])
+    public function adr(array $config = [])
     {
         $loader = new Loader($this->envPath);
         $loader->parse();

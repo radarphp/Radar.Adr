@@ -12,7 +12,7 @@ class Factory
         $this->injectionFactory = $injectionFactory;
     }
 
-    public function __invoke($spec)
+    public function invokable($spec)
     {
         if (is_string($spec)) {
             return $this->injectionFactory->newInstance($spec);

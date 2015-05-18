@@ -30,11 +30,6 @@ class Adr
         return call_user_func_array([$this->map, $method], $params);
     }
 
-    public function __invoke()
-    {
-        return call_user_func($this->dispatcher);
-    }
-
     public function before($spec)
     {
         $this->middle->before($spec);
@@ -73,5 +68,10 @@ class Adr
     public function sendingHandler($spec)
     {
         $this->dispatcher->sendingHandler($spec);
+    }
+
+    public function run()
+    {
+        return $this->dispatcher->run();
     }
 }
