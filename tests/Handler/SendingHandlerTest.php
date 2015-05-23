@@ -2,37 +2,25 @@
 namespace Radar\Adr\Handler;
 
 use Phly\Http\Response;
-use Radar\Adr\Fake\FakePhp;
+use Phly\Http\ServerRequestFactory;
+use Radar\Adr\Fake\FakeSender;
+use Radar\Adr\Sender;
 
-function header($string, $flag = true)
+class SendingHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    FakePhp::header($string, $flag);
-}
-
-class SenderTest extends \PHPUnit_Framework_TestCase
-{
-    protected function setUp()
-    {
-        FakePhp::$headers = [];
-    }
-
     public function test()
     {
-        $sendingHandler = new SendingHandler();
-
+        $fakeSender = new FakeSender();
+        $sendingHandler = new SendingHandler($fakeSender);
+        $request = ServerRequestFactory::fromGlobals();
         $response = new Response();
-        $response = $response->withHeader('content-type', 'foo/bar');
-        $response->getBody()->write('DOOM');
-
-        ob_start();
-        $sendingHandler($response);
-        $body = ob_get_clean();
-
-        $expect = [
-            'HTTP/1.1 200 OK',
-            'Content-Type: foo/bar'
-        ];
-        $this->assertSame($expect, FakePhp::$headers);
-        $this->assertSame('DOOM', $body);
+        $this->assertFalse($fakeSender->sent);
+        $returnedResponse = $sendingHandler(
+            $request,
+            $response,
+            function ($request, $response) { return $response; }
+        );
+        $this->assertTrue($fakeSender->sent);
+        $this->assertSame($response, $returnedResponse);
     }
 }

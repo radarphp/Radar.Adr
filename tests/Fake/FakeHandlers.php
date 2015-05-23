@@ -1,9 +1,9 @@
 <?php
 namespace Radar\Adr\Fake;
 
-use Radar\Adr\Middle;
+use Radar\Adr\Handlers;
 
-class FakeMiddle extends Middle
+class FakeHandlers extends Handlers
 {
     public function __construct()
     {

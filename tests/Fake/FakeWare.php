@@ -5,10 +5,10 @@ class FakeWare
 {
     public static $count;
 
-    public function __invoke(&$request, &$response)
+    public function __invoke($request, $response, $next)
     {
         static::$count ++;
-        $request = $request->withAttribute('radar/adr:test-middle', static::$count);
-        return static::$count;
+        $response->getBody()->write(static::$count);
+        return $next($request, $response);
     }
 }

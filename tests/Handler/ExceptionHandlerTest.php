@@ -4,24 +4,25 @@ namespace Radar\Adr\Handler;
 use Exception;
 use Phly\Http\ServerRequestFactory;
 use Phly\Http\Response;
+use Radar\Adr\Sender;
 
 class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function test()
     {
-        $exceptionHandler = new ExceptionHandler();
+        $exceptionHandler = new ExceptionHandler(
+            new Sender(['Radar\Adr\Fake\FakePhp', 'header'])
+        );
+
+        ob_start();
         $response = $exceptionHandler(
             ServerRequestFactory::fromGlobals(),
             new Response(),
             new Exception('Random exception')
         );
-
-        $this->assertEquals(500, $response->getStatusCode());
-
-        ob_start();
-        echo $response->getBody();
         $actual = ob_get_clean();
 
         $this->assertEquals('Random exception', $actual);
+        $this->assertEquals(500, $response->getStatusCode());
     }
 }

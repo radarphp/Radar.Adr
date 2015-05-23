@@ -5,7 +5,7 @@ use Exception;
 
 class FakeWareError
 {
-    public function __invoke(&$request, &$response)
+    public function __invoke($request, $response, $next)
     {
         throw new Exception('Error in middle');
     }

@@ -1,214 +1,72 @@
 <?php
 namespace Radar\Adr;
 
-use Radar\Adr\Fake\FakePhp;
+use Aura\Di\ContainerBuilder;
+use Phly\Http\Response;
+use Phly\Http\ServerRequestFactory;
 use Radar\Adr\Fake\FakeWare;
-use Radar\Adr\Fake\FakeDomain;
-
-function header($string, $flag = true)
-{
-    FakePhp::header($string, $flag);
-}
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
-    protected $factory;
+    protected $handlers;
+    protected $dispatcher;
 
     protected function setUp()
     {
-        FakePhp::$headers = [];
+        $builder = new ContainerBuilder();
+        $di = $builder->newInstance();
+        $this->handlers = new Handlers(
+            new Factory($di->getInjectionFactory())
+        );
+
+        $this->handlers->setExceptionHandler(
+            function ($request, $response, $exception)
+            {
+                $response = $response->withStatus(500);
+                $response->getBody()->write($exception->getMessage());
+                return $response;
+            }
+        );
+
+        $this->dispatcher = new Dispatcher($this->handlers);
+    }
+
+    protected function assertResponse($expectStatus, $expectHeaders, $expectBody)
+    {
         FakeWare::$count = 0;
-    }
-
-    protected function newAdr(array $server = [])
-    {
-        FakePhp::$headers = [];
-        FakeWare::$count = 0;
-        $_SERVER = array_merge($_SERVER, $server);
-        $boot = new Boot(__DIR__ . DIRECTORY_SEPARATOR . '_env');
-        return $boot->adr();
-    }
-
-    protected function assertOutput($adr, $expectHeaders, $expectBody)
-    {
-        ob_start();
-        $adr->run();
-        $actualBody = ob_get_clean();
-        $this->assertEquals($expectBody, $actualBody);
-        $this->assertEquals($expectHeaders, FakePhp::$headers);
-    }
-
-    public function testOk()
-    {
-        $adr = $this->newAdr([
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/fake',
-        ]);
-
-        $adr->get('Radar\Adr\Fake\Action', '/fake', 'Radar\Adr\Fake\FakeDomain');
-        $this->assertOutput(
-            $adr,
-            [
-                'HTTP/1.1 200 OK',
-            ],
-            'domain'
+        $response = $this->dispatcher->__invoke(
+            ServerRequestFactory::fromGlobals(),
+            new Response()
         );
-    }
 
-    public function testOkWithArrayDomain()
-    {
-        $adr = $this->newAdr([
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/fake',
-        ]);
-
-        $adr->get('Radar\Adr\Fake\Action', '/fake', ['Radar\Adr\Fake\FakeDomain', '__invoke']);
-        $this->assertOutput(
-            $adr,
-            [
-                'HTTP/1.1 200 OK',
-            ],
-            'domain'
-        );
-    }
-
-    public function testOkWithObjectDomain()
-    {
-        $adr = $this->newAdr([
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/fake',
-        ]);
-
-        $adr->get('Radar\Adr\Fake\Action', '/fake', new Fake\FakeDomain());
-        $this->assertOutput(
-            $adr,
-            [
-                'HTTP/1.1 200 OK',
-            ],
-            'domain'
-        );
-    }
-
-    public function testInboundError()
-    {
-        $adr = $this->newAdr([
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/no-such-path',
-        ]);
-
-        $adr->get('Radar\Adr\Fake\Action', '/fake', 'Radar\Adr\Fake\FakeDomain');
-        $this->assertOutput(
-            $adr,
-            [
-                'HTTP/1.1 404 Not Found',
-            ],
-            '404 Not Found'
-        );
-    }
-
-    public function testOutboundErrorInAfter()
-    {
-        $adr = $this->newAdr([
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/fake',
-        ]);
-
-        $adr->after('Radar\Adr\Fake\FakeWareError');
-
-        $adr->get('Radar\Adr\Fake\Action', '/fake', 'Radar\Adr\Fake\FakeDomain');
-        $this->assertOutput(
-            $adr,
-            [
-                'HTTP/1.1 500 Internal Server Error',
-            ],
-            'domainError in middle'
-        );
-    }
-
-    public function testOutboundErrorInFinish()
-    {
-        $adr = $this->newAdr([
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/fake',
-        ]);
-
-        $adr->finish('Radar\Adr\Fake\FakeWareError');
-        $adr->get('Radar\Adr\Fake\Action', '/fake', 'Radar\Adr\Fake\FakeDomain');
-
-        // OK, because the error is after the response is sent
-        $this->assertOutput(
-            $adr,
-            [
-                'HTTP/1.1 200 OK',
-            ],
-            'domain'
-        );
+        $this->assertEquals($expectBody, $response->getBody()->__toString());
+        $this->assertEquals($expectHeaders, $response->getHeaders());
     }
 
     public function testMiddle()
     {
-        $adr = $this->newAdr([
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/fake',
-        ]);
+        $this->handlers->appendMiddle('Radar\Adr\Fake\FakeWare');
+        $this->handlers->appendMiddle('Radar\Adr\Fake\FakeWare');
+        $this->handlers->appendMiddle('Radar\Adr\Fake\FakeWare');
 
-        $adr->before('Radar\Adr\Fake\FakeWare');
-        $adr->before('Radar\Adr\Fake\FakeWare');
-        $adr->before('Radar\Adr\Fake\FakeWare');
-
-        $adr->get('Radar\Adr\Fake\Action', '/fake', new FakeDomain());
-        $this->assertOutput(
-            $adr,
-            [
-                'HTTP/1.1 200 OK',
-            ],
-            'domain 3'
+        $this->assertResponse(
+            200,
+            [],
+            '123'
         );
-        $this->assertSame(3, FakeWare::$count);
-
     }
 
-    public function testMiddleError()
+    public function testError()
     {
-        $adr = $this->newAdr([
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/fake',
-        ]);
+        $this->handlers->appendMiddle('Radar\Adr\Fake\FakeWare');
+        $this->handlers->appendMiddle('Radar\Adr\Fake\FakeWare');
+        $this->handlers->appendMiddle('Radar\Adr\Fake\FakeWareError');
+        $this->handlers->appendMiddle('Radar\Adr\Fake\FakeWare');
 
-        $adr->before('Radar\Adr\Fake\FakeWare');
-        $adr->before('Radar\Adr\Fake\FakeWare');
-        $adr->before('Radar\Adr\Fake\FakeWareError');
-
-        $adr->get('Radar\Adr\Fake\Action', '/fake', new FakeDomain());
-        $this->assertOutput(
-            $adr,
-            [
-                'HTTP/1.1 500 Internal Server Error',
-            ],
-            'Error in middle'
+        $this->assertResponse(
+            500,
+            [],
+            '12Error in middle'
         );
-        $this->assertSame(2, FakeWare::$count);
-    }
-
-    public function testMiddleEarly()
-    {
-        $adr = $this->newAdr([
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/fake',
-        ]);
-
-        $adr->before('Radar\Adr\Fake\FakeWare');
-        $adr->before('Radar\Adr\Fake\FakeWareEarly');
-        $adr->before('Radar\Adr\Fake\FakeWare');
-
-        $adr->get('Radar\Adr\Fake\Action', '/fake', new FakeDomain());
-        $this->assertOutput(
-            $adr,
-            [
-                'HTTP/1.1 200 OK',
-            ],
-            'Early exit in middle'
-        );
-        $this->assertSame(1, FakeWare::$count);
     }
 }

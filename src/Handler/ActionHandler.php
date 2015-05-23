@@ -18,16 +18,19 @@ class ActionHandler
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        Route $route
+        callable $next
     ) {
-        $responder = $this->factory->invokable($route->responder);
+        $route = $request->getAttribute('radar/adr:route');
+        $request = $request->withoutAttribute('radar/adr:route');
 
+        $responder = $this->factory->invokable($route->responder);
         if ($route->domain) {
             $payload = $this->domain($route, $request);
             return $responder($request, $response, $payload);
         }
 
-        return $responder($request, $response);
+        $response = $responder($request, $response);
+        return $next($request, $response);
     }
 
     protected function domain(Route $route, ServerRequestInterface $request)
