@@ -4,7 +4,7 @@ namespace Radar\Adr\Handler;
 use Aura\Di\ContainerBuilder;
 use Phly\Http\Response;
 use Phly\Http\ServerRequestFactory;
-use Radar\Adr\Factory;
+use Radar\Adr\Resolver;
 use Radar\Adr\Router\Route;
 
 class ActionHandlerTest extends \PHPUnit_Framework_TestCase
@@ -16,7 +16,7 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $di = $builder->newInstance();
         $this->actionHandler = new ActionHandler(
-            new Factory($di->getInjectionFactory())
+            new Resolver($di->getInjectionFactory())
         );
     }
 

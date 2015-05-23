@@ -7,9 +7,9 @@ class Handlers
 
     protected $exceptionHandler = 'Radar\Adr\Handler\ExceptionHandler';
 
-    public function __construct(Factory $factory)
+    public function __construct(Resolver $resolver)
     {
-        $this->factory = $factory;
+        $this->resolver = $resolver;
     }
 
     public function appendMiddle($spec)
@@ -23,7 +23,7 @@ class Handlers
             return function ($request, $response) { return $response; };
         }
 
-        return $this->factory->invokable(array_shift($this->middle));
+        return $this->resolver->resolve(array_shift($this->middle));
     }
 
     public function setExceptionHandler($exceptionHandler)
@@ -33,6 +33,6 @@ class Handlers
 
     public function getExceptionHandler()
     {
-        return $this->factory->invokable($this->exceptionHandler);
+        return $this->resolver->resolve($this->exceptionHandler);
     }
 }

@@ -16,7 +16,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $builder = new ContainerBuilder();
         $di = $builder->newInstance();
         $this->handlers = new Handlers(
-            new Factory($di->getInjectionFactory())
+            new Resolver($di->getInjectionFactory())
         );
 
         $this->handlers->setExceptionHandler(
