@@ -11,18 +11,18 @@ class Adr
     protected $map;
     protected $handlers;
     protected $rules;
-    protected $dispatcher;
+    protected $dispatcherFactory;
 
     public function __construct(
         Map $map,
         RuleIterator $rules,
         Handlers $handlers,
-        Dispatcher $dispatcher
+        callable $dispatcherFactory
     ) {
         $this->map = $map;
         $this->rules = $rules;
-        $this->dispatcher = $dispatcher;
         $this->handlers = $handlers;
+        $this->dispatcherFactory = $dispatcherFactory;
     }
 
     public function __call($method, $params)
@@ -49,6 +49,7 @@ class Adr
         ServerRequestInterface $request,
         ResponseInterface $response
     ) {
-        return $this->dispatcher->__invoke($request, $response);
+        $dispatcher = call_user_func($this->dispatcherFactory, $this->handlers);
+        return $dispatcher($request, $response);
     }
 }

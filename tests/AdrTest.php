@@ -15,12 +15,14 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->fakeMap = new Fake\FakeMap(new Route());
         $this->fakeRules = new RuleIterator();
         $this->fakeHandlers = new Fake\FakeHandlers();
-        $this->fakeDispatcher = new Fake\FakeDispatcher($this->fakeHandlers);
+        $this->fakeDispatcherFactory = function ($handlers) {
+            return new Fake\FakeDispatcher($handlers);
+        };
         $this->adr = new Adr(
             $this->fakeMap,
             $this->fakeRules,
             $this->fakeHandlers,
-            $this->fakeDispatcher
+            $this->fakeDispatcherFactory
         );
     }
 
