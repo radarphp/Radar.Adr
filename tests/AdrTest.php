@@ -26,6 +26,11 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testRules()
+    {
+        $this->assertSame($this->adr->rules(), $this->fakeRules);
+    }
+
     public function testProxyToMap()
     {
         $expect = 'Radar\Adr\Fake\FakeMap::fakeMapMethod';
@@ -33,7 +38,7 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testGetDispatcherParams()
+    public function testHandlers()
     {
         $this->adr->middle('middle1');
         $this->adr->middle('middle2');

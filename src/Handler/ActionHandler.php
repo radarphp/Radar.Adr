@@ -41,9 +41,8 @@ class ActionHandler
         if ($route->input) {
             $input = $this->resolver->resolve($route->input);
             $input = (array) $input($request);
-            return call_user_func_array($domain, $input);
         }
 
-        return $domain();
+        return call_user_func_array($domain, $input);
     }
 }

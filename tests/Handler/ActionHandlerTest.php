@@ -85,4 +85,17 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testWithoutDomain()
+    {
+        $route = new Route();
+        $route->responder('Radar\Adr\Fake\Action\Responder');
+
+        $this->assertResponse(
+            $route,
+            200,
+            [
+            ],
+            'No payload.'
+        );
+    }
 }

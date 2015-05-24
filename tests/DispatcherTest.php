@@ -28,7 +28,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $this->dispatcher = new Dispatcher($this->handlers);
+        $dispatcherFactory = new DispatcherFactory();
+        $this->dispatcher = $dispatcherFactory($this->handlers);
     }
 
     protected function assertResponse($expectStatus, $expectHeaders, $expectBody)
