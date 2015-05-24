@@ -22,18 +22,26 @@ class ActionHandler
     ) {
         $route = $request->getAttribute('radar/adr:route');
         $request = $request->withoutAttribute('radar/adr:route');
-
-        $responder = $this->resolver->resolve($route->responder);
-        if ($route->domain) {
-            $payload = $this->domain($route, $request);
-            return $responder($request, $response, $payload);
-        }
-
-        $response = $responder($request, $response);
+        $response = $this->response($route, $request, $response);
         return $next($request, $response);
     }
 
-    protected function domain(Route $route, ServerRequestInterface $request)
+    protected function response(
+        Route $route,
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ) {
+        $responder = $this->resolver->resolve($route->responder);
+
+        if ($route->domain) {
+            $payload = $this->payload($route, $request);
+            return $responder($request, $response, $payload);
+        }
+
+        return $responder($request, $response);
+    }
+
+    protected function payload(Route $route, ServerRequestInterface $request)
     {
         $domain = $this->resolver->resolve($route->domain);
 
