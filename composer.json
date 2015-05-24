@@ -7,8 +7,10 @@
         "aura/di": "~3.0",
         "aura/payload": "~3.0",
         "aura/router": "~3.0",
-        "josegonzalez/dotenv": "~0.0",
-        "phly/http": "~0.0"
+        "josegonzalez/dotenv": "~0.0"
+    },
+    "require-dev": {
+        "zendframework/zend-diactoros": "~1.0"
     },
     "autoload": {
         "psr-4": {

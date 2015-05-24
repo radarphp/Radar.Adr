@@ -1,7 +1,7 @@
 <?php
 namespace Radar\Adr;
 
-use Phly\Http\Response;
+use Zend\Diactoros\Response;
 use Radar\Adr\Fake\FakePhp;
 
 function header($string, $flag = null)

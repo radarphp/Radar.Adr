@@ -3,8 +3,8 @@ namespace Radar\Adr;
 
 use Aura\Router\Rule\RuleIterator;
 use Radar\Adr\Router\Route;
-use Phly\Http\ServerRequestFactory;
-use Phly\Http\Response;
+use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\Response;
 
 class AdrTest extends \PHPUnit_Framework_TestCase
 {

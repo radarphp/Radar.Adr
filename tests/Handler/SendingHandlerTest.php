@@ -1,8 +1,8 @@
 <?php
 namespace Radar\Adr\Handler;
 
-use Phly\Http\Response;
-use Phly\Http\ServerRequestFactory;
+use Zend\Diactoros\Response;
+use Zend\Diactoros\ServerRequestFactory;
 use Radar\Adr\Fake\FakeSender;
 use Radar\Adr\Sender;
 

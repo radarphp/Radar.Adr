@@ -2,8 +2,8 @@
 namespace Radar\Adr\Handler;
 
 use Exception;
-use Phly\Http\ServerRequestFactory;
-use Phly\Http\Response;
+use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\Response;
 use Radar\Adr\Sender;
 
 class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase

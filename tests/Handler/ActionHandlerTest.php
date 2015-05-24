@@ -2,8 +2,8 @@
 namespace Radar\Adr\Handler;
 
 use Aura\Di\ContainerBuilder;
-use Phly\Http\Response;
-use Phly\Http\ServerRequestFactory;
+use Zend\Diactoros\Response;
+use Zend\Diactoros\ServerRequestFactory;
 use Radar\Adr\Resolver;
 use Radar\Adr\Router\Route;
 

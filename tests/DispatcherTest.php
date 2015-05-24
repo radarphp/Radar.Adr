@@ -2,8 +2,8 @@
 namespace Radar\Adr;
 
 use Aura\Di\ContainerBuilder;
-use Phly\Http\Response;
-use Phly\Http\ServerRequestFactory;
+use Zend\Diactoros\Response;
+use Zend\Diactoros\ServerRequestFactory;
 use Radar\Adr\Fake\FakeWare;
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
