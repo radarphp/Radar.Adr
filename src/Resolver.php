@@ -3,7 +3,7 @@ namespace Radar\Adr;
 
 use Aura\Di\Injection\InjectionFactory;
 
-class Factory
+class Resolver
 {
     protected $injectionFactory;
 
@@ -12,7 +12,7 @@ class Factory
         $this->injectionFactory = $injectionFactory;
     }
 
-    public function invokable($spec)
+    public function resolve($spec)
     {
         if (is_string($spec)) {
             return $this->injectionFactory->newInstance($spec);

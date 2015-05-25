@@ -2,8 +2,8 @@
 namespace Radar\Adr\Responder;
 
 use Aura\Payload\Payload;
-use Phly\Http\ServerRequestFactory;
-use Phly\Http\Response;
+use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\Response;
 
 class ResponderTest extends \PHPUnit_Framework_TestCase
 {

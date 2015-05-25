@@ -2,43 +2,24 @@
 namespace Radar\Adr\Handler;
 
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Radar\Adr\Sender;
 
 class SendingHandler
 {
-    public function __invoke(ResponseInterface $response)
+    protected $sender;
+
+    public function __construct(Sender $sender)
     {
-        $this->sendStatus($response);
-        $this->sendHeaders($response);
-        $this->sendBody($response);
+        $this->sender = $sender;
     }
 
-    protected function sendStatus(ResponseInterface $response)
-    {
-        $version = $response->getProtocolVersion();
-        $status = $response->getStatusCode();
-        $phrase = $response->getReasonPhrase();
-        header("HTTP/{$version} {$status} {$phrase}");
-    }
-
-    protected function sendHeaders(ResponseInterface $response)
-    {
-        foreach ($response->getHeaders() as $name => $values) {
-            $this->sendHeader($name, $values);
-        }
-    }
-
-    protected function sendHeader($name, $values)
-    {
-        $name = str_replace('-', ' ', $name);
-        $name = ucwords($name);
-        $name = str_replace(' ', '-', $name);
-        foreach ($values as $value) {
-            header("{$name}: {$value}", false);
-        }
-    }
-
-    protected function sendBody(ResponseInterface $response)
-    {
-        echo $response->getBody();
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        callable $next
+    ) {
+        $this->sender->send($response);
+        return $next($request, $response);
     }
 }

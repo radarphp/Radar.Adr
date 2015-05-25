@@ -3,6 +3,8 @@ namespace Radar\Adr;
 
 use Aura\Router\Rule\RuleIterator;
 use Radar\Adr\Router\Route;
+use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\Response;
 
 class AdrTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,9 +14,21 @@ class AdrTest extends \PHPUnit_Framework_TestCase
     {
         $this->fakeMap = new Fake\FakeMap(new Route());
         $this->fakeRules = new RuleIterator();
-        $this->fakeMiddle = new Fake\FakeMiddle();
-        $this->fakeDispatcher = new Fake\FakeDispatcher($this->fakeMiddle);
-        $this->adr = new Adr($this->fakeMap, $this->fakeRules, $this->fakeDispatcher);
+        $this->fakeHandlers = new Fake\FakeHandlers();
+        $this->fakeDispatcherFactory = function ($handlers) {
+            return new Fake\FakeDispatcher($handlers);
+        };
+        $this->adr = new Adr(
+            $this->fakeMap,
+            $this->fakeRules,
+            $this->fakeHandlers,
+            $this->fakeDispatcherFactory
+        );
+    }
+
+    public function testRules()
+    {
+        $this->assertSame($this->adr->rules(), $this->fakeRules);
     }
 
     public function testProxyToMap()
@@ -24,66 +38,30 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testGetDispatcherParams()
+    public function testHandlers()
     {
-        $this->adr->before('before1');
-        $this->adr->before('before2');
-        $this->adr->before('before3');
-        $this->adr->after('after1');
-        $this->adr->after('after2');
-        $this->adr->after('after3');
-        $this->adr->finish('finish1');
-        $this->adr->finish('finish2');
-        $this->adr->finish('finish3');
-        $this->adr->routingHandler('Foo\Bar\RoutingHandler');
-        $this->adr->actionHandler('Foo\Bar\ActionHandler');
-        $this->adr->sendingHandler('Foo\Bar\SendingHandler');
+        $this->adr->middle('middle1');
+        $this->adr->middle('middle2');
+        $this->adr->middle('middle3');
         $this->adr->exceptionHandler('Foo\Bar\ExceptionHandler');
 
-        $expect = 'Foo\Bar\ActionHandler';
-        $this->assertSame($expect, $this->fakeDispatcher->actionHandler);
-
-        $expect = 'Foo\Bar\RoutingHandler';
-        $this->assertSame($expect, $this->fakeDispatcher->routingHandler);
-
-        $expect = 'Foo\Bar\SendingHandler';
-        $this->assertSame($expect, $this->fakeDispatcher->sendingHandler);
-
         $expect = 'Foo\Bar\ExceptionHandler';
-        $this->assertSame($expect, $this->fakeDispatcher->exceptionHandler);
+        $this->assertSame($expect, $this->fakeHandlers->exceptionHandler);
 
         $expect = [
-            [
-                'before1',
-                'before2',
-                'before3',
-            ]
+            'middle1',
+            'middle2',
+            'middle3',
         ];
-        $this->assertSame($expect, $this->fakeMiddle->before);
-
-        $expect = [
-            [
-                'after1',
-                'after2',
-                'after3',
-            ]
-        ];
-        $this->assertSame($expect, $this->fakeMiddle->after);
-
-        $expect = [
-            [
-                'finish1',
-                'finish2',
-                'finish3',
-            ]
-        ];
-        $this->assertSame($expect, $this->fakeMiddle->finish);
+        $this->assertSame($expect, $this->fakeHandlers->middle);
     }
 
     public function testRun()
     {
-        $expect = 'Radar\Adr\Fake\FakeDispatcher::run';
-        $actual = $this->adr->run();
+        $request = ServerRequestFactory::fromGlobals();
+        $response = new Response();
+        $expect = 'Radar\Adr\Fake\FakeDispatcher::__invoke';
+        $actual = $this->adr->run($request, $response);
         $this->assertSame($expect, $actual);
     }
 }

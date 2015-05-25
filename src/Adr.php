@@ -6,23 +6,23 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Radar\Adr\Router\Map;
 
-// a proxy for the map, middle, and dispatcher
 class Adr
 {
     protected $map;
-    protected $middle;
+    protected $handlers;
     protected $rules;
-    protected $dispatcher;
+    protected $dispatcherFactory;
 
     public function __construct(
         Map $map,
         RuleIterator $rules,
-        Dispatcher $dispatcher
+        Handlers $handlers,
+        callable $dispatcherFactory
     ) {
         $this->map = $map;
         $this->rules = $rules;
-        $this->dispatcher = $dispatcher;
-        $this->middle = $this->dispatcher->middle;
+        $this->handlers = $handlers;
+        $this->dispatcherFactory = $dispatcherFactory;
     }
 
     public function __call($method, $params)
@@ -30,48 +30,26 @@ class Adr
         return call_user_func_array([$this->map, $method], $params);
     }
 
-    public function before($spec)
-    {
-        $this->middle->before($spec);
-    }
-
-    public function after($spec)
-    {
-        $this->middle->after($spec);
-    }
-
-    public function finish($spec)
-    {
-        $this->middle->finish($spec);
-    }
-
     public function rules()
     {
         return $this->rules;
     }
 
-    public function actionHandler($spec)
+    public function middle($spec)
     {
-        $this->dispatcher->actionHandler($spec);
+        return $this->handlers->appendMiddle($spec);
     }
 
     public function exceptionHandler($spec)
     {
-        $this->dispatcher->exceptionHandler($spec);
+        return $this->handlers->setExceptionHandler($spec);
     }
 
-    public function routingHandler($spec)
-    {
-        $this->dispatcher->routingHandler($spec);
-    }
-
-    public function sendingHandler($spec)
-    {
-        $this->dispatcher->sendingHandler($spec);
-    }
-
-    public function run()
-    {
-        return $this->dispatcher->run();
+    public function run(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ) {
+        $dispatcher = call_user_func($this->dispatcherFactory, $this->handlers);
+        return $dispatcher($request, $response);
     }
 }

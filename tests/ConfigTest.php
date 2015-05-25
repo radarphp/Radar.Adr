@@ -15,8 +15,9 @@ class ConfigTest extends AbstractContainerTest
     public function provideGet()
     {
         return [
-            ['radar/adr:router', 'Aura\Router\RouterContainer'],
             ['radar/adr:adr', 'Radar\Adr\Adr'],
+            ['radar/adr:resolver', 'Radar\Adr\Resolver'],
+            ['radar/adr:router', 'Aura\Router\RouterContainer'],
         ];
     }
 
@@ -25,11 +26,12 @@ class ConfigTest extends AbstractContainerTest
         return [
             ['Aura\Router\RouterContainer'],
             ['Radar\Adr\Adr'],
-            ['Radar\Adr\Dispatcher'],
-            ['Radar\Adr\Factory'],
             ['Radar\Adr\Handler\ActionHandler'],
+            ['Radar\Adr\Handler\ExceptionHandler'],
             ['Radar\Adr\Handler\RoutingHandler'],
-            ['Radar\Adr\Middle'],
+            ['Radar\Adr\Handler\SendingHandler'],
+            ['Radar\Adr\Handlers'],
+            ['Radar\Adr\Resolver'],
             ['Radar\Adr\Router\Map'],
         ];
     }

@@ -4,30 +4,25 @@ namespace Radar\Adr\Handler;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Radar\Adr\Sender;
 
 class ExceptionHandler
 {
-    protected $request;
-    protected $response;
-    protected $exception;
+    protected $sender;
+
+    public function __construct(Sender $sender)
+    {
+        $this->sender = $sender;
+    }
 
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
         Exception $exception
     ) {
-        $this->request = $request;
-        $this->response = $response;
-        $this->exception = $exception;
-        $this->exec();
-        return $this->response;
-    }
-
-    protected function exec()
-    {
-        $this->response = $this->response
-            ->withStatus(500);
-
-        $this->response->getBody()->write($this->exception->getMessage());
+        $response = $response->withStatus(500);
+        $response->getBody()->write($exception->getMessage());
+        $this->sender->send($response);
+        return $response;
     }
 }

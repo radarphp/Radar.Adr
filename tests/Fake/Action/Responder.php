@@ -20,6 +20,8 @@ class Responder implements ResponderAcceptsInterface
     ) {
         if ($payload) {
             $response->getBody()->write($payload->getOutput());
+        } else {
+            $response->getBody()->write('No payload.');
         }
         return $response;
     }

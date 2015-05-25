@@ -1,8 +1,8 @@
 <?php
 namespace Radar\Adr\Responder;
 
-use Phly\Http\ServerRequestFactory;
-use Phly\Http\Response;
+use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\Response;
 use Radar\Adr\Router\Route;
 
 class RoutingFailedResponderTest extends \PHPUnit_Framework_TestCase
