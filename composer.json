@@ -4,9 +4,9 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "aura/di": "~3.0.0@alpha",
-        "aura/payload": "~3.0.0@alpha",
-        "aura/router": "~3.0.0@alpha",
+        "aura/di": "~3.0",
+        "aura/payload": "~3.0",
+        "aura/router": "~3.0",
         "josegonzalez/dotenv": "~0.0"
     },
     "require-dev": {
@@ -22,5 +22,6 @@
             "Radar\\Adr\\": "tests/",
             "Aura\\Di\\_Config\\": "vendor/aura/di/tests/_Config"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
