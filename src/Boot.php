@@ -6,11 +6,14 @@ use josegonzalez\Dotenv\Loader;
 
 class Boot
 {
-    protected $dotenv = [];
+    protected $dotenv = [
+        'toEnv' => true,
+        'putenv' => true,
+    ];
 
     public function __construct(array $dotenv = [])
     {
-        $this->dotenv = $dotenv;
+        $this->dotenv = array_merge($this->dotenv, $dotenv);
     }
 
     public function adr(array $config = [])
