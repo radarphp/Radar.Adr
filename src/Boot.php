@@ -36,11 +36,14 @@ class Boot
             return $_ENV['RADAR_ADR_CONTAINER_CACHE'];
         }
 
+        $cache = getenv('RADAR_ADR_CONTAINER_CACHE');
+        if ($cache) {
+            return $cache;
+        }
+
         if (isset($_SERVER['RADAR_ADR_CONTAINER_CACHE'])) {
             return $_SERVER['RADAR_ADR_CONTAINER_CACHE'];
         }
-
-        return getenv('RADAR_ADR_CONTAINER_CACHE');
     }
 
     protected function cachedContainer(array $config, $cache)
