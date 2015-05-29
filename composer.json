@@ -6,8 +6,7 @@
     "require": {
         "aura/di": "~3.0",
         "aura/payload": "~3.0",
-        "aura/router": "~3.0",
-        "josegonzalez/dotenv": "~1.0"
+        "aura/router": "~3.0"
     },
     "require-dev": {
         "zendframework/zend-diactoros": "~1.0"

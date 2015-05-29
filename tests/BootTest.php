@@ -3,68 +3,46 @@ namespace Radar\Adr;
 
 class BootTest extends \PHPUnit_Framework_TestCase
 {
-    protected $cache;
+    protected $containerCache;
 
     protected function setUp()
     {
-        $this->cache = __DIR__ . DIRECTORY_SEPARATOR . 'container.serialized';
-        if (file_exists($this->cache)) {
-            unlink($this->cache);
+        $this->containerCache = __DIR__ . DIRECTORY_SEPARATOR . 'container.serialized';
+        if (file_exists($this->containerCache)) {
+            unlink($this->containerCache);
         }
     }
 
     protected function tearDown()
     {
-        if (file_exists($this->cache)) {
-            unlink($this->cache);
+        if (file_exists($this->containerCache)) {
+            unlink($this->containerCache);
         }
     }
 
-    public function testLoader()
+    public function testUncached()
     {
-        $boot = new Boot([
-            'filepath' => __DIR__ . DIRECTORY_SEPARATOR . '_env',
-            'toEnv' => true,
-        ]);
-
+        $this->assertFalse(file_exists($this->containerCache));
+        $boot = new Boot();
         $adr = $boot->adr();
         $this->assertInstanceOf('Radar\Adr\Adr', $adr);
-        $this->assertSame('BAR', $_ENV['FOO']);
+        $this->assertFalse(file_exists($this->containerCache));
     }
 
-    public function testCacheEnv()
+    public function testCached()
     {
-        $_ENV['RADAR_ADR_CONTAINER_CACHE'] = $this->cache;
-        unset($_SERVER['RADAR_ADR_CONTAINER_CACHE']);
-        putenv('RADAR_ADR_CONTAINER_CACHE=');
-        $this->assertCache();
-    }
+        $this->assertFalse(file_exists($this->containerCache));
 
-    public function testCacheServer()
-    {
-        unset($_ENV['RADAR_ADR_CONTAINER_CACHE']);
-        $_SERVER['RADAR_ADR_CONTAINER_CACHE'] = $this->cache;
-        putenv('RADAR_ADR_CONTAINER_CACHE=');
-        $this->assertCache();
-    }
-
-    public function testCachePutenv()
-    {
-        unset($_ENV['RADAR_ADR_CONTAINER_CACHE']);
-        unset($_SERVER['RADAR_ADR_CONTAINER_CACHE']);
-        putenv('RADAR_ADR_CONTAINER_CACHE=' . $this->cache);
-        $this->assertCache();
-    }
-
-    protected function assertCache()
-    {
-        $this->assertFalse(file_exists($this->cache));
-        $boot = new Boot(['filepath' => __DIR__ . DIRECTORY_SEPARATOR . '_env']);
-        $adr = $boot->adr();
-        $this->assertTrue(file_exists($this->cache));
-        $this->assertInstanceOf('Radar\Adr\Adr', $adr);
-
+        // boot 'im!
+        $boot = new Boot($this->containerCache);
         $adr = $boot->adr();
         $this->assertInstanceOf('Radar\Adr\Adr', $adr);
+        $this->assertTrue(file_exists($this->containerCache));
+
+        // boot 'im agin, paw!
+        $boot = new Boot($this->containerCache);
+        $adr = $boot->adr();
+        $this->assertInstanceOf('Radar\Adr\Adr', $adr);
+        $this->assertTrue(file_exists($this->containerCache));
     }
 }

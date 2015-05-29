@@ -6,23 +6,17 @@ use josegonzalez\Dotenv\Loader;
 
 class Boot
 {
-    protected $dotenv = [
-        'toEnv' => true,
-        'putenv' => true,
-    ];
+    protected $containerCache;
 
-    public function __construct(array $dotenv = [])
+    public function __construct($containerCache = null)
     {
-        $this->dotenv = array_merge($this->dotenv, $dotenv);
+        $this->containerCache = $containerCache;
     }
 
     public function adr(array $config = [])
     {
-        Loader::load($this->dotenv);
-
-        $cache = $this->getCache();
-        if ($cache) {
-            $di = $this->cachedContainer($config, $cache);
+        if ($this->containerCache) {
+            $di = $this->cachedContainer($config);
         } else {
             $di = $this->newContainer($config);
         }
@@ -30,30 +24,14 @@ class Boot
         return $di->get('radar/adr:adr');
     }
 
-    protected function getCache()
+    protected function cachedContainer(array $config)
     {
-        if (isset($_ENV['RADAR_ADR_CONTAINER_CACHE'])) {
-            return $_ENV['RADAR_ADR_CONTAINER_CACHE'];
-        }
-
-        $cache = getenv('RADAR_ADR_CONTAINER_CACHE');
-        if ($cache) {
-            return $cache;
-        }
-
-        if (isset($_SERVER['RADAR_ADR_CONTAINER_CACHE'])) {
-            return $_SERVER['RADAR_ADR_CONTAINER_CACHE'];
-        }
-    }
-
-    protected function cachedContainer(array $config, $cache)
-    {
-        if (file_exists($cache)) {
-            return unserialize(file_get_contents($cache));
+        if (file_exists($this->containerCache)) {
+            return unserialize(file_get_contents($this->containerCache));
         }
 
         $di = $this->newContainer($config);
-        file_put_contents($cache, serialize($di));
+        file_put_contents($this->containerCache, serialize($di));
         return $di;
     }
 
