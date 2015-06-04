@@ -1,8 +1,8 @@
 <?php
 namespace Radar\Adr\Handler;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Radar\Adr\Sender;
 
 class SendingHandler
@@ -15,8 +15,8 @@ class SendingHandler
     }
 
     public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
+        Request $request,
+        Response $response,
         callable $next
     ) {
         $this->sender->send($response);

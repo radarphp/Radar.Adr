@@ -3,8 +3,8 @@ namespace Radar\Adr\Responder;
 
 use Aura\Payload_Interface\PayloadInterface;
 use Aura\Payload\Payload;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class Responder implements ResponderAcceptsInterface
 {
@@ -20,8 +20,8 @@ class Responder implements ResponderAcceptsInterface
     }
 
     public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
+        Request $request,
+        Response $response,
         PayloadInterface $payload = null
     ) {
         $this->request = $request;

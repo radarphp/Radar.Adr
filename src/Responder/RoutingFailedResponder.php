@@ -1,8 +1,8 @@
 <?php
 namespace Radar\Adr\Responder;
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Radar\Adr\Router\Route;
 
 class RoutingFailedResponder
@@ -12,8 +12,8 @@ class RoutingFailedResponder
     protected $failedRoute;
 
     public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
+        Request $request,
+        Response $response,
         Route $failedRoute
     ) {
         $this->request = $request;

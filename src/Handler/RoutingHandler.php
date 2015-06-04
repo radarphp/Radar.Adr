@@ -2,8 +2,8 @@
 namespace Radar\Adr\Handler;
 
 use Aura\Router\Matcher;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Radar\Adr\Router\Route;
 
 class RoutingHandler
@@ -18,15 +18,15 @@ class RoutingHandler
     }
 
     public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
+        Request $request,
+        Response $response,
         callable $next
     ) {
         $request = $this->routeRequest($request);
         return $next($request, $response);
     }
 
-    protected function routeRequest(ServerRequestInterface $request)
+    protected function routeRequest(Request $request)
     {
         $route = $this->route($request);
         foreach ($route->attributes as $key => $val) {
@@ -36,7 +36,7 @@ class RoutingHandler
         return $request;
     }
 
-    protected function route(ServerRequestInterface $request)
+    protected function route(Request $request)
     {
         $route = $this->matcher->match($request);
         if (! $route) {

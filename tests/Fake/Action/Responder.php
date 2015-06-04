@@ -2,8 +2,8 @@
 namespace Radar\Adr\Fake\Action;
 
 use Aura\Payload_Interface\PayloadInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Radar\Adr\Responder\ResponderAcceptsInterface;
 
 class Responder implements ResponderAcceptsInterface
@@ -14,8 +14,8 @@ class Responder implements ResponderAcceptsInterface
     }
 
     public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
+        Request $request,
+        Response $response,
         PayloadInterface $payload = null
     ) {
         if ($payload) {

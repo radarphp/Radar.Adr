@@ -1,8 +1,8 @@
 <?php
 namespace Radar\Adr\Handler;
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Radar\Adr\Resolver;
 use Radar\Adr\Router\Route;
 
@@ -16,8 +16,8 @@ class ActionHandler
     }
 
     public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
+        Request $request,
+        Response $response,
         callable $next
     ) {
         $route = $request->getAttribute('radar/adr:route');
@@ -28,10 +28,10 @@ class ActionHandler
 
     protected function response(
         Route $route,
-        ServerRequestInterface $request,
-        ResponseInterface $response
+        Request $request,
+        Response $response
     ) {
-        $responder = $this->resolver->resolve($route->responder);
+        $responder = $this->resolver->__invoke($route->responder);
 
         if ($route->domain) {
             $payload = $this->payload($route, $request);
@@ -41,13 +41,13 @@ class ActionHandler
         return $responder($request, $response);
     }
 
-    protected function payload(Route $route, ServerRequestInterface $request)
+    protected function payload(Route $route, Request $request)
     {
-        $domain = $this->resolver->resolve($route->domain);
+        $domain = $this->resolver->__invoke($route->domain);
 
         $input = [];
         if ($route->input) {
-            $input = $this->resolver->resolve($route->input);
+            $input = $this->resolver->__invoke($route->input);
             $input = (array) $input($request);
         }
 

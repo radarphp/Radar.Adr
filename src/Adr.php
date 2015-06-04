@@ -2,8 +2,8 @@
 namespace Radar\Adr;
 
 use Aura\Router\Rule\RuleIterator;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Radar\Adr\Router\Map;
 
 class Adr
@@ -46,8 +46,8 @@ class Adr
     }
 
     public function run(
-        ServerRequestInterface $request,
-        ResponseInterface $response
+        Request $request,
+        Response $response
     ) {
         $dispatcher = call_user_func($this->dispatcherFactory, $this->handlers);
         return $dispatcher($request, $response);

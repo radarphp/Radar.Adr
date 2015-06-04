@@ -12,7 +12,7 @@ class Resolver
         $this->injectionFactory = $injectionFactory;
     }
 
-    public function resolve($spec)
+    public function __invoke($spec)
     {
         if (is_string($spec)) {
             return $this->injectionFactory->newInstance($spec);

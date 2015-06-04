@@ -2,8 +2,8 @@
 namespace Radar\Adr;
 
 use Exception;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class Dispatcher
 {
@@ -15,8 +15,8 @@ class Dispatcher
     }
 
     public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response
+        Request $request,
+        Response $response
     ) {
         try {
             $middle = $this->handlers->shiftMiddle();

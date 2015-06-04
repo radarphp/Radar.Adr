@@ -23,7 +23,7 @@ class Handlers
             return function ($request, $response) { return $response; };
         }
 
-        return $this->resolver->resolve(array_shift($this->middle));
+        return $this->resolver->__invoke(array_shift($this->middle));
     }
 
     public function setExceptionHandler($exceptionHandler)
@@ -33,6 +33,6 @@ class Handlers
 
     public function getExceptionHandler()
     {
-        return $this->resolver->resolve($this->exceptionHandler);
+        return $this->resolver->__invoke($this->exceptionHandler);
     }
 }

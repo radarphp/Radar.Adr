@@ -2,8 +2,8 @@
 namespace Radar\Adr\Handler;
 
 use Exception;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Radar\Adr\Sender;
 
 class ExceptionHandler
@@ -16,8 +16,8 @@ class ExceptionHandler
     }
 
     public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
+        Request $request,
+        Response $response,
         Exception $exception
     ) {
         $response = $response->withStatus(500);

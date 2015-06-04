@@ -1,11 +1,11 @@
 <?php
 namespace Radar\Adr;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class Input
 {
-    public function __invoke(ServerRequestInterface $request)
+    public function __invoke(Request $request)
     {
         return [
             array_merge(
