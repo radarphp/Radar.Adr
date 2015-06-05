@@ -18,7 +18,9 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         $response = $exceptionHandler(
             ServerRequestFactory::fromGlobals(),
             new Response(),
-            new Exception('Random exception')
+            function ($request, $response) {
+                throw new Exception('Random exception');
+            }
         );
         $actual = ob_get_clean();
 

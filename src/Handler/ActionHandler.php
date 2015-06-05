@@ -15,11 +15,8 @@ class ActionHandler
         $this->resolver = $resolver;
     }
 
-    public function __invoke(
-        Request $request,
-        Response $response,
-        callable $next
-    ) {
+    public function __invoke(Request $request, Response $response, callable $next)
+    {
         $route = $request->getAttribute('radar/adr:route');
         $request = $request->withoutAttribute('radar/adr:route');
         $response = $this->response($route, $request, $response);

@@ -15,14 +15,15 @@ class ExceptionHandler
         $this->sender = $sender;
     }
 
-    public function __invoke(
-        Request $request,
-        Response $response,
-        Exception $exception
-    ) {
-        $response = $response->withStatus(500);
-        $response->getBody()->write($exception->getMessage());
-        $this->sender->send($response);
+    public function __invoke(Request $request, Response $response, callable $next)
+    {
+        try {
+            $response = $next($request, $response);
+        } catch (Exception $e) {
+            $response = $response->withStatus(500);
+            $response->getBody()->write($e->getMessage());
+            $this->sender->send($response);
+        }
         return $response;
     }
 }

@@ -6,7 +6,8 @@
     "require": {
         "aura/di": "~3.0",
         "aura/payload": "~3.0",
-        "aura/router": "~3.0"
+        "aura/router": "~3.0",
+        "pipeline/pipeline": "~1.0"
     },
     "require-dev": {
         "zendframework/zend-diactoros": "~1.0"
@@ -19,7 +20,7 @@
     "autoload-dev": {
         "psr-4": {
             "Radar\\Adr\\": "tests/",
-            "Aura\\Di\\_Config\\": "vendor/aura/di/tests/_Config"
+            "Aura\\Di\\": "vendor/aura/di/tests/"
         }
     },
     "minimum-stability": "dev"

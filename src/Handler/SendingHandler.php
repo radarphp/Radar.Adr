@@ -14,11 +14,8 @@ class SendingHandler
         $this->sender = $sender;
     }
 
-    public function __invoke(
-        Request $request,
-        Response $response,
-        callable $next
-    ) {
+    public function __invoke(Request $request, Response $response, callable $next)
+    {
         $this->sender->send($response);
         return $next($request, $response);
     }

@@ -1,8 +1,10 @@
 <?php
 namespace Radar\Adr;
 
+use Aura\Di\ContainerBuilder;
 use Aura\Router\Rule\RuleIterator;
 use Radar\Adr\Router\Route;
+use Radar\Adr\Fake\FakeMiddleware;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
 
@@ -10,19 +12,20 @@ class AdrTest extends \PHPUnit_Framework_TestCase
 {
     protected $adr;
 
-    public function setup()
+    public function setUp()
     {
+        $builder = new ContainerBuilder();
+        $di = $builder->newInstance();
+        $resolver = new Resolver($di->getInjectionFactory());
+
         $this->fakeMap = new Fake\FakeMap(new Route());
         $this->fakeRules = new RuleIterator();
-        $this->fakeHandlers = new Fake\FakeHandlers();
-        $this->fakeDispatcherFactory = function ($handlers) {
-            return new Fake\FakeDispatcher($handlers);
-        };
+        $this->pipelineFactory = new PipelineFactory($resolver);
+
         $this->adr = new Adr(
             $this->fakeMap,
             $this->fakeRules,
-            $this->fakeHandlers,
-            $this->fakeDispatcherFactory
+            $this->pipelineFactory
         );
     }
 
@@ -38,30 +41,20 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testHandlers()
-    {
-        $this->adr->middle('middle1');
-        $this->adr->middle('middle2');
-        $this->adr->middle('middle3');
-        $this->adr->exceptionHandler('Foo\Bar\ExceptionHandler');
-
-        $expect = 'Foo\Bar\ExceptionHandler';
-        $this->assertSame($expect, $this->fakeHandlers->exceptionHandler);
-
-        $expect = [
-            'middle1',
-            'middle2',
-            'middle3',
-        ];
-        $this->assertSame($expect, $this->fakeHandlers->middle);
-    }
-
     public function testRun()
     {
-        $request = ServerRequestFactory::fromGlobals();
-        $response = new Response();
-        $expect = 'Radar\Adr\Fake\FakeDispatcher::__invoke';
-        $actual = $this->adr->run($request, $response);
-        $this->assertSame($expect, $actual);
+        FakeMiddleware::$count = 0;
+
+        $this->adr->middle('Radar\Adr\Fake\FakeMiddleware');
+        $this->adr->middle('Radar\Adr\Fake\FakeMiddleware');
+        $this->adr->middle('Radar\Adr\Fake\FakeMiddleware');
+
+        $response = $this->adr->run(
+            ServerRequestFactory::fromGlobals(),
+            new Response()
+        );
+
+        $actual = (string) $response->getBody();
+        $this->assertSame('123456', $actual);
     }
 }

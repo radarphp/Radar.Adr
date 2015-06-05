@@ -1,9 +1,9 @@
 <?php
 namespace Radar\Adr;
 
-use Aura\Di\_Config\AbstractContainerTest;
+use Aura\Di\AbstractContainerConfigTest;
 
-class ConfigTest extends AbstractContainerTest
+class ConfigTest extends AbstractContainerConfigTest
 {
     protected function getConfigClasses()
     {
@@ -30,7 +30,6 @@ class ConfigTest extends AbstractContainerTest
             ['Radar\Adr\Handler\ExceptionHandler'],
             ['Radar\Adr\Handler\RoutingHandler'],
             ['Radar\Adr\Handler\SendingHandler'],
-            ['Radar\Adr\Handlers'],
             ['Radar\Adr\Resolver'],
             ['Radar\Adr\Router\Map'],
         ];

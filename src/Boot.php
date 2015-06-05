@@ -38,6 +38,6 @@ class Boot
     protected function newContainer(array $config)
     {
         $config = array_merge(['Radar\Adr\Config'], $config);
-        return (new ContainerBuilder())->newConfiguredInstance([], $config);
+        return (new ContainerBuilder())->newConfiguredInstance($config);
     }
 }

@@ -17,11 +17,8 @@ class RoutingHandler
         $this->route = $route;
     }
 
-    public function __invoke(
-        Request $request,
-        Response $response,
-        callable $next
-    ) {
+    public function __invoke(Request $request, Response $response, callable $next)
+    {
         $request = $this->routeRequest($request);
         return $next($request, $response);
     }

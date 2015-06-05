@@ -25,8 +25,12 @@ class Config extends ContainerConfig
          */
         $di->params['Radar\Adr\Adr']['map'] = $di->lazyGetCall('radar/adr:router', 'getMap');
         $di->params['Radar\Adr\Adr']['rules'] = $di->lazyGetCall('radar/adr:router', 'getRuleIterator');
-        $di->params['Radar\Adr\Adr']['handlers'] = $di->lazyNew('Radar\Adr\Handlers');
-        $di->params['Radar\Adr\Adr']['dispatcherFactory'] = $di->lazyNew('Radar\Adr\DispatcherFactory');
+        $di->params['Radar\Adr\Adr']['pipelineFactory'] = $di->lazyNew('Radar\Adr\PipelineFactory');
+
+        /**
+         * Radar\Adr\PipelineFactory
+         */
+        $di->params['Radar\Adr\PipelineFactory']['resolver'] = $di->lazyGet('radar/adr:resolver');
 
         /**
          * Radar\Adr\Handler\ActionHandler
@@ -48,11 +52,6 @@ class Config extends ContainerConfig
          * Radar\Adr\Handler\SendingHandler
          */
         $di->params['Radar\Adr\Handler\SendingHandler']['sender'] = $di->lazyNew('Radar\Adr\Sender');
-
-        /**
-         * Radar\Adr\Handlers
-         */
-        $di->params['Radar\Adr\Handlers']['resolver'] = $di->lazyGet('radar/adr:resolver');
 
         /**
          * Radar\Adr\Resolver

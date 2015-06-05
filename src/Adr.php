@@ -8,21 +8,19 @@ use Radar\Adr\Router\Map;
 
 class Adr
 {
+    protected $pipelineFactory;
     protected $map;
-    protected $handlers;
+    protected $middle = [];
     protected $rules;
-    protected $dispatcherFactory;
 
     public function __construct(
         Map $map,
         RuleIterator $rules,
-        Handlers $handlers,
-        callable $dispatcherFactory
+        PipelineFactory $pipelineFactory
     ) {
         $this->map = $map;
         $this->rules = $rules;
-        $this->handlers = $handlers;
-        $this->dispatcherFactory = $dispatcherFactory;
+        $this->pipelineFactory = $pipelineFactory;
     }
 
     public function __call($method, $params)
@@ -37,19 +35,12 @@ class Adr
 
     public function middle($spec)
     {
-        return $this->handlers->appendMiddle($spec);
+        return $this->middle[] = $spec;
     }
 
-    public function exceptionHandler($spec)
+    public function run(Request $request, Response $response)
     {
-        return $this->handlers->setExceptionHandler($spec);
-    }
-
-    public function run(
-        Request $request,
-        Response $response
-    ) {
-        $dispatcher = call_user_func($this->dispatcherFactory, $this->handlers);
-        return $dispatcher($request, $response);
+        $pipeline = $this->pipelineFactory->newInstance($this->middle);
+        return $pipeline($request, $response);
     }
 }
