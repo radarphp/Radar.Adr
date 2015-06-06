@@ -20,7 +20,6 @@ class Resolver
 
         if (is_array($spec) && is_string($spec[0])) {
             $spec[0] = $this->injectionFactory->newInstance($spec[0]);
-            return $spec;
         }
 
         return $spec;
