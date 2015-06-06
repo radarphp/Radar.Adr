@@ -14,7 +14,6 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
             new Sender(['Radar\Adr\Fake\FakePhp', 'header'])
         );
 
-        ob_start();
         $response = $exceptionHandler(
             ServerRequestFactory::fromGlobals(),
             new Response(),
@@ -22,9 +21,8 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
                 throw new Exception('Random exception');
             }
         );
-        $actual = ob_get_clean();
 
-        $this->assertEquals('Random exception', $actual);
+        $this->assertEquals('Random exception', $response->getBody()->__toString());
         $this->assertEquals(500, $response->getStatusCode());
     }
 }
