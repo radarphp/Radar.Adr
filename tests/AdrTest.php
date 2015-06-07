@@ -3,6 +3,7 @@ namespace Radar\Adr;
 
 use Aura\Di\ContainerBuilder;
 use Aura\Router\Rule\RuleIterator;
+use Pipeline\Pipeline\PipelineBuilder;
 use Radar\Adr\Router\Route;
 use Radar\Adr\Fake\FakeMiddleware;
 use Zend\Diactoros\ServerRequestFactory;
@@ -20,12 +21,12 @@ class AdrTest extends \PHPUnit_Framework_TestCase
 
         $this->fakeMap = new Fake\FakeMap(new Route());
         $this->fakeRules = new RuleIterator();
-        $this->pipelineFactory = new PipelineFactory($resolver);
+        $this->pipelineBuilder = new PipelineBuilder($resolver);
 
         $this->adr = new Adr(
             $this->fakeMap,
             $this->fakeRules,
-            $this->pipelineFactory
+            $this->pipelineBuilder
         );
     }
 
