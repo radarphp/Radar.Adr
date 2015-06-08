@@ -2,7 +2,6 @@
 namespace Radar\Adr\Handler;
 
 use Radar\Adr\Fake\FakePhp;
-use Radar\Adr\Fake\FakeSender;
 use Radar\Adr\Sender;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
