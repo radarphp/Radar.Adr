@@ -4,15 +4,12 @@ namespace Radar\Adr\Handler;
 use Exception;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
-use Radar\Adr\Sender;
 
 class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function test()
     {
-        $exceptionHandler = new ExceptionHandler(
-            new Sender(['Radar\Adr\Fake\FakePhp', 'header'])
-        );
+        $exceptionHandler = new ExceptionHandler();
 
         $response = $exceptionHandler(
             ServerRequestFactory::fromGlobals(),
