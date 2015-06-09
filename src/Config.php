@@ -21,16 +21,16 @@ class Config extends ContainerConfig
         $di->setters['Aura\Router\RouterContainer']['setMapFactory'] = $di->newFactory('Radar\Adr\Router\Map');
 
         /**
-         * Pipeline\Pipeline\PipelineBuilder
+         * Relay\Relay\RelayBuilder
          */
-        $di->params['Pipeline\Pipeline\PipelineBuilder']['resolver'] = $di->lazyGet('radar/adr:resolver');
+        $di->params['Relay\Relay\RelayBuilder']['resolver'] = $di->lazyGet('radar/adr:resolver');
 
         /**
          * Radar\Adr\Adr
          */
         $di->params['Radar\Adr\Adr']['map'] = $di->lazyGetCall('radar/adr:router', 'getMap');
         $di->params['Radar\Adr\Adr']['rules'] = $di->lazyGetCall('radar/adr:router', 'getRuleIterator');
-        $di->params['Radar\Adr\Adr']['pipelineBuilder'] = $di->lazyNew('Pipeline\Pipeline\PipelineBuilder');
+        $di->params['Radar\Adr\Adr']['relayBuilder'] = $di->lazyNew('Relay\Relay\RelayBuilder');
 
         /**
          * Radar\Adr\Handler\ActionHandler

@@ -2,14 +2,14 @@
 namespace Radar\Adr;
 
 use Aura\Router\Rule\RuleIterator;
-use Pipeline\Pipeline\PipelineBuilder;
+use Relay\Relay\RelayBuilder;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Radar\Adr\Router\Map;
 
 class Adr
 {
-    protected $pipelineBuilder;
+    protected $relayBuilder;
     protected $map;
     protected $middle = [];
     protected $rules;
@@ -17,11 +17,11 @@ class Adr
     public function __construct(
         Map $map,
         RuleIterator $rules,
-        PipelineBuilder $pipelineBuilder
+        RelayBuilder $relayBuilder
     ) {
         $this->map = $map;
         $this->rules = $rules;
-        $this->pipelineBuilder = $pipelineBuilder;
+        $this->relayBuilder = $relayBuilder;
     }
 
     public function __call($method, $params)
@@ -41,7 +41,7 @@ class Adr
 
     public function run(Request $request, Response $response)
     {
-        $pipeline = $this->pipelineBuilder->newInstance($this->middle);
-        return $pipeline($request, $response);
+        $relay = $this->relayBuilder->newInstance($this->middle);
+        return $relay($request, $response);
     }
 }
