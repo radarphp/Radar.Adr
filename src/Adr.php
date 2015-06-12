@@ -2,7 +2,7 @@
 namespace Radar\Adr;
 
 use Aura\Router\Rule\RuleIterator;
-use Relay\Relay\RelayBuilder;
+use Relay\RelayBuilder;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Radar\Adr\Router\Map;

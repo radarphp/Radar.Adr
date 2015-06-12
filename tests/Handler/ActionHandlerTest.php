@@ -2,10 +2,11 @@
 namespace Radar\Adr\Handler;
 
 use Aura\Di\ContainerBuilder;
-use Zend\Diactoros\Response;
-use Zend\Diactoros\ServerRequestFactory;
+use Radar\Adr\Action;
 use Radar\Adr\Resolver;
 use Radar\Adr\Router\Route;
+use Zend\Diactoros\Response;
+use Zend\Diactoros\ServerRequestFactory;
 
 class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,10 +21,10 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function assertResponse(Route $route, $expectStatus, $expectHeaders, $expectBody)
+    protected function assertResponse(Action $action, $expectStatus, $expectHeaders, $expectBody)
     {
         $request = ServerRequestFactory::fromGlobals();
-        $request = $request->withAttribute('radar/adr:route', $route);
+        $request = $request->withAttribute('radar/adr:action', $action);
         $response = $this->actionHandler->__invoke(
             $request,
             new Response(),
@@ -36,11 +37,12 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDomainClass()
     {
-        $route = new Route();
-        $route->domain('Radar\Adr\Fake\FakeDomain');
+        $action = new Action();
+        $action->setDomain('Radar\Adr\Fake\FakeDomain');
+        $action->setResponder('Radar\Adr\Responder\Responder');
 
         $this->assertResponse(
-            $route,
+            $action,
             200,
             [
                 'Content-Type' => [
@@ -53,11 +55,12 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDomainArray()
     {
-        $route = new Route();
-        $route->domain(['Radar\Adr\Fake\FakeDomain', '__invoke']);
+        $action = new Action();
+        $action->setDomain(['Radar\Adr\Fake\FakeDomain', '__invoke']);
+        $action->setResponder('Radar\Adr\Responder\Responder');
 
         $this->assertResponse(
-            $route,
+            $action,
             200,
             [
                 'Content-Type' => [
@@ -70,11 +73,12 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDomainObject()
     {
-        $route = new Route();
-        $route->domain(new \Radar\Adr\Fake\FakeDomain());
+        $action = new Action();
+        $action->setDomain(new \Radar\Adr\Fake\FakeDomain());
+        $action->setResponder('Radar\Adr\Responder\Responder');
 
         $this->assertResponse(
-            $route,
+            $action,
             200,
             [
                 'Content-Type' => [
@@ -87,11 +91,11 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testWithoutDomain()
     {
-        $route = new Route();
-        $route->responder('Radar\Adr\Fake\Action\Responder');
+        $action = new Action();
+        $action->setResponder('Radar\Adr\Fake\Action\Responder');
 
         $this->assertResponse(
-            $route,
+            $action,
             200,
             [
             ],

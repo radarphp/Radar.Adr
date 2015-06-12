@@ -1,8 +1,9 @@
 <?php
 namespace Radar\Adr\Handler;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Radar\Adr\Action;
 use Radar\Adr\Resolver;
 use Radar\Adr\Router\Route;
 
@@ -17,37 +18,35 @@ class ActionHandler
 
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        $route = $request->getAttribute('radar/adr:route');
-        $request = $request->withoutAttribute('radar/adr:route');
-        $response = $this->response($route, $request, $response);
+        $action = $request->getAttribute('radar/adr:action');
+        $request = $request->withoutAttribute('radar/adr:action');
+        $response = $this->response($request, $response, $action);
         return $next($request, $response);
     }
 
-    protected function response(
-        Route $route,
-        Request $request,
-        Response $response
-    ) {
-        $responder = $this->resolver->__invoke($route->responder);
+    protected function response(Request $request, Response $response, Action $action)
+    {
+        $responder = $this->resolver->__invoke($action->getResponder());
 
-        if ($route->domain) {
-            $payload = $this->payload($route, $request);
-            return $responder($request, $response, $payload);
+        $domainSpec = $action->getDomain();
+        if (! $domainSpec) {
+            return $responder($request, $response);
         }
 
-        return $responder($request, $response);
+        $domain = $this->resolver->__invoke($domainSpec);
+        $params = $this->params($request, $action);
+        $result = call_user_func_array($domain, $params);
+        return $responder($request, $response, $result);
     }
 
-    protected function payload(Route $route, Request $request)
+    protected function params(Request $request, Action $action)
     {
-        $domain = $this->resolver->__invoke($route->domain);
-
-        $input = [];
-        if ($route->input) {
-            $input = $this->resolver->__invoke($route->input);
-            $input = (array) $input($request);
+        $inputSpec = $action->getInput();
+        if (! $inputSpec) {
+            return [];
         }
 
-        return call_user_func_array($domain, $input);
+        $input = $this->resolver->__invoke($inputSpec);
+        return (array) $input($request);
     }
 }

@@ -5,7 +5,7 @@ use Aura\Payload\Payload;
 
 class FakeDomain
 {
-    public function __invoke($input)
+    public function __invoke()
     {
         $payload = new Payload();
         return $payload
