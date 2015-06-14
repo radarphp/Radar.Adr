@@ -5,7 +5,7 @@ use Aura\Di\ContainerBuilder;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
 use Radar\Adr\Resolver;
-use Radar\Adr\Router\Route;
+use Radar\Adr\Route;
 
 class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 {

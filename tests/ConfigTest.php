@@ -31,7 +31,6 @@ class ConfigTest extends AbstractContainerConfigTest
             ['Radar\Adr\Handler\RoutingHandler'],
             ['Radar\Adr\Handler\SendingHandler'],
             ['Radar\Adr\Resolver'],
-            ['Radar\Adr\Router\Map'],
         ];
     }
 }

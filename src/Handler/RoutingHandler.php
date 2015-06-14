@@ -4,7 +4,7 @@ namespace Radar\Adr\Handler;
 use Aura\Router\Matcher;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Radar\Adr\Router\Route;
+use Radar\Adr\Route;
 
 class RoutingHandler
 {

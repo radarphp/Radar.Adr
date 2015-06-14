@@ -18,19 +18,24 @@ class Config extends ContainerConfig
         /**
          * Aura\Router\Container
          */
-        $di->setters['Aura\Router\RouterContainer']['setMapFactory'] = $di->newFactory('Radar\Adr\Router\Map');
+        $di->setters['Aura\Router\RouterContainer']['setMapFactory'] = $di->newFactory('Aura\Router\Map');
 
         /**
-         * Relay\Relay\RelayBuilder
+         * Aura\Router\Map
          */
-        $di->params['Relay\Relay\RelayBuilder']['resolver'] = $di->lazyGet('radar/adr:resolver');
+        $di->params['Aura\Router\Map']['protoRoute'] = $di->lazyNew('Radar\Adr\Route');
+
+        /**
+         * Relay\RelayBuilder
+         */
+        $di->params['Relay\RelayBuilder']['resolver'] = $di->lazyGet('radar/adr:resolver');
 
         /**
          * Radar\Adr\Adr
          */
         $di->params['Radar\Adr\Adr']['map'] = $di->lazyGetCall('radar/adr:router', 'getMap');
         $di->params['Radar\Adr\Adr']['rules'] = $di->lazyGetCall('radar/adr:router', 'getRuleIterator');
-        $di->params['Radar\Adr\Adr']['relayBuilder'] = $di->lazyNew('Relay\Relay\RelayBuilder');
+        $di->params['Radar\Adr\Adr']['relayBuilder'] = $di->lazyNew('Relay\RelayBuilder');
 
         /**
          * Radar\Adr\Handler\ActionHandler
@@ -41,17 +46,12 @@ class Config extends ContainerConfig
          * Radar\Adr\Handler\RoutingHandler
          */
         $di->params['Radar\Adr\Handler\RoutingHandler']['matcher'] = $di->lazyGetCall('radar/adr:router', 'getMatcher');
-        $di->params['Radar\Adr\Handler\RoutingHandler']['route'] = $di->lazyNew('Radar\Adr\Router\Route');
+        $di->params['Radar\Adr\Handler\RoutingHandler']['route'] = $di->lazyNew('Radar\Adr\Route');
 
         /**
          * Radar\Adr\Resolver
          */
         $di->params['Radar\Adr\Resolver']['injectionFactory'] = $di->getInjectionFactory();
-
-        /**
-         * Radar\Adr\Router\Map
-         */
-        $di->params['Radar\Adr\Router\Map']['protoRoute'] = $di->lazyNew('Radar\Adr\Router\Route');
     }
 
     public function modify(Container $di)

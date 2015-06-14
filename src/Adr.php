@@ -1,11 +1,11 @@
 <?php
 namespace Radar\Adr;
 
+use Aura\Router\Map;
 use Aura\Router\Rule\RuleIterator;
-use Relay\Relay\RelayBuilder;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Radar\Adr\Router\Map;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Relay\RelayBuilder;
 
 class Adr
 {

@@ -1,11 +1,11 @@
 <?php
 namespace Radar\Adr\Handler;
 
+use Aura\Router\Map;
 use Aura\Router\RouterContainer;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
-use Radar\Adr\Router\Map;
-use Radar\Adr\Router\Route;
+use Radar\Adr\Route;
 
 class RoutingHandlerTest extends \PHPUnit_Framework_TestCase
 {

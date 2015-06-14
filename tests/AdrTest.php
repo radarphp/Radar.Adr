@@ -3,8 +3,8 @@ namespace Radar\Adr;
 
 use Aura\Di\ContainerBuilder;
 use Aura\Router\Rule\RuleIterator;
-use Relay\Relay\RelayBuilder;
-use Radar\Adr\Router\Route;
+use Relay\RelayBuilder;
+use Radar\Adr\Route;
 use Radar\Adr\Fake\FakeMiddleware;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
