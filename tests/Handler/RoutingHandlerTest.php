@@ -3,7 +3,7 @@ namespace Radar\Adr\Handler;
 
 use Aura\Router\Map;
 use Aura\Router\RouterContainer;
-use Radar\Adr\Action;
+use Radar\Adr\ActionFactory;
 use Radar\Adr\Route;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
@@ -21,7 +21,7 @@ class RoutingHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->map = $actionr->getMap();
         $this->matcher = $actionr->getMatcher();
-        $this->routingHandler = new RoutingHandler($this->matcher, new Action());
+        $this->routingHandler = new RoutingHandler($this->matcher, new ActionFactory());
     }
 
     protected function newRequest($path)

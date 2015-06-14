@@ -37,9 +37,11 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDomainClass()
     {
-        $action = new Action();
-        $action->setDomain('Radar\Adr\Fake\FakeDomain');
-        $action->setResponder('Radar\Adr\Responder\Responder');
+        $action = new Action(
+            null,
+            'Radar\Adr\Fake\FakeDomain',
+            'Radar\Adr\Responder\Responder'
+        );
 
         $this->assertResponse(
             $action,
@@ -55,9 +57,11 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDomainArray()
     {
-        $action = new Action();
-        $action->setDomain(['Radar\Adr\Fake\FakeDomain', '__invoke']);
-        $action->setResponder('Radar\Adr\Responder\Responder');
+        $action = new Action(
+            null,
+            ['Radar\Adr\Fake\FakeDomain', '__invoke'],
+            'Radar\Adr\Responder\Responder'
+        );
 
         $this->assertResponse(
             $action,
@@ -73,9 +77,11 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDomainObject()
     {
-        $action = new Action();
-        $action->setDomain(new \Radar\Adr\Fake\FakeDomain());
-        $action->setResponder('Radar\Adr\Responder\Responder');
+        $action = new Action(
+            null,
+            new \Radar\Adr\Fake\FakeDomain(),
+            'Radar\Adr\Responder\Responder'
+        );
 
         $this->assertResponse(
             $action,
@@ -91,8 +97,11 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testWithoutDomain()
     {
-        $action = new Action();
-        $action->setResponder('Radar\Adr\Fake\Action\Responder');
+        $action = new Action(
+            null,
+            null,
+            'Radar\Adr\Fake\Action\Responder'
+        );
 
         $this->assertResponse(
             $action,

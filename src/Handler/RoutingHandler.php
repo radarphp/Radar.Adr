@@ -4,57 +4,52 @@ namespace Radar\Adr\Handler;
 use Aura\Router\Matcher;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Radar\Adr\Action;
+use Radar\Adr\ActionFactory;
 use Radar\Adr\Route;
 
 class RoutingHandler
 {
-    protected $action;
+    protected $actionFactory;
     protected $matcher;
 
-    public function __construct(Matcher $matcher, Action $action)
+    public function __construct(Matcher $matcher, ActionFactory $actionFactory)
     {
         $this->matcher = $matcher;
-        $this->action = $action;
+        $this->actionFactory = $actionFactory;
     }
 
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        $request = $this
-            ->routeRequest($request)
-            ->withAttribute('radar/adr:action', $this->action);
+        $request = $this->routeRequest($request);
         return $next($request, $response);
     }
 
     protected function routeRequest(Request $request)
     {
         $route = $this->matcher->match($request);
+
         if (! $route) {
-            return $this->noAction($request);
+            return $request->withAttribute(
+                'radar/adr:action',
+                $this->actionFactory->newInstance(
+                    null,
+                    [$this->matcher, 'getFailedRoute'],
+                    'Radar\Adr\Responder\RoutingFailedResponder'
+                )
+            );
         }
-        return $this->action($request, $route);
-    }
-
-    protected function noAction(Request $request)
-    {
-        $this->action
-            ->setInput(null)
-            ->setDomain([$this->matcher, 'getFailedRoute'])
-            ->setResponder('Radar\Adr\Responder\RoutingFailedResponder');
-        return $request;
-    }
-
-    protected function action(Request $request, Route $route)
-    {
-        $this->action
-            ->setInput($route->input)
-            ->setDomain($route->domain)
-            ->setResponder($route->responder);
 
         foreach ($route->attributes as $key => $val) {
             $request = $request->withAttribute($key, $val);
         }
 
-        return $request;
+        return $request->withAttribute(
+            'radar/adr:action',
+            $this->actionFactory->newInstance(
+                $route->input,
+                $route->domain,
+                $route->responder
+            )
+        );
     }
 }

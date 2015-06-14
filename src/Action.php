@@ -1,28 +1,21 @@
 <?php
 namespace Radar\Adr;
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
 class Action
 {
+    // specifications to be resolved
     protected $input;
     protected $domain;
     protected $responder;
 
-    public function setInput($input)
+    public function __construct($input, $domain, $responder)
     {
         $this->input = $input;
-        return $this;
-    }
-
-    public function setDomain($domain)
-    {
         $this->domain = $domain;
-        return $this;
-    }
-
-    public function setResponder($responder)
-    {
         $this->responder = $responder;
-        return $this;
     }
 
     public function getInput()

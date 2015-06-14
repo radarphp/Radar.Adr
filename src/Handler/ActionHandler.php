@@ -11,7 +11,7 @@ class ActionHandler
 {
     protected $resolver;
 
-    public function __construct(Resolver $resolver)
+    public function __construct(callable $resolver)
     {
         $this->resolver = $resolver;
     }
@@ -20,33 +20,38 @@ class ActionHandler
     {
         $action = $request->getAttribute('radar/adr:action');
         $request = $request->withoutAttribute('radar/adr:action');
-        $response = $this->response($request, $response, $action);
+        $response = $this->handle($action, $request, $response);
         return $next($request, $response);
     }
 
-    protected function response(Request $request, Response $response, Action $action)
+    protected function handle(Action $action, Request $request, Response $response)
     {
-        $responder = $this->resolver->__invoke($action->getResponder());
+        $responder = $this->resolve($action->getResponder());
 
         $domainSpec = $action->getDomain();
         if (! $domainSpec) {
             return $responder($request, $response);
         }
 
-        $domain = $this->resolver->__invoke($domainSpec);
-        $params = $this->params($request, $action);
-        $result = call_user_func_array($domain, $params);
-        return $responder($request, $response, $result);
+        $domain = $this->resolve($domainSpec);
+        $params = $this->params($action, $request);
+        $payload = call_user_func_array($domain, $params);
+        return $responder($request, $response, $payload);
     }
 
-    protected function params(Request $request, Action $action)
+    protected function params(Action $action, Request $request)
     {
         $inputSpec = $action->getInput();
         if (! $inputSpec) {
             return [];
         }
 
-        $input = $this->resolver->__invoke($inputSpec);
+        $input = $this->resolve($inputSpec);
         return (array) $input($request);
+    }
+
+    protected function resolve($spec)
+    {
+        return call_user_func($this->resolver, $spec);
     }
 }

@@ -46,7 +46,7 @@ class Config extends ContainerConfig
          * Radar\Adr\Handler\RoutingHandler
          */
         $di->params['Radar\Adr\Handler\RoutingHandler']['matcher'] = $di->lazyGetCall('radar/adr:router', 'getMatcher');
-        $di->params['Radar\Adr\Handler\RoutingHandler']['route'] = $di->lazyNew('Radar\Adr\Route');
+        $di->params['Radar\Adr\Handler\RoutingHandler']['actionFactory'] = $di->lazyNew('Radar\Adr\ActionFactory');
 
         /**
          * Radar\Adr\Resolver
