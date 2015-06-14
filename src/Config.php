@@ -18,12 +18,7 @@ class Config extends ContainerConfig
         /**
          * Aura\Router\Container
          */
-        $di->setters['Aura\Router\RouterContainer']['setMapFactory'] = $di->newFactory('Aura\Router\Map');
-
-        /**
-         * Aura\Router\Map
-         */
-        $di->params['Aura\Router\Map']['protoRoute'] = $di->lazyNew('Radar\Adr\Route');
+        $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('Radar\Adr\Route');
 
         /**
          * Relay\RelayBuilder
