@@ -1,8 +1,8 @@
 <?php
 namespace Radar\Adr\Fake;
 
-use Radar\Adr\Router\Map;
-use Radar\Adr\Router\Route;
+use Aura\Router\Map;
+use Radar\Adr\Route;
 
 class FakeMap extends Map
 {

@@ -3,11 +3,11 @@ namespace Radar\Adr;
 
 use Aura\Di\ContainerBuilder;
 use Aura\Router\Rule\RuleIterator;
-use Relay\RelayBuilder;
-use Radar\Adr\Router\Route;
 use Radar\Adr\Fake\FakeMiddleware;
-use Zend\Diactoros\ServerRequestFactory;
+use Radar\Adr\Route;
+use Relay\RelayBuilder;
 use Zend\Diactoros\Response;
+use Zend\Diactoros\ServerRequestFactory;
 
 class AdrTest extends \PHPUnit_Framework_TestCase
 {
