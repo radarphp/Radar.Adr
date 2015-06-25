@@ -1,9 +1,9 @@
 <?php
 namespace Radar\Adr\Handler;
 
+use Arbiter\ActionFactory;
 use Aura\Router\Map;
 use Aura\Router\RouterContainer;
-use Radar\Adr\ActionFactory;
 use Radar\Adr\Route;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;

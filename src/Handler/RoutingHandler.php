@@ -1,10 +1,10 @@
 <?php
 namespace Radar\Adr\Handler;
 
+use Arbiter\ActionFactory;
 use Aura\Router\Matcher;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Radar\Adr\ActionFactory;
 use Radar\Adr\Route;
 
 class RoutingHandler

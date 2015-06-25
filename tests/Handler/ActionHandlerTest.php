@@ -1,8 +1,8 @@
 <?php
 namespace Radar\Adr\Handler;
 
+use Arbiter\Action;
 use Aura\Di\ContainerBuilder;
-use Radar\Adr\Action;
 use Radar\Adr\Resolver;
 use Radar\Adr\Route;
 use Zend\Diactoros\Response;
