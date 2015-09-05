@@ -78,4 +78,37 @@ class RoutingHandlerTest extends \PHPUnit_Framework_TestCase
 
         return $response;
     }
+
+    public function testCustomNotFound()
+    {
+        $routingHandler = new RoutingHandler(
+            $this->matcher,
+            new ActionFactory(),
+            'Radar\Adr\Fake\FakeRoutingFailedResponder'
+        );
+
+        $this->map->get('Radar\Adr\Fake\Action', '/fake/{id}', 'FakeDomain');
+        $request = $this->newRequest('/wrong/path');
+        $response = new Response();
+        $returnedResponse = $routingHandler->__invoke(
+            $request,
+            $response,
+            [$this, 'assertCustomNotFound']
+        );
+    }
+
+    public function assertCustomNotFound($request, $response)
+    {
+        $action = $request->getAttribute('radar/adr:action');
+        $this->assertSame(
+            'Radar\Adr\Fake\FakeRoutingFailedResponder',
+            $action->getResponder()
+        );
+
+        $expect = $this->matcher->getFailedRoute();
+        $actual = call_user_func($action->getDomain());
+        $this->assertSame($expect, $actual);
+
+        return $response;
+    }
 }
