@@ -13,11 +13,14 @@ class RoutingHandler
     protected $matcher;
     protected $failResponder;
 
-    public function __construct(Matcher $matcher, ActionFactory $actionFactory, $failResponder = null)
-    {
+    public function __construct(
+        Matcher $matcher, 
+        ActionFactory $actionFactory, 
+        $failResponder = 'Radar\Adr\Responder\RoutingFailedResponder'
+    ) {
         $this->matcher = $matcher;
         $this->actionFactory = $actionFactory;
-        $this->failResponder = $failResponder ?: 'Radar\Adr\Responder\RoutingFailedResponder';
+        $this->failResponder = $failResponder;
     }
 
     public function __invoke(Request $request, Response $response, callable $next)
