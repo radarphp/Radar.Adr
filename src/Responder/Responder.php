@@ -96,7 +96,7 @@ class Responder implements ResponderAcceptsInterface
 
     protected function notAuthenticated()
     {
-        $this->response = $this->response->withStatus(400);
+        $this->response = $this->response->withStatus(401);
         $this->jsonBody($this->payload->getInput());
     }
 
