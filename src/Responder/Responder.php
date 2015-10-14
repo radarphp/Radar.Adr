@@ -106,9 +106,27 @@ class Responder implements ResponderAcceptsInterface
         $this->jsonBody($this->payload->getInput());
     }
 
+    protected function notCreated()
+    {
+        $this->response = $this->response->withStatus(304);
+        $this->jsonBody($this->payload->getInput());
+    }
+
+    protected function notDeleted()
+    {
+        $this->response = $this->response->withStatus(304);
+        $this->jsonBody($this->payload->getInput());
+    }
+
     protected function notFound()
     {
         $this->response = $this->response->withStatus(404);
+        $this->jsonBody($this->payload->getInput());
+    }
+
+    protected function notUpdated()
+    {
+        $this->response = $this->response->withStatus(409);
         $this->jsonBody($this->payload->getInput());
     }
 
