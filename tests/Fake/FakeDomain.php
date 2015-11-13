@@ -2,6 +2,7 @@
 namespace Radar\Adr\Fake;
 
 use Aura\Payload\Payload;
+use Aura\Payload_Interface\PayloadStatus;
 
 class FakeDomain
 {
@@ -9,7 +10,7 @@ class FakeDomain
     {
         $payload = new Payload();
         return $payload
-            ->setStatus(Payload::FOUND)
+            ->setStatus(PayloadStatus::FOUND)
             ->setOutput(['domain' => 'value']);
     }
 }

@@ -2,6 +2,7 @@
 namespace Radar\Adr\Responder;
 
 use Aura\Payload\Payload;
+use Aura\Payload_Interface\PayloadStatus;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
 
@@ -51,7 +52,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testAccepted()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::ACCEPTED)
+            ->setStatus(PayloadStatus::ACCEPTED)
             ->setOutput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -65,7 +66,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testCreated()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::CREATED)
+            ->setStatus(PayloadStatus::CREATED)
             ->setOutput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -79,7 +80,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testDeleted()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::DELETED)
+            ->setStatus(PayloadStatus::DELETED)
             ->setOutput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -93,7 +94,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testError()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::ERROR)
+            ->setStatus(PayloadStatus::ERROR)
             ->setInput(['foo' => 'bar'])
             ->setOutput('96: wrong');
 
@@ -108,7 +109,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testFailure()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::FAILURE)
+            ->setStatus(PayloadStatus::FAILURE)
             ->setInput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -122,7 +123,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testFound()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::FOUND)
+            ->setStatus(PayloadStatus::FOUND)
             ->setOutput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -146,7 +147,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testNotAuthenticated()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::NOT_AUTHENTICATED)
+            ->setStatus(PayloadStatus::NOT_AUTHENTICATED)
             ->setInput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -160,7 +161,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testNotAuthorized()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::NOT_AUTHORIZED)
+            ->setStatus(PayloadStatus::NOT_AUTHORIZED)
             ->setInput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -174,7 +175,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testNotFound()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::NOT_FOUND)
+            ->setStatus(PayloadStatus::NOT_FOUND)
             ->setInput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -188,7 +189,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testNotValid()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::NOT_VALID)
+            ->setStatus(PayloadStatus::NOT_VALID)
             ->setInput(['foo' => 'bar'])
             ->setOutput(['baz' => 'dib'])
             ->setMessages(['zim' => 'gir']);
@@ -210,7 +211,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testProcessing()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::PROCESSING)
+            ->setStatus(PayloadStatus::PROCESSING)
             ->setOutput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -224,7 +225,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testSuccess()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::SUCCESS)
+            ->setStatus(PayloadStatus::SUCCESS)
             ->setOutput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
@@ -252,7 +253,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     public function testUpdated()
     {
         $payload = (new Payload())
-            ->setStatus(Payload::UPDATED)
+            ->setStatus(PayloadStatus::UPDATED)
             ->setOutput(['foo' => 'bar']);
 
         $this->assertPayloadResponse(
