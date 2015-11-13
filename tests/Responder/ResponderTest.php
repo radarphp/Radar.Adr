@@ -152,7 +152,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertPayloadResponse(
             $payload,
-            400,
+            401,
             ['Content-Type' => 'application/json'],
             '{"foo":"bar"}'
         );

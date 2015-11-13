@@ -11,11 +11,16 @@ class RoutingHandler
 {
     protected $actionFactory;
     protected $matcher;
+    protected $failResponder;
 
-    public function __construct(Matcher $matcher, ActionFactory $actionFactory)
-    {
+    public function __construct(
+        Matcher $matcher, 
+        ActionFactory $actionFactory, 
+        $failResponder = 'Radar\Adr\Responder\RoutingFailedResponder'
+    ) {
         $this->matcher = $matcher;
         $this->actionFactory = $actionFactory;
+        $this->failResponder = $failResponder;
     }
 
     public function __invoke(Request $request, Response $response, callable $next)
@@ -34,7 +39,7 @@ class RoutingHandler
                 $this->actionFactory->newInstance(
                     null,
                     [$this->matcher, 'getFailedRoute'],
-                    'Radar\Adr\Responder\RoutingFailedResponder'
+                    $this->failResponder
                 )
             );
         }
