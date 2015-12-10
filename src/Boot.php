@@ -2,7 +2,6 @@
 namespace Radar\Adr;
 
 use Aura\Di\ContainerBuilder;
-use josegonzalez\Dotenv\Loader;
 
 class Boot
 {
