@@ -2,6 +2,7 @@
     "name": "radar/adr",
     "description": "The Action-Domain-Responder core library for Radar.",
     "type": "library",
+    "homepage": "https://github.com/radarphp/Radar.Adr",
     "license": "MIT",
     "require": {
         "aura/di": "~3.0",
