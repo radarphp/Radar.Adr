@@ -1,4 +1,11 @@
 <?php
+/**
+ *
+ * This file is part of Radar for PHP.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ *
+ */
 namespace Radar\Adr\Handler;
 
 use Arbiter\ActionFactory;
@@ -14,8 +21,8 @@ class RoutingHandler
     protected $failResponder;
 
     public function __construct(
-        Matcher $matcher, 
-        ActionFactory $actionFactory, 
+        Matcher $matcher,
+        ActionFactory $actionFactory,
         $failResponder = 'Radar\Adr\Responder\RoutingFailedResponder'
     ) {
         $this->matcher = $matcher;
