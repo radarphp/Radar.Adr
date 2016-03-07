@@ -1,3 +1,5 @@
+First beta release.
+
 - Extract new package, "Arbiter", and use it for action handling.
 
 - Add a parameter to set a custom "routing failed" responder class in the RoutingHandler.
