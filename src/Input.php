@@ -14,12 +14,15 @@ class Input
 {
     public function __invoke(Request $request)
     {
+        // cf. EGPCS, where Files is part of Post,
+        // and Attributes is part of Server
         return [
-            array_merge(
+            array_replace(
                 (array) $request->getQueryParams(),
-                (array) $request->getAttributes(),
                 (array) $request->getParsedBody(),
-                (array) $request->getUploadedFiles()
+                (array) $request->getUploadedFiles(),
+                (array) $request->getCookieParams(),
+                (array) $request->getAttributes()
             )
         ];
     }
