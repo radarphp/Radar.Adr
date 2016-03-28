@@ -25,6 +25,5 @@
             "Radar\\Adr\\": "tests/",
             "Aura\\Di\\": "vendor/aura/di/tests/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
