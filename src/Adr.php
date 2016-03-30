@@ -66,7 +66,7 @@ class Adr
      *
      * @param Map $map The router map.
      *
-     * @param RuleIterator The route-matching rules.
+     * @param RuleIterator $rules The route-matching rules.
      *
      * @param RelayBuilder $relayBuilder The middleware relay builder.
      *

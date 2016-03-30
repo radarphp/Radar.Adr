@@ -19,10 +19,43 @@ use Aura\Router\Route as AuraRoute;
  */
 class Route extends AuraRoute
 {
+    /**
+     *
+     * The input spec to use with the action.
+     *
+     * @var string
+     *
+     */
     protected $input = 'Radar\Adr\Input';
+
+    /**
+     *
+     * The domain spec to use with the action.
+     *
+     * @var string
+     *
+     */
     protected $domain;
+
+    /**
+     *
+     * The responder spec to use with the action.
+     *
+     * @var string
+     *
+     */
     protected $responder = 'Radar\Adr\Responder\Responder';
 
+    /**
+     *
+     * Sets the route name, typically a prefix for Input and Responder class
+     * names; also sets the $input and $responder class names, if they exist.
+     *
+     * @param string $name The route name.
+     *
+     * @return self
+     *
+     */
     public function name($name)
     {
         parent::name($name);
@@ -40,24 +73,61 @@ class Route extends AuraRoute
         return $this;
     }
 
+    /**
+     *
+     * Overrides `parent::handler()` to set the domain specification.
+     *
+     * @param string $handler The domain specification.
+     *
+     * @return self
+     *
+     */
     public function handler($handler)
     {
         $this->domain($handler);
         return $this;
     }
 
+    /**
+     *
+     * Sets the input specification.
+     *
+     * @param string $input The input specification.
+     *
+     * @return self
+     *
+     */
     public function input($input)
     {
         $this->input = $input;
         return $this;
     }
 
+    /**
+     *
+     * Sets the domain specification.
+     *
+     * @param string $handler The domain specification.
+     *
+     * @return self
+     *
+     */
     public function domain($domain)
     {
         $this->domain = $domain;
         return $this;
     }
 
+    /**
+     *
+     * Sets the responder specification; if the responder is an instance of
+     * ResponderAcceptsInterface, also sets the `accepts()` on the route.
+     *
+     * @param string $responder The responder specification.
+     *
+     * @return self
+     *
+     */
     public function responder($responder)
     {
         $this->responder = $responder;

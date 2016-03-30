@@ -69,6 +69,8 @@ class Responder implements ResponderAcceptsInterface
      *
      * @param Response $response The HTTP response object.
      *
+     * @param PayloadInterface $payload The domain payload object.
+     *
      * @return Response
      *
      */

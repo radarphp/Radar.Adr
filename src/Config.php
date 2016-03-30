@@ -20,6 +20,13 @@ use Aura\Di\ContainerConfig;
  */
 class Config extends ContainerConfig
 {
+    /**
+     *
+     * Defines params, setters, values, etc. in the Container.
+     *
+     * @param Container $di The DI container.
+     *
+     */
     public function define(Container $di)
     {
         /**
@@ -63,6 +70,13 @@ class Config extends ContainerConfig
         $di->params['Radar\Adr\Resolver']['injectionFactory'] = $di->getInjectionFactory();
     }
 
+    /**
+     *
+     * Modifies constructed container objects.
+     *
+     * @param Container $di The DI container.
+     *
+     */
     public function modify(Container $di)
     {
     }

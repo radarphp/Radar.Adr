@@ -19,13 +19,37 @@ use Aura\Di\Injection\InjectionFactory;
  */
 class Resolver
 {
+    /**
+     *
+     * The injection factory from the DI container.
+     *
+     * @var InjectionFactory
+     *
+     */
     protected $injectionFactory;
 
+    /**
+     *
+     * Constructor.
+     *
+     * @param InjectionFactory $injectionFactory The injection factory from the
+     * DI container.
+     *
+     */
     public function __construct(InjectionFactory $injectionFactory)
     {
         $this->injectionFactory = $injectionFactory;
     }
 
+    /**
+     *
+     * Resolves an object specification.
+     *
+     * @param mixed $spec The object specification.
+     *
+     * @return mixed
+     *
+     */
     public function __invoke($spec)
     {
         if (is_string($spec)) {

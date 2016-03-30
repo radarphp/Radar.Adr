@@ -56,7 +56,7 @@ class RoutingFailedResponder
      *
      * @param Response $response The HTTP response object.
      *
-     * @param Route The closest route that failed to match.
+     * @param Route $failedRoute The closest route that failed to match.
      *
      * @return Response
      *
