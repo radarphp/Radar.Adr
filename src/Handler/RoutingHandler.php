@@ -34,21 +34,21 @@ class RoutingHandler
 
     /**
      *
-     * A route matcher.
-     *
-     * @var Matcher
-     *
-     */
-    protected $matcher;
-
-    /**
-     *
      * The Responder class to use when there is no matching route.
      *
      * @var string
      *
      */
     protected $failResponder;
+
+    /**
+     *
+     * A route matcher.
+     *
+     * @var Matcher
+     *
+     */
+    protected $matcher;
 
     /**
      *

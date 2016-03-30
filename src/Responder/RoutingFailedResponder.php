@@ -23,6 +23,15 @@ class RoutingFailedResponder
 {
     /**
      *
+     * The closest route that failed to match.
+     *
+     * @var Route
+     *
+     */
+    protected $failedRoute;
+
+    /**
+     *
      * The HTTP request.
      *
      * @var Request
@@ -38,15 +47,6 @@ class RoutingFailedResponder
      *
      */
     protected $response;
-
-    /**
-     *
-     * The closest route that failed to match.
-     *
-     * @var Route
-     *
-     */
-    protected $failedRoute;
 
     /**
      *
@@ -77,6 +77,8 @@ class RoutingFailedResponder
     /**
      *
      * Returns the Responder method to call, based on the failed route.
+     *
+     * @return string
      *
      */
     protected function getMethodForFailedRoute()

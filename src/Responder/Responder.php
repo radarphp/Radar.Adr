@@ -24,6 +24,15 @@ class Responder implements ResponderAcceptsInterface
 {
     /**
      *
+     * The domain payload (i.e. the output from the domain).
+     *
+     * @var PayloadInterface
+     *
+     */
+    protected $payload;
+
+    /**
+     *
      * The HTTP request.
      *
      * @var Request
@@ -39,15 +48,6 @@ class Responder implements ResponderAcceptsInterface
      *
      */
     protected $response;
-
-    /**
-     *
-     * The domain payload (i.e. the output from the domain).
-     *
-     * @var PayloadInterface
-     *
-     */
-    protected $payload;
 
     /**
      *
