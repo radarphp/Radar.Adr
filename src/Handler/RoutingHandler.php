@@ -25,7 +25,7 @@ class RoutingHandler
 {
     /**
      *
-     * A factory to creat Action objects.
+     * A factory to create Action objects.
      *
      * @var ActionFactory
      *
@@ -50,6 +50,18 @@ class RoutingHandler
      */
     protected $failResponder;
 
+    /**
+     *
+     * Constructor.
+     *
+     * @param Matcher $matcher A route matcher.
+     *
+     * @param ActionFactory $actionFactory An factory to create Action objects.
+     *
+     * @param string $failResponder The Responder class to use when there is no
+     * matching route.
+     *
+     */
     public function __construct(
         Matcher $matcher,
         ActionFactory $actionFactory,
@@ -66,7 +78,7 @@ class RoutingHandler
      *
      * @param Request $request The HTTP request object.
      *
-     * @param Request $request The HTTP response object.
+     * @param Response $response The HTTP response object.
      *
      * @param callable $next The next middleware decorator.
      *

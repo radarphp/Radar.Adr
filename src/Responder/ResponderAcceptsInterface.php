@@ -17,5 +17,12 @@ namespace Radar\Adr\Responder;
  */
 interface ResponderAcceptsInterface
 {
+    /**
+     *
+     * Returns the list of media types the Responder can generate.
+     *
+     * @return array
+     *
+     */
     public static function accepts();
 }

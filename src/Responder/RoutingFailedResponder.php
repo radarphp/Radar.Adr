@@ -14,17 +14,53 @@ use Radar\Adr\Route;
 
 /**
  *
- * Use this Responder when routing fails.
+ * A Responder for when there is no matching route.
  *
  * @package radar/adr
  *
  */
 class RoutingFailedResponder
 {
+    /**
+     *
+     * The HTTP request.
+     *
+     * @var Request
+     *
+     */
     protected $request;
+
+    /**
+     *
+     * The HTTP response.
+     *
+     * @var Response
+     *
+     */
     protected $response;
+
+    /**
+     *
+     * The closest route that failed to match.
+     *
+     * @var Route
+     *
+     */
     protected $failedRoute;
 
+    /**
+     *
+     * Builds the Response for a failure-to-route.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @param Response $response The HTTP response object.
+     *
+     * @param Route The closest route that failed to match.
+     *
+     * @return Response
+     *
+     */
     public function __invoke(
         Request $request,
         Response $response,
@@ -33,25 +69,36 @@ class RoutingFailedResponder
         $this->request = $request;
         $this->response = $response;
         $this->failedRoute = $failedRoute;
-        $this->exec();
+        $method = $this->getMethodForFailedRoute();
+        $this->$method();
         return $this->response;
     }
 
-    protected function exec()
+    /**
+     *
+     * Returns the Responder method to call, based on the failed route.
+     *
+     */
+    protected function getMethodForFailedRoute()
     {
         switch ($this->failedRoute->failedRule) {
             case 'Aura\Router\Rule\Allows':
-                return $this->methodNotAllowed();
+                return 'methodNotAllowed';
             case 'Aura\Router\Rule\Accepts':
-                return $this->notAcceptable();
+                return 'notAcceptable';
             case 'Aura\Router\Rule\Host':
             case 'Aura\Router\Rule\Path':
-                return $this->notFound();
+                return 'notFound';
             default:
-                return $this->other();
+                return 'other';
         }
     }
 
+    /**
+     *
+     * Builds the Response when the failed route method was not allowed.
+     *
+     */
     protected function methodNotAllowed()
     {
         $this->response = $this->response
@@ -62,6 +109,11 @@ class RoutingFailedResponder
         $this->response->getBody()->write(json_encode($this->failedRoute->allows));
     }
 
+    /**
+     *
+     * Builds the Response when the failed route could not accept the media type.
+     *
+     */
     protected function notAcceptable()
     {
         $this->response = $this->response
@@ -71,18 +123,25 @@ class RoutingFailedResponder
         $this->response->getBody()->write(json_encode($this->failedRoute->accepts));
     }
 
+    /**
+     *
+     * Builds the Response when the failed route host or path was not found.
+     *
+     */
     protected function notFound()
     {
-        $this->response = $this->response
-            ->withStatus(404);
-
+        $this->response = $this->response->withStatus(404);
         $this->response->getBody()->write('404 Not Found');
     }
 
+    /**
+     *
+     * Builds the Response when routing failed for some other reason.
+     *
+     */
     protected function other()
     {
-        $this->response = $this->response
-            ->withStatus(500);
+        $this->response = $this->response->withStatus(500);
 
         $message = "Route " . $this->failedRoute->name
             . " failed rule " . $this->failedRoute->failedRule;
