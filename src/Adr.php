@@ -14,6 +14,14 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Relay\RelayBuilder;
 
+/**
+ *
+ * The "core" class for building and running the router and the middleware
+ * relay.
+ *
+ * @package radar/adr
+ *
+ */
 class Adr
 {
     protected $relayBuilder;

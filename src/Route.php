@@ -10,6 +10,13 @@ namespace Radar\Adr;
 
 use Aura\Router\Route as AuraRoute;
 
+/**
+ *
+ * A Radar-specific route definition.
+ *
+ * @package radar/adr
+ *
+ */
 class Route extends AuraRoute
 {
     protected $input = 'Radar\Adr\Input';

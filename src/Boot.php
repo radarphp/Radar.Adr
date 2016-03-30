@@ -10,6 +10,13 @@ namespace Radar\Adr;
 
 use Aura\Di\ContainerBuilder;
 
+/**
+ *
+ * Bootstraps the ADR instance with DI container configuration.
+ *
+ * @package radar/adr
+ *
+ */
 class Boot
 {
     protected $containerCache;

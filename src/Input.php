@@ -10,6 +10,13 @@ namespace Radar\Adr;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 
+/**
+ *
+ * A generic input marshal.
+ *
+ * @package radar/adr
+ *
+ */
 class Input
 {
     public function __invoke(Request $request)

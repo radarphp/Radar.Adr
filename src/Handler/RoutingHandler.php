@@ -14,6 +14,13 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Radar\Adr\Route;
 
+/**
+ *
+ * Middleware to route (but not dispatch) the Request.
+ *
+ * @package radar/adr
+ *
+ */
 class RoutingHandler
 {
     protected $actionFactory;
@@ -30,16 +37,42 @@ class RoutingHandler
         $this->failResponder = $failResponder;
     }
 
-    public function __invoke(Request $request, Response $response, callable $next)
-    {
-        $request = $this->routeRequest($request);
+    /**
+     *
+     * Adds the Action specification for the Route to the Request.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @param Request $request The HTTP response object.
+     *
+     * @param callable $next The next middleware decorator.
+     *
+     * @return Response
+     *
+     */
+    public function __invoke(
+        Request $request,
+        Response $response,
+        callable $next
+    ) {
+        $route = $this->matcher->match($request);
+        $request = $this->addRouteToRequest($route, $request);
         return $next($request, $response);
     }
 
-    protected function routeRequest(Request $request)
+    /**
+     *
+     * Adds the route information to the Request.
+     *
+     * @param mixed $route The route result.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return Request with the route information.
+     *
+     */
+    protected function addRouteToRequest($route, Request $request)
     {
-        $route = $this->matcher->match($request);
-
         if (! $route) {
             return $request->withAttribute(
                 'radar/adr:action',

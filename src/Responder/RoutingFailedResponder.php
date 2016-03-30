@@ -12,6 +12,13 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Radar\Adr\Route;
 
+/**
+ *
+ * Use this Responder when routing fails.
+ *
+ * @package radar/adr
+ *
+ */
 class RoutingFailedResponder
 {
     protected $request;

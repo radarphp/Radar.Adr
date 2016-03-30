@@ -13,6 +13,13 @@ use Aura\Payload\Payload;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
+/**
+ *
+ * A generic Responder.
+ *
+ * @package radar/adr
+ *
+ */
 class Responder implements ResponderAcceptsInterface
 {
     protected $request;

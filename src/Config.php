@@ -11,6 +11,13 @@ namespace Radar\Adr;
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig;
 
+/**
+ *
+ * DI container configuration for Radar classes.
+ *
+ * @package radar/adr
+ *
+ */
 class Config extends ContainerConfig
 {
     public function define(Container $di)

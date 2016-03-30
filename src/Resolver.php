@@ -10,6 +10,13 @@ namespace Radar\Adr;
 
 use Aura\Di\Injection\InjectionFactory;
 
+/**
+ *
+ * Resolves object specifications using the DI container.
+ *
+ * @package radar/adr
+ *
+ */
 class Resolver
 {
     protected $injectionFactory;
