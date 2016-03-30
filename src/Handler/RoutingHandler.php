@@ -23,8 +23,31 @@ use Radar\Adr\Route;
  */
 class RoutingHandler
 {
+    /**
+     *
+     * A factory to creat Action objects.
+     *
+     * @var ActionFactory
+     *
+     */
     protected $actionFactory;
+
+    /**
+     *
+     * A route matcher.
+     *
+     * @var Matcher
+     *
+     */
     protected $matcher;
+
+    /**
+     *
+     * The Responder class to use when there is no matching route.
+     *
+     * @var string
+     *
+     */
     protected $failResponder;
 
     public function __construct(
