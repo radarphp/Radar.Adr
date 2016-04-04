@@ -97,39 +97,43 @@ class RoutingHandler
 
     /**
      *
-     * Adds the route information to the Request.
+     * Adds the Route and Action information to the Request.
      *
-     * @param mixed $route The route result.
+     * @param mixed $route The route matching the request (if any).
      *
      * @param Request $request The HTTP request object.
      *
-     * @return Request with the route information.
+     * @return Request with the Route and Action information.
      *
      */
     protected function addRouteToRequest($route, Request $request)
     {
         if (! $route) {
-            return $request->withAttribute(
-                'radar/adr:action',
-                $this->actionFactory->newInstance(
-                    null,
-                    [$this->matcher, 'getFailedRoute'],
-                    $this->failResponder
-                )
-            );
+            return $request
+                ->withAttribute('radar/adr:route', false)
+                ->withAttribute(
+                    'radar/adr:action',
+                    $this->actionFactory->newInstance(
+                        null,
+                        [$this->matcher, 'getFailedRoute'],
+                        $this->failResponder
+                    )
+                );
         }
 
         foreach ($route->attributes as $key => $val) {
             $request = $request->withAttribute($key, $val);
         }
 
-        return $request->withAttribute(
-            'radar/adr:action',
-            $this->actionFactory->newInstance(
-                $route->input,
-                $route->domain,
-                $route->responder
-            )
-        );
+        return $request
+            ->withAttribute('radar/adr:route', $route)
+            ->withAttribute(
+                'radar/adr:action',
+                $this->actionFactory->newInstance(
+                    $route->input,
+                    $route->domain,
+                    $route->responder
+                )
+            );
     }
 }
