@@ -5,7 +5,7 @@ use Aura\Di\ContainerBuilder;
 use Aura\Router\Rule\RuleIterator;
 use Radar\Adr\Fake\FakeMiddleware;
 use Radar\Adr\Route;
-use Relay\RelayBuilder;
+use Telegraph\TelegraphFactory;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
 
@@ -21,12 +21,13 @@ class AdrTest extends \PHPUnit_Framework_TestCase
 
         $this->fakeMap = new Fake\FakeMap(new Route());
         $this->fakeRules = new RuleIterator();
-        $this->relayBuilder = new RelayBuilder($resolver);
+        $this->telegraph = new TelegraphFactory();
 
         $this->adr = new Adr(
             $this->fakeMap,
             $this->fakeRules,
-            $this->relayBuilder
+            $this->telegraph,
+            $resolver
         );
     }
 
@@ -49,13 +50,13 @@ class AdrTest extends \PHPUnit_Framework_TestCase
         $this->adr->middle('Radar\Adr\Fake\FakeMiddleware');
         $this->adr->middle('Radar\Adr\Fake\FakeMiddleware');
         $this->adr->middle('Radar\Adr\Fake\FakeMiddleware');
+        $this->adr->middle('Radar\Adr\Fake\FakeResponseMiddleware');
 
         $response = $this->adr->run(
-            ServerRequestFactory::fromGlobals(),
-            new Response()
+            ServerRequestFactory::fromGlobals()
         );
 
         $actual = (string) $response->getBody();
-        $this->assertSame('123456', $actual);
+        $this->assertSame('123', $actual);
     }
 }

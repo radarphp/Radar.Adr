@@ -20,7 +20,7 @@ use Psr\Http\Message\ResponseInterface as Response;
  * @package radar/adr
  *
  */
-class Responder implements ResponderAcceptsInterface
+class Responder extends AbstractResponder implements ResponderAcceptsInterface
 {
     /**
      *
@@ -39,15 +39,6 @@ class Responder implements ResponderAcceptsInterface
      *
      */
     protected $request;
-
-    /**
-     *
-     * The HTTP response.
-     *
-     * @var Response
-     *
-     */
-    protected $response;
 
     /**
      *
@@ -76,11 +67,9 @@ class Responder implements ResponderAcceptsInterface
      */
     public function __invoke(
         Request $request,
-        Response $response,
         PayloadInterface $payload = null
     ) {
         $this->request = $request;
-        $this->response = $response;
         $this->payload = $payload;
         $method = $this->getMethodForPayload();
         $this->$method();

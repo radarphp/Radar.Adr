@@ -1,14 +1,15 @@
 <?php
 namespace Radar\Adr\Fake;
 
+use Zend\Diactoros\Response;
+
 class FakeMiddleware
 {
     public static $count;
 
-    public function __invoke($request, $response, $next)
+    public function __invoke($request, $next)
     {
-        $response->getBody()->write(++ static::$count);
-        $response = $next($request, $response);
+        $response = $next($request);
         $response->getBody()->write(++ static::$count);
         return $response;
     }

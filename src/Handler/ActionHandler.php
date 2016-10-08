@@ -9,7 +9,6 @@
 namespace Radar\Adr\Handler;
 
 use Arbiter\ActionHandler as Arbiter;
-use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
@@ -28,21 +27,14 @@ class ActionHandler extends Arbiter
      *
      * @param Request $request The HTTP request object.
      *
-     * @param Response $response The HTTP response object.
-     *
-     * @param callable $next The next middleware decorator.
-     *
      * @return Response
      *
      */
     public function __invoke(
-        Request $request,
-        Response $response,
-        callable $next
+        Request $request
     ) {
         $action = $request->getAttribute('radar/adr:action');
         $request = $request->withoutAttribute('radar/adr:action');
-        $response = $this->handle($action, $request, $response);
-        return $next($request, $response);
+        return $this->handle($action, $request);
     }
 }

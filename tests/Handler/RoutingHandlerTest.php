@@ -34,37 +34,30 @@ class RoutingHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->map->get('Radar\Adr\Fake\Action', '/fake/{id}', 'FakeDomain');
         $request = $this->newRequest('/fake/88');
-        $response = new Response();
-        $returnedResponse = $this->routingHandler->__invoke(
+        $this->routingHandler->__invoke(
             $request,
-            $response,
             [$this, 'assertFound']
         );
-        $this->assertSame($response, $returnedResponse);
     }
 
-    public function assertFound($request, $response)
+    public function assertFound($request)
     {
         $action = $request->getAttribute('radar/adr:action');
         $id = $request->getAttribute('id');
         $this->assertSame('88', $id);
-        return $response;
     }
 
     public function testNotFound()
     {
         $this->map->get('Radar\Adr\Fake\Action', '/fake/{id}', 'FakeDomain');
         $request = $this->newRequest('/wrong/path');
-        $response = new Response();
         $returnedResponse = $this->routingHandler->__invoke(
             $request,
-            $response,
             [$this, 'assertNotFound']
         );
-        $this->assertSame($response, $returnedResponse);
     }
 
-    public function assertNotFound($request, $response)
+    public function assertNotFound($request)
     {
         $action = $request->getAttribute('radar/adr:action');
         $this->assertSame(
@@ -75,8 +68,6 @@ class RoutingHandlerTest extends \PHPUnit_Framework_TestCase
         $expect = $this->matcher->getFailedRoute();
         $actual = call_user_func($action->getDomain());
         $this->assertSame($expect, $actual);
-
-        return $response;
     }
 
     public function testCustomNotFound()
@@ -89,15 +80,13 @@ class RoutingHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->map->get('Radar\Adr\Fake\Action', '/fake/{id}', 'FakeDomain');
         $request = $this->newRequest('/wrong/path');
-        $response = new Response();
         $returnedResponse = $routingHandler->__invoke(
             $request,
-            $response,
             [$this, 'assertCustomNotFound']
         );
     }
 
-    public function assertCustomNotFound($request, $response)
+    public function assertCustomNotFound($request)
     {
         $action = $request->getAttribute('radar/adr:action');
         $this->assertSame(
@@ -108,7 +97,5 @@ class RoutingHandlerTest extends \PHPUnit_Framework_TestCase
         $expect = $this->matcher->getFailedRoute();
         $actual = call_user_func($action->getDomain());
         $this->assertSame($expect, $actual);
-
-        return $response;
     }
 }

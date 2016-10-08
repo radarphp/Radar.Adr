@@ -16,6 +16,8 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
         $di = $builder->newInstance();
+        $di->params['Radar\Adr\Responder\AbstractResponder']
+            ['response'] = $di->lazyNew('Zend\Diactoros\Response');
         $this->actionHandler = new ActionHandler(
             new Resolver($di->getInjectionFactory())
         );
@@ -27,8 +29,7 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
         $request = $request->withAttribute('radar/adr:action', $action);
         $response = $this->actionHandler->__invoke(
             $request,
-            new Response(),
-            function ($request, $response) { return $response; }
+            function ($request) { return; }
         );
         $this->assertEquals($expectStatus, $response->getStatusCode());
         $this->assertEquals($expectBody, $response->getBody()->__toString());
