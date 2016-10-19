@@ -4,13 +4,19 @@
     "type": "library",
     "homepage": "https://github.com/radarphp/Radar.Adr",
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/jakejohns/Arbiter.Arbiter"
+        }
+    ],
     "require": {
         "aura/di": "~3.0",
         "aura/payload": "~3.0",
         "aura/router": "~3.0",
-        "relay/relay": "~1.0",
-        "relay/middleware": "~1.0",
-        "arbiter/arbiter": "~1.0"
+        "telegraph/telegraph": "~1.0",
+        "telegraph/middleware": "~1.0",
+        "arbiter/arbiter": "dev-feature/psr-15"
     },
     "require-dev": {
         "zendframework/zend-diactoros": "~1.0"

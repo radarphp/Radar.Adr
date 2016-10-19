@@ -19,7 +19,7 @@ use Radar\Adr\Route;
  * @package radar/adr
  *
  */
-class RoutingFailedResponder
+class RoutingFailedResponder extends AbstractResponder
 {
     /**
      *
@@ -54,8 +54,6 @@ class RoutingFailedResponder
      *
      * @param Request $request The HTTP request object.
      *
-     * @param Response $response The HTTP response object.
-     *
      * @param Route $failedRoute The closest route that failed to match.
      *
      * @return Response
@@ -63,11 +61,9 @@ class RoutingFailedResponder
      */
     public function __invoke(
         Request $request,
-        Response $response,
         Route $failedRoute
     ) {
         $this->request = $request;
-        $this->response = $response;
         $this->failedRoute = $failedRoute;
         $method = $this->getMethodForFailedRoute();
         $this->$method();

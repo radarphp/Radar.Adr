@@ -78,8 +78,6 @@ class RoutingHandler
      *
      * @param Request $request The HTTP request object.
      *
-     * @param Response $response The HTTP response object.
-     *
      * @param callable $next The next middleware decorator.
      *
      * @return Response
@@ -87,12 +85,11 @@ class RoutingHandler
      */
     public function __invoke(
         Request $request,
-        Response $response,
         callable $next
     ) {
         $route = $this->matcher->match($request);
         $request = $this->addRouteToRequest($route, $request);
-        return $next($request, $response);
+        return $next($request);
     }
 
     /**

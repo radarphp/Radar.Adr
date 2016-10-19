@@ -13,7 +13,7 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->responder = new Responder();
+        $this->responder = new Responder(new Response);
     }
 
     public function testAccepts()
@@ -26,10 +26,9 @@ class ResponderTest extends \PHPUnit_Framework_TestCase
     protected function getResponse($payload)
     {
         $request = ServerRequestFactory::fromGlobals();
-        $response = new Response();
         return $payload
-            ? $this->responder->__invoke($request, $response, $payload)
-            : $this->responder->__invoke($request, $response);
+            ? $this->responder->__invoke($request, $payload)
+            : $this->responder->__invoke($request);
     }
 
     protected function assertPayloadResponse($payload, $status, array $headers, $body)

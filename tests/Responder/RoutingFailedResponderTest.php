@@ -9,10 +9,9 @@ class RoutingFailedResponderTest extends \PHPUnit_Framework_TestCase
 {
     protected function getResponse($failedRoute)
     {
-        $routingFailedResponder = new RoutingFailedResponder();
+        $routingFailedResponder = new RoutingFailedResponder(new Response);
         $request = ServerRequestFactory::fromGlobals();
-        $response = new Response();
-        return $routingFailedResponder($request, $response, $failedRoute);
+        return $routingFailedResponder($request, $failedRoute);
     }
 
     protected function assertResponse($failedRoute, $status, array $headers, $body)

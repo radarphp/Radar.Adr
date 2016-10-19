@@ -12,12 +12,12 @@ use Aura\Router\Map;
 use Aura\Router\Rule\RuleIterator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Relay\RelayBuilder;
+use Telegraph\TelegraphFactory;
 
 /**
  *
  * The "main" class for building and running the router and the middleware
- * relay.
+ * telegraph.
  *
  * @package radar/adr
  *
@@ -44,12 +44,12 @@ class Adr
 
     /**
      *
-     * The middleware relay builder.
+     * The middleware telegraph factory.
      *
-     * @var RelayBuilder
+     * @var TelegraphFactory
      *
      */
-    protected $relayBuilder;
+    protected $telegraphFactory;
 
     /**
      *
@@ -62,23 +62,36 @@ class Adr
 
     /**
      *
+     * The rresolver
+     *
+     * @var callable
+     *
+     */
+    protected $resolver;
+
+    /**
+     *
      * Constructor.
      *
      * @param Map $map The router map.
      *
      * @param RuleIterator $rules The route-matching rules.
      *
-     * @param RelayBuilder $relayBuilder The middleware relay builder.
+     * @param TelegraphFactory $telegraphFactory The middleware telegraph builder.
+     *
+     * @param callable $resolver The resolver.
      *
      */
     public function __construct(
         Map $map,
         RuleIterator $rules,
-        RelayBuilder $relayBuilder
+        TelegraphFactory $telegraphFactory,
+        callable $resolver = null
     ) {
         $this->map = $map;
         $this->rules = $rules;
-        $this->relayBuilder = $relayBuilder;
+        $this->telegraphFactory = $telegraphFactory;
+        $this->resolver = $resolver;
     }
 
     /**
@@ -132,9 +145,11 @@ class Adr
      * @return Response
      *
      */
-    public function run(Request $request, Response $response)
+    public function run(Request $request)
     {
-        $relay = $this->relayBuilder->newInstance($this->middle);
-        return $relay($request, $response);
+        $telegraph = $this->telegraphFactory->newInstance(
+            $this->middle, $this->resolver
+        );
+        return $telegraph->dispatch($request);
     }
 }

@@ -42,16 +42,12 @@ class Config extends ContainerConfig
         $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('Radar\Adr\Route');
 
         /**
-         * Relay\RelayBuilder
-         */
-        $di->params['Relay\RelayBuilder']['resolver'] = $di->lazyGet('radar/adr:resolver');
-
-        /**
          * Radar\Adr\Adr
          */
         $di->params['Radar\Adr\Adr']['map'] = $di->lazyGetCall('radar/adr:router', 'getMap');
         $di->params['Radar\Adr\Adr']['rules'] = $di->lazyGetCall('radar/adr:router', 'getRuleIterator');
-        $di->params['Radar\Adr\Adr']['relayBuilder'] = $di->lazyNew('Relay\RelayBuilder');
+        $di->params['Radar\Adr\Adr']['telegraphFactory'] = $di->lazyNew('Telegraph\TelegraphFactory');
+        $di->params['Radar\Adr\Adr']['resolver'] = $di->lazyGet('radar/adr:resolver');
 
         /**
          * Radar\Adr\Handler\ActionHandler
