@@ -13,7 +13,8 @@
         "arbiter/arbiter": "~1.0"
     },
     "require-dev": {
-        "zendframework/zend-diactoros": "~1.0"
+        "zendframework/zend-diactoros": "~1.0",
+        "phpunit/phpunit": "~5.7 || ~4.8"
     },
     "autoload": {
         "psr-4": {
