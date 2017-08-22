@@ -33,7 +33,7 @@ class Config extends ContainerConfig
          * Services
          */
         $di->set('radar/adr:adr', $di->lazyNew('Radar\Adr\Adr'));
-        $di->set('radar/adr:resolver', $di->lazyNew('Radar\Adr\Resolver'));
+        $di->set('radar/adr:resolver', $di->newResolutionHelper());
         $di->set('radar/adr:router', $di->lazyNew('Aura\Router\RouterContainer'));
 
         /**
@@ -64,10 +64,6 @@ class Config extends ContainerConfig
         $di->params['Radar\Adr\Handler\RoutingHandler']['matcher'] = $di->lazyGetCall('radar/adr:router', 'getMatcher');
         $di->params['Radar\Adr\Handler\RoutingHandler']['actionFactory'] = $di->lazyNew('Arbiter\ActionFactory');
 
-        /**
-         * Radar\Adr\Resolver
-         */
-        $di->params['Radar\Adr\Resolver']['injectionFactory'] = $di->getInjectionFactory();
     }
 
     /**

@@ -17,7 +17,7 @@ class AdrTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
         $di = $builder->newInstance();
-        $resolver = new Resolver($di->getInjectionFactory());
+        $resolver = $di->newResolutionHelper();
 
         $this->fakeMap = new Fake\FakeMap(new Route());
         $this->fakeRules = new RuleIterator();
