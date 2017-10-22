@@ -61,7 +61,7 @@ class Boot
             $di = $this->newContainer($config, $autoResolve);
         }
 
-        return $di->get('radar/adr:adr');
+        return $di->get(Config::ADR);
     }
 
     /**
