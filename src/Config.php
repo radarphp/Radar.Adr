@@ -8,8 +8,11 @@
  */
 namespace Radar\Adr;
 
+use Arbiter\ActionFactory;
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig;
+use Aura\Router\RouterContainer as Router;
+use Relay\RelayBuilder;
 
 /**
  *
@@ -48,42 +51,42 @@ class Config extends ContainerConfig
         /**
          * Services
          */
-        $di->set(self::ADR, $di->lazyNew('Radar\Adr\Adr'));
-        $di->set(self::RESOLVER, $di->lazyNew('Radar\Adr\Resolver'));
-        $di->set(self::ROUTER, $di->lazyNew('Aura\Router\RouterContainer'));
+        $di->set(self::ADR, $di->lazyNew(Adr::class));
+        $di->set(self::RESOLVER, $di->lazyNew(Resolver::class));
+        $di->set(self::ROUTER, $di->lazyNew(Router::class));
 
         /**
          * Aura\Router\Container
          */
-        $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('Radar\Adr\Route');
+        $di->setters[Router::class]['setRouteFactory'] = $di->newFactory(Route::class);
 
         /**
          * Relay\RelayBuilder
          */
-        $di->params['Relay\RelayBuilder']['resolver'] = $di->lazyGet(self::RESOLVER);
+        $di->params[RelayBuilder::class]['resolver'] = $di->lazyGet(self::RESOLVER);
 
         /**
          * Radar\Adr\Adr
          */
-        $di->params['Radar\Adr\Adr']['map'] = $di->lazyGetCall(self::ROUTER, 'getMap');
-        $di->params['Radar\Adr\Adr']['rules'] = $di->lazyGetCall(self::ROUTER, 'getRuleIterator');
-        $di->params['Radar\Adr\Adr']['relayBuilder'] = $di->lazyNew('Relay\RelayBuilder');
+        $di->params[Adr::class]['map'] = $di->lazyGetCall(self::ROUTER, 'getMap');
+        $di->params[Adr::class]['rules'] = $di->lazyGetCall(self::ROUTER, 'getRuleIterator');
+        $di->params[Adr::class]['relayBuilder'] = $di->lazyNew(RelayBuilder::class);
 
         /**
          * Radar\Adr\Handler\ActionHandler
          */
-        $di->params['Radar\Adr\Handler\ActionHandler']['resolver'] = $di->lazyGet(self::RESOLVER);
+        $di->params[Handler\ActionHandler::class]['resolver'] = $di->lazyGet(self::RESOLVER);
 
         /**
          * Radar\Adr\Handler\RoutingHandler
          */
-        $di->params['Radar\Adr\Handler\RoutingHandler']['matcher'] = $di->lazyGetCall(self::ROUTER, 'getMatcher');
-        $di->params['Radar\Adr\Handler\RoutingHandler']['actionFactory'] = $di->lazyNew('Arbiter\ActionFactory');
+        $di->params[Handler\RoutingHandler::class]['matcher'] = $di->lazyGetCall(self::ROUTER, 'getMatcher');
+        $di->params[Handler\RoutingHandler::class]['actionFactory'] = $di->lazyNew(ActionFactory::class);
 
         /**
          * Radar\Adr\Resolver
          */
-        $di->params['Radar\Adr\Resolver']['injectionFactory'] = $di->getInjectionFactory();
+        $di->params[Resolver::class]['injectionFactory'] = $di->getInjectionFactory();
     }
 
     /**
