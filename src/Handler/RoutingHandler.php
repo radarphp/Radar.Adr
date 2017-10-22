@@ -23,6 +23,12 @@ use Radar\Adr\Route;
  */
 class RoutingHandler
 {
+
+    /**
+     * Request Attribute containing the route
+     */
+    const ROUTE_ATTRIBUTE = 'radar/adr:route';
+
     /**
      *
      * A factory to create Action objects.
@@ -110,9 +116,9 @@ class RoutingHandler
     {
         if (! $route) {
             return $request
-                ->withAttribute('radar/adr:route', false)
+                ->withAttribute(self::ROUTE_ATTRIBUTE, false)
                 ->withAttribute(
-                    'radar/adr:action',
+                    ActionHandler::ACTION_ATTRIBUTE,
                     $this->actionFactory->newInstance(
                         null,
                         [$this->matcher, 'getFailedRoute'],
@@ -126,9 +132,9 @@ class RoutingHandler
         }
 
         return $request
-            ->withAttribute('radar/adr:route', $route)
+            ->withAttribute(self::ROUTE_ATTRIBUTE, $route)
             ->withAttribute(
-                'radar/adr:action',
+                ActionHandler::ACTION_ATTRIBUTE,
                 $this->actionFactory->newInstance(
                     $route->input,
                     $route->domain,

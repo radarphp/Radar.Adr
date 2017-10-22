@@ -21,6 +21,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class ActionHandler extends Arbiter
 {
+
+    /**
+     * Request Attribute containing the action
+     */
+    const ACTION_ATTRIBUTE = 'radar/adr:action';
+
     /**
      *
      * Dispatches to the Action stored in the `radar/adr:action` Request
@@ -40,8 +46,8 @@ class ActionHandler extends Arbiter
         Response $response,
         callable $next
     ) {
-        $action = $request->getAttribute('radar/adr:action');
-        $request = $request->withoutAttribute('radar/adr:action');
+        $action = $request->getAttribute(self::ACTION_ATTRIBUTE);
+        $request = $request->withoutAttribute(self::ACTION_ATTRIBUTE);
         $response = $this->handle($action, $request, $response);
         return $next($request, $response);
     }
