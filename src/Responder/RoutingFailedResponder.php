@@ -6,17 +6,17 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Adr\Responder;
+namespace Radar\Middleware\Responder;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Radar\Adr\Route;
+use Radar\Framework\Route;
 
 /**
  *
  * A Responder for when there is no matching route.
  *
- * @package radar/adr
+ * @package radar/middleware
  *
  */
 class RoutingFailedResponder

@@ -6,19 +6,19 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Adr\Handler;
+namespace Radar\Middleware\Handler;
 
 use Arbiter\ActionFactory;
 use Aura\Router\Matcher;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Radar\Adr\Route;
+use Radar\Framework\Route;
 
 /**
  *
  * Middleware to route (but not dispatch) the Request.
  *
- * @package radar/adr
+ * @package radar/middleware
  *
  */
 class RoutingHandler
@@ -65,7 +65,7 @@ class RoutingHandler
     public function __construct(
         Matcher $matcher,
         ActionFactory $actionFactory,
-        $failResponder = 'Radar\Adr\Responder\RoutingFailedResponder'
+        $failResponder = 'Radar\Middleware\Responder\RoutingFailedResponder'
     ) {
         $this->matcher = $matcher;
         $this->actionFactory = $actionFactory;

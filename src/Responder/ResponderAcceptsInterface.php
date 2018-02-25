@@ -6,13 +6,13 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Adr\Responder;
+namespace Radar\Middleware\Responder;
 
 /**
  *
  * Indicates that the Responder will examine the `Accepts` Request header.
  *
- * @package radar/adr
+ * @package radar/middleware
  *
  */
 interface ResponderAcceptsInterface

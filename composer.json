@@ -1,29 +1,21 @@
 {
-    "name": "radar/adr",
+    "name": "radar/middleware",
     "description": "The Action-Domain-Responder core library for Radar.",
     "type": "library",
     "homepage": "https://github.com/radarphp/Radar.Adr",
     "license": "MIT",
     "require": {
-        "aura/di": "~3.0",
-        "aura/payload": "~3.0",
+        "aura/payload-interface": "~3.0",
         "aura/router": "~3.0",
-        "relay/relay": "~1.0",
-        "relay/middleware": "~1.0",
-        "arbiter/arbiter": "~1.0"
+        "arbiter/arbiter": "~1.0",
+        "psr/http-message": "~1.0"
     },
     "require-dev": {
         "zendframework/zend-diactoros": "~1.0"
     },
     "autoload": {
         "psr-4": {
-            "Radar\\Adr\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Radar\\Adr\\": "tests/",
-            "Aura\\Di\\": "vendor/aura/di/tests/"
+            "Radar\\Middleware\\": "src/"
         }
     }
 }

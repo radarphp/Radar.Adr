@@ -6,10 +6,9 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Adr\Responder;
+namespace Radar\Middleware\Responder;
 
 use Aura\Payload_Interface\PayloadInterface;
-use Aura\Payload\Payload;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -17,7 +16,7 @@ use Psr\Http\Message\ResponseInterface as Response;
  *
  * A generic Responder.
  *
- * @package radar/adr
+ * @package radar/middleware
  *
  */
 class Responder implements ResponderAcceptsInterface

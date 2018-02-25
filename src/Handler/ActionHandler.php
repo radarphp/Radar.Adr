@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Adr\Handler;
+namespace Radar\Middleware\Handler;
 
 use Arbiter\ActionHandler as Arbiter;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -16,7 +16,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  *
  * Dispatches to the Action stored in the `radar/adr:action` Request attribute.
  *
- * @package radar/adr
+ * @package radar/middleware
  *
  */
 class ActionHandler extends Arbiter
