@@ -9,10 +9,12 @@
 namespace Radar\Middleware\Handler;
 
 use Arbiter\ActionFactory;
-use Aura\Router\Matcher;
+use Aura\Router\RouterContainer;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Radar\Framework\Route;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Radar\Middleware\ActionSpecs;
 
 /**
  *
@@ -21,7 +23,7 @@ use Radar\Framework\Route;
  * @package radar/middleware
  *
  */
-class RoutingHandler
+class RoutingHandler implements MiddlewareInterface
 {
     /**
      *
@@ -43,31 +45,30 @@ class RoutingHandler
 
     /**
      *
-     * A route matcher.
+     * Routing container.
      *
-     * @var Matcher
+     * @var RouterContainer
      *
      */
-    protected $matcher;
+    protected $router;
 
     /**
      *
      * Constructor.
      *
-     * @param Matcher $matcher A route matcher.
+     * @param RouterContainer $router
      *
      * @param ActionFactory $actionFactory An factory to create Action objects.
      *
      * @param string $failResponder The Responder class to use when there is no
      * matching route.
-     *
      */
     public function __construct(
-        Matcher $matcher,
+        RouterContainer $router,
         ActionFactory $actionFactory,
         $failResponder = 'Radar\Middleware\Responder\RoutingFailedResponder'
     ) {
-        $this->matcher = $matcher;
+        $this->router = $router;
         $this->actionFactory = $actionFactory;
         $this->failResponder = $failResponder;
     }
@@ -78,21 +79,17 @@ class RoutingHandler
      *
      * @param Request $request The HTTP request object.
      *
-     * @param Response $response The HTTP response object.
-     *
-     * @param callable $next The next middleware decorator.
+     * @param RequestHandlerInterface $handler The handler middleware decorator.
      *
      * @return Response
-     *
      */
-    public function __invoke(
-        Request $request,
-        Response $response,
-        callable $next
-    ) {
-        $route = $this->matcher->match($request);
+    public function process(Request $request, RequestHandlerInterface $handler): Response
+    {
+        $matcher = $this->router->getMatcher();
+        $route = $matcher->match($request);
+
         $request = $this->addRouteToRequest($route, $request);
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 
     /**
@@ -106,8 +103,9 @@ class RoutingHandler
      * @return Request with the Route and Action information.
      *
      */
-    protected function addRouteToRequest($route, Request $request)
+    protected function addRouteToRequest($route, Request $request): Request
     {
+
         if (! $route) {
             return $request
                 ->withAttribute('radar/adr:route', false)
@@ -125,14 +123,16 @@ class RoutingHandler
             $request = $request->withAttribute($key, $val);
         }
 
+        $specs = new ActionSpecs($route->handler);
+
         return $request
             ->withAttribute('radar/adr:route', $route)
             ->withAttribute(
                 'radar/adr:action',
                 $this->actionFactory->newInstance(
-                    $route->input,
-                    $route->domain,
-                    $route->responder
+                    $specs->input,
+                    $specs->domain,
+                    $specs->responder
                 )
             );
     }
