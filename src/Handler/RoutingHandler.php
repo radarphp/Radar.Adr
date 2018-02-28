@@ -9,7 +9,7 @@
 namespace Radar\Middleware\Handler;
 
 use Arbiter\ActionFactory;
-use Aura\Router\RouterContainer;
+use Aura\Router\Matcher;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
@@ -45,18 +45,18 @@ class RoutingHandler implements MiddlewareInterface
 
     /**
      *
-     * Routing container.
+     * A route matcher.
      *
-     * @var RouterContainer
+     * @var Matcher
      *
      */
-    protected $router;
+    protected $matcher;
 
     /**
      *
      * Constructor.
      *
-     * @param RouterContainer $router
+     * @param Matcher $matcher
      *
      * @param ActionFactory $actionFactory An factory to create Action objects.
      *
@@ -64,11 +64,11 @@ class RoutingHandler implements MiddlewareInterface
      * matching route.
      */
     public function __construct(
-        RouterContainer $router,
+        Matcher $matcher,
         ActionFactory $actionFactory,
         $failResponder = 'Radar\Middleware\Responder\RoutingFailedResponder'
     ) {
-        $this->router = $router;
+        $this->matcher = $matcher;
         $this->actionFactory = $actionFactory;
         $this->failResponder = $failResponder;
     }
@@ -85,8 +85,7 @@ class RoutingHandler implements MiddlewareInterface
      */
     public function process(Request $request, RequestHandlerInterface $handler): Response
     {
-        $matcher = $this->router->getMatcher();
-        $route = $matcher->match($request);
+        $route = $this->matcher->match($request);
 
         $request = $this->addRouteToRequest($route, $request);
         return $handler->handle($request);
