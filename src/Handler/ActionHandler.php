@@ -9,8 +9,11 @@
 namespace Radar\Middleware\Handler;
 
 use Arbiter\ActionHandler as Arbiter;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Zend\Diactoros\Response;
 
 /**
  *
@@ -19,30 +22,26 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  * @package radar/middleware
  *
  */
-class ActionHandler extends Arbiter
+class ActionHandler extends Arbiter implements MiddlewareInterface
 {
     /**
      *
      * Dispatches to the Action stored in the `radar/adr:action` Request
      * attribute.
      *
-     * @param Request $request The HTTP request object.
+     * @param ServerRequestInterface $request The HTTP request object.
      *
-     * @param Response $response The HTTP response object.
+     * @param RequestHandlerInterface $handler The handler middleware decorator.
      *
-     * @param callable $next The next middleware decorator.
+     * @return ResponseInterface
      *
-     * @return Response
-     *
+     * @throws \InvalidArgumentException
+     * @throws \Arbiter\Exception
      */
-    public function __invoke(
-        Request $request,
-        Response $response,
-        callable $next
-    ) {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         $action = $request->getAttribute('radar/adr:action');
         $request = $request->withoutAttribute('radar/adr:action');
-        $response = $this->handle($action, $request, $response);
-        return $next($request, $response);
+        return $this->handle($action, $request, new Response());
     }
 }
