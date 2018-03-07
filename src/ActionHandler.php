@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Middleware\Handler;
+namespace Radar\Middleware;
 
 use Arbiter\ActionFactory;
 use Arbiter\ActionHandler as Arbiter;

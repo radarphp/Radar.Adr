@@ -41,7 +41,7 @@ class ActionSpecs
      * @var string
      *
      */
-    public $responder = 'Radar\Middleware\Responder\Responder';
+    public $responder = 'Radar\Middleware\Responder';
 
     /**
      * ActionSpecs constructor.

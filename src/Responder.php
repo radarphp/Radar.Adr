@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Middleware\Responder;
+namespace Radar\Middleware;
 
 use Aura\Payload_Interface\PayloadInterface;
 use Psr\Http\Message\ResponseInterface as Response;
