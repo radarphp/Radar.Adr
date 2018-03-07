@@ -9,8 +9,8 @@
 namespace Radar\Middleware\Responder;
 
 use Aura\Payload_Interface\PayloadInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  *
@@ -19,7 +19,7 @@ use Psr\Http\Message\ResponseInterface as Response;
  * @package radar/middleware
  *
  */
-class Responder implements ResponderAcceptsInterface
+class Responder
 {
     /**
      *
@@ -47,18 +47,6 @@ class Responder implements ResponderAcceptsInterface
      *
      */
     protected $response;
-
-    /**
-     *
-     * Returns the list of media types this Responder can generate.
-     *
-     * @return array
-     *
-     */
-    public static function accepts()
-    {
-        return ['application/json'];
-    }
 
     /**
      *
