@@ -1,8 +1,8 @@
 {
     "name": "radar/middleware",
-    "description": "The Action-Domain-Responder core library for Radar.",
+    "description": "A PSR-15 compatible Action-Domain-Responder route handler.",
     "type": "library",
-    "homepage": "https://github.com/radarphp/Radar.Adr",
+    "homepage": "https://github.com/radarphp/Radar.Middleware",
     "license": "MIT",
     "require": {
         "aura/payload-interface": "~3.0",
