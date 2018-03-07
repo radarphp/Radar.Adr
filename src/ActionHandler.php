@@ -14,7 +14,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Radar\Middleware\ActionSpecsFactory;
 use Zend\Diactoros\Response;
 
 /**
