@@ -3,7 +3,7 @@ php:
   - 5.6
   - 7
 before_script:
-  - curl -sSfL -o ~/.phpenv/versions/$(phpenv 7e)/bin/phpunit https://phar.phpunit.de/phpunit-5.7.phar
+  - curl -sSfL -o ~/.phpenv/versions/$(phpenv version-name)/bin/phpunit https://phar.phpunit.de/phpunit-5.7.phar
   - composer self-update
   - composer install
 script:
