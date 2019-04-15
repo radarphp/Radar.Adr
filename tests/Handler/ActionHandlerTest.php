@@ -8,7 +8,7 @@ use Radar\Adr\Route;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
 
-class ActionHandlerTest extends \PHPUnit_Framework_TestCase
+class ActionHandlerTest extends \PHPUnit\Framework\TestCase
 {
     protected $actionHandler;
 

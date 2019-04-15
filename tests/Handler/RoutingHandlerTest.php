@@ -8,7 +8,7 @@ use Radar\Adr\Route;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
 
-class RoutingHandlerTest extends \PHPUnit_Framework_TestCase
+class RoutingHandlerTest extends \PHPUnit\Framework\TestCase
 {
     protected $map;
     protected $matcher;
