@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Adr;
+namespace Radar\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  *
  * A generic input marshal.
  *
- * @package radar/adr
+ * @package radar/middleware
  *
  */
 class Input

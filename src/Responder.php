@@ -6,21 +6,20 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Adr\Responder;
+namespace Radar\Middleware;
 
 use Aura\Payload_Interface\PayloadInterface;
-use Aura\Payload\Payload;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
  *
  * A generic Responder.
  *
- * @package radar/adr
+ * @package radar/middleware
  *
  */
-class Responder implements ResponderAcceptsInterface
+class Responder
 {
     /**
      *
@@ -48,18 +47,6 @@ class Responder implements ResponderAcceptsInterface
      *
      */
     protected $response;
-
-    /**
-     *
-     * Returns the list of media types this Responder can generate.
-     *
-     * @return array
-     *
-     */
-    public static function accepts()
-    {
-        return ['application/json'];
-    }
 
     /**
      *

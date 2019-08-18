@@ -6,39 +6,36 @@
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
-namespace Radar\Adr;
+namespace Radar\Middleware;
 
-use Aura\Di\Injection\InjectionFactory;
+use Invoker\Invoker;
+use Psr\Container\ContainerInterface;
 
 /**
  *
- * Resolves object specifications using the DI container.
+ * Resolves object specifications using a given PSR-11 compliant DI container.
  *
- * @package radar/adr
+ * @package radar/middleware
  *
  */
 class Resolver
 {
     /**
+     * Any PSR-11 compliant container
      *
-     * The injection factory from the DI container.
-     *
-     * @var InjectionFactory
-     *
+     * @var ContainerInterface
      */
-    protected $injectionFactory;
+    private $container;
 
     /**
      *
      * Constructor.
      *
-     * @param InjectionFactory $injectionFactory The injection factory from the
-     * DI container.
-     *
+     * @param ContainerInterface $container
      */
-    public function __construct(InjectionFactory $injectionFactory)
+    public function __construct(ContainerInterface $container)
     {
-        $this->injectionFactory = $injectionFactory;
+        $this->container = $container;
     }
 
     /**
@@ -49,15 +46,19 @@ class Resolver
      *
      * @return mixed
      *
+     * @throws \Invoker\Exception\InvocationException
+     * @throws \Invoker\Exception\NotCallableException
      */
     public function __invoke($spec)
     {
-        if (is_string($spec)) {
-            return $this->injectionFactory->newInstance($spec);
+        $invoker = new Invoker(null, $this->container);
+
+        if (\is_string($spec)) {
+            return $invoker->getCallableResolver()->resolve($spec);
         }
 
-        if (is_array($spec) && is_string($spec[0])) {
-            $spec[0] = $this->injectionFactory->newInstance($spec[0]);
+        if (\is_array($spec) && \is_string($spec[0])) {
+            $spec[0] = $invoker->getCallableResolver()->resolve($spec[0]);
         }
 
         return $spec;
