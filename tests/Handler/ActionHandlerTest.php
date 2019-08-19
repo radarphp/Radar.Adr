@@ -12,7 +12,7 @@ class ActionHandlerTest extends \PHPUnit\Framework\TestCase
 {
     protected $actionHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $builder = new ContainerBuilder();
         $di = $builder->newInstance();

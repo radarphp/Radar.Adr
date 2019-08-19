@@ -14,7 +14,7 @@ class RoutingHandlerTest extends \PHPUnit\Framework\TestCase
     protected $matcher;
     protected $routingHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $actionr = new RouterContainer();
         $actionr->setMapFactory(function () { return new Map(new Route()); } );

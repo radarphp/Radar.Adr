@@ -13,7 +13,7 @@ class AdrTest extends \PHPUnit\Framework\TestCase
 {
     protected $adr;
 
-    public function setUp()
+    public function setUp(): void
     {
         $builder = new ContainerBuilder();
         $di = $builder->newInstance();

@@ -5,7 +5,7 @@ class BootTest extends \PHPUnit\Framework\TestCase
 {
     protected $containerCache;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->containerCache = __DIR__ . DIRECTORY_SEPARATOR . 'container.serialized';
         if (file_exists($this->containerCache)) {
