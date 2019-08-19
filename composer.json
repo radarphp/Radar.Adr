@@ -5,7 +5,7 @@
     "homepage": "https://github.com/radarphp/Radar.Adr",
     "license": "MIT",
     "require": {
-        "aura/di": "~3.0",
+        "aura/di": "~4.0",
         "aura/payload": "~3.0",
         "aura/router": "~3.0",
         "relay/relay": "~1.0",

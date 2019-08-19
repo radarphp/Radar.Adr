@@ -27,7 +27,7 @@ class Config extends ContainerConfig
      * @param Container $di The DI container.
      *
      */
-    public function define(Container $di)
+    public function define(Container $di): void
     {
         /**
          * Services
@@ -77,7 +77,7 @@ class Config extends ContainerConfig
      * @param Container $di The DI container.
      *
      */
-    public function modify(Container $di)
+    public function modify(Container $di): void
     {
     }
 }

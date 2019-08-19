@@ -1,7 +1,7 @@
 <?php
 namespace Radar\Adr;
 
-class BootTest extends \PHPUnit_Framework_TestCase
+class BootTest extends \PHPUnit\Framework\TestCase
 {
     protected $containerCache;
 
