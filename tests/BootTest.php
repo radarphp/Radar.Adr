@@ -13,7 +13,7 @@ class BootTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists($this->containerCache)) {
             unlink($this->containerCache);

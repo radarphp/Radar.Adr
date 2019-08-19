@@ -1,6 +1,4 @@
-sudo: false
 language: php
-dist: trusty
 php:
   - 7.2
   - 7.3
@@ -14,7 +12,7 @@ before_script:
   - composer self-update
   - composer install
 script:
-  - phpunit --coverage-clover=coverage.clover
+  - phpunit -v --coverage-clover=coverage.clover
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
