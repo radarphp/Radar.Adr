@@ -1,11 +1,11 @@
 <?php
 namespace Radar\Adr;
 
-class BootTest extends \PHPUnit_Framework_TestCase
+class BootTest extends \PHPUnit\Framework\TestCase
 {
     protected $containerCache;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->containerCache = __DIR__ . DIRECTORY_SEPARATOR . 'container.serialized';
         if (file_exists($this->containerCache)) {
@@ -13,7 +13,7 @@ class BootTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists($this->containerCache)) {
             unlink($this->containerCache);

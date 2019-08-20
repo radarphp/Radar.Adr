@@ -5,7 +5,7 @@ use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
 use Radar\Adr\Route;
 
-class RoutingFailedResponderTest extends \PHPUnit_Framework_TestCase
+class RoutingFailedResponderTest extends \PHPUnit\Framework\TestCase
 {
     protected function getResponse($failedRoute)
     {

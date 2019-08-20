@@ -6,7 +6,7 @@ use Aura\Payload_Interface\PayloadStatus;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
 
-class ResponderTest extends \PHPUnit_Framework_TestCase
+class ResponderTest extends \PHPUnit\Framework\TestCase
 {
     protected $responder;
     protected $payload;
