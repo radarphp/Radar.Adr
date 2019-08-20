@@ -12,6 +12,7 @@ use Arbiter\ActionFactory;
 use Aura\Router\Matcher;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Radar\Adr\Responder\RoutingFailedResponder;
 use Radar\Adr\Route;
 
 /**
@@ -23,6 +24,12 @@ use Radar\Adr\Route;
  */
 class RoutingHandler
 {
+
+    /**
+     * Request Attribute containing the route
+     */
+    const ROUTE_ATTRIBUTE = 'radar/adr:route';
+
     /**
      *
      * A factory to create Action objects.
@@ -65,7 +72,7 @@ class RoutingHandler
     public function __construct(
         Matcher $matcher,
         ActionFactory $actionFactory,
-        $failResponder = 'Radar\Adr\Responder\RoutingFailedResponder'
+        $failResponder = RoutingFailedResponder::class
     ) {
         $this->matcher = $matcher;
         $this->actionFactory = $actionFactory;
@@ -110,9 +117,9 @@ class RoutingHandler
     {
         if (! $route) {
             return $request
-                ->withAttribute('radar/adr:route', false)
+                ->withAttribute(self::ROUTE_ATTRIBUTE, false)
                 ->withAttribute(
-                    'radar/adr:action',
+                    ActionHandler::ACTION_ATTRIBUTE,
                     $this->actionFactory->newInstance(
                         null,
                         [$this->matcher, 'getFailedRoute'],
@@ -126,9 +133,9 @@ class RoutingHandler
         }
 
         return $request
-            ->withAttribute('radar/adr:route', $route)
+            ->withAttribute(self::ROUTE_ATTRIBUTE, $route)
             ->withAttribute(
-                'radar/adr:action',
+                ActionHandler::ACTION_ATTRIBUTE,
                 $this->actionFactory->newInstance(
                     $route->input,
                     $route->domain,

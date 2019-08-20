@@ -26,7 +26,7 @@ class Route extends AuraRoute
      * @var string
      *
      */
-    protected $input = 'Radar\Adr\Input';
+    protected $input = Input::class;
 
     /**
      *
@@ -44,7 +44,7 @@ class Route extends AuraRoute
      * @var string
      *
      */
-    protected $responder = 'Radar\Adr\Responder\Responder';
+    protected $responder = Responder\Responder::class;
 
     /**
      *
@@ -135,7 +135,7 @@ class Route extends AuraRoute
 
         $responderAcceptsInterface = is_subclass_of(
             $responder,
-            'Radar\Adr\Responder\ResponderAcceptsInterface',
+            Responder\ResponderAcceptsInterface::class,
             true
         );
 

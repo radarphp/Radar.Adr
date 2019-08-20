@@ -8,8 +8,9 @@
  */
 namespace Radar\Adr\Responder;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Aura\Router\Rule;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Radar\Adr\Route;
 
 /**
@@ -84,12 +85,12 @@ class RoutingFailedResponder
     protected function getMethodForFailedRoute()
     {
         switch ($this->failedRoute->failedRule) {
-            case 'Aura\Router\Rule\Allows':
+            case Rule\Allows::class:
                 return 'methodNotAllowed';
-            case 'Aura\Router\Rule\Accepts':
+            case Rule\Accepts::class:
                 return 'notAcceptable';
-            case 'Aura\Router\Rule\Host':
-            case 'Aura\Router\Rule\Path':
+            case Rule\Host::class:
+            case Rule\Path::class:
                 return 'notFound';
             default:
                 return 'other';

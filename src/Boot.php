@@ -61,7 +61,7 @@ class Boot
             $di = $this->newContainer($config, $autoResolve);
         }
 
-        return $di->get('radar/adr:adr');
+        return $di->get(Config::ADR);
     }
 
     /**
@@ -101,7 +101,7 @@ class Boot
      */
     protected function newContainer(array $config, $autoResolve = false)
     {
-        $config = array_merge(['Radar\Adr\Config'], $config);
+        $config = array_merge([Config::class], $config);
         return (new ContainerBuilder())->newConfiguredInstance($config, $autoResolve);
     }
 }
