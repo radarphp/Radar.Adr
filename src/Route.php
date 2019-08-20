@@ -107,7 +107,7 @@ class Route extends AuraRoute
      *
      * Sets the domain specification.
      *
-     * @param string $handler The domain specification.
+     * @param string $domain The domain specification.
      *
      * @return self
      *

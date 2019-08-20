@@ -54,7 +54,6 @@ class Resolver
     public function __invoke($spec)
     {
         if (is_string($spec)) {
-
             return $this->injectionFactory->newInstance(
                 new Blueprint($spec)
             );
