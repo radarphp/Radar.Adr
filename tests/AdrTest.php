@@ -9,11 +9,11 @@ use Relay\RelayBuilder;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
 
-class AdrTest extends \PHPUnit_Framework_TestCase
+class AdrTest extends \PHPUnit\Framework\TestCase
 {
     protected $adr;
 
-    public function setUp()
+    public function setUp(): void
     {
         $builder = new ContainerBuilder();
         $di = $builder->newInstance();

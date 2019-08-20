@@ -9,6 +9,7 @@
 namespace Radar\Adr;
 
 use Aura\Di\Injection\InjectionFactory;
+use Aura\Di\Resolver\Blueprint;
 
 /**
  *
@@ -53,11 +54,16 @@ class Resolver
     public function __invoke($spec)
     {
         if (is_string($spec)) {
-            return $this->injectionFactory->newInstance($spec);
+
+            return $this->injectionFactory->newInstance(
+                new Blueprint($spec)
+            );
         }
 
         if (is_array($spec) && is_string($spec[0])) {
-            $spec[0] = $this->injectionFactory->newInstance($spec[0]);
+            $spec[0] = $this->injectionFactory->newInstance(
+                new Blueprint($spec[0])
+            );
         }
 
         return $spec;

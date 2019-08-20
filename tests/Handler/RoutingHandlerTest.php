@@ -8,13 +8,13 @@ use Radar\Adr\Route;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
 
-class RoutingHandlerTest extends \PHPUnit_Framework_TestCase
+class RoutingHandlerTest extends \PHPUnit\Framework\TestCase
 {
     protected $map;
     protected $matcher;
     protected $routingHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $actionr = new RouterContainer();
         $actionr->setMapFactory(function () { return new Map(new Route()); } );
