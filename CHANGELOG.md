@@ -2,6 +2,8 @@
 
 ## 2.x
 
+- (CHG) Use class constants for service and attributes names.
+
 - (CHG) Upgrade to PHP 7.2+ only.
 
 - (CHG) Drop HHVM support.
