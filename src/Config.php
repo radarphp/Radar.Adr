@@ -52,7 +52,7 @@ class Config extends ContainerConfig
          * Services
          */
         $di->set(self::ADR, $di->lazyNew(Adr::class));
-        $di->set(self::RESOLVER, $di->lazyNew(Resolver::class));
+        $di->set(self::RESOLVER, $di->newResolutionHelper());
         $di->set(self::ROUTER, $di->lazyNew(Router::class));
 
         /**
@@ -82,11 +82,6 @@ class Config extends ContainerConfig
          */
         $di->params[Handler\RoutingHandler::class]['matcher'] = $di->lazyGetCall(self::ROUTER, 'getMatcher');
         $di->params[Handler\RoutingHandler::class]['actionFactory'] = $di->lazyNew(ActionFactory::class);
-
-        /**
-         * Radar\Adr\Resolver
-         */
-        $di->params[Resolver::class]['injectionFactory'] = $di->getInjectionFactory();
     }
 
     /**
