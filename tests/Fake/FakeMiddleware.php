@@ -7,9 +7,9 @@ class FakeMiddleware
 
     public function __invoke($request, $response, $next)
     {
-        $response->getBody()->write(++ static::$count);
+        $response->getBody()->write((string) ++ static::$count);
         $response = $next($request, $response);
-        $response->getBody()->write(++ static::$count);
+        $response->getBody()->write((string) ++ static::$count);
         return $response;
     }
 }
